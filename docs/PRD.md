@@ -2,15 +2,15 @@
 
 **Product:** SECOD — Security Coding Skills for AI Builders
 **Status:** Draft v0.2
-**Release:** SECOD v1.0.0 (complete public launch)
-**Last updated:** 2026-08-24
-**Owner:** TBD
+**Release:** SECOD v0.1.0-beta.1 public prerelease; v1.0.0 stable target
+**Last updated:** 2026-09-04
+**Owner:** iamruzaini / SECOD maintainers
 
 ## 1. Executive summary
 
 SECOD is an open-source security skill library for people building applications with AI coding agents. It gives Codex, Claude Code, Cursor, and compatible agents practical security instructions, provider-specific implementation guidance, and evidence-based pre-launch reviews.
 
-The GitHub repository is the canonical product. The SECOD website is the discovery, education, installation, and sponsor surface.
+The standalone [`iamruzaini/secod`](https://github.com/iamruzaini/secod) GitHub repository is the canonical product. The separately maintained SECOD website imports immutable tagged releases for discovery, education, installation, and sponsor surfaces.
 
 SECOD v1.0 launches as a complete 57-skill pack. It separates a general app-security baseline from conditional framework and provider adapters, so every reviewed application gets portable security coverage while stack-specific controls are applied only when detected.
 
@@ -598,9 +598,9 @@ Commercial metrics must never become a reason to weaken security standards or ma
 
 ## 16. Delivery plan
 
-There is one public release: **SECOD v1.0.0, the full 57-skill suite**.
+SECOD may publish explicitly labeled beta/prerelease builds during development. The stable target is **SECOD v1.0.0, the full 57-skill suite**.
 
-Development may proceed in internal workstreams, but none of the workstreams constitute a public partial product:
+Development may proceed through public prereleases and internal workstreams, but none constitutes SECOD v1.0.0 until every release gate passes:
 
 1. Freeze skill contracts: inputs, outputs, trigger boundaries, references and tests.
 2. Build common validation scaffolding, fixtures and reporting format.
@@ -612,11 +612,9 @@ Development may proceed in internal workstreams, but none of the workstreams con
 
 ## 17. Open decisions
 
-The repository license is Apache-2.0.
+Resolved decisions: `iamruzaini` owns the canonical repository at `https://github.com/iamruzaini/secod`; the repository license is Apache-2.0; website source remains separate and imports immutable SECOD releases.
 
-- GitHub owner/organization name and final repository URL.
 - Website domain and hosting provider.
-- Whether website source lives in a separate repository or monorepo package.
 - Exact first-year sponsor placement inventory and pricing.
 - Whether automated, read-only repository scanning is included in the website at v1.0 or deferred to a later product.
 - Initial framework and deployment coverage beyond Next.js and Vercel, such as React SPA frameworks, Netlify, Railway and Render.

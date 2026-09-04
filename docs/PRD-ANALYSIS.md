@@ -15,7 +15,9 @@ The products therefore use separate repositories:
 - The Bun-managed Next.js website imports versioned catalog data from a SECOD
   release.
 
-They should receive independent Git remotes when the owner decision is made.
+They have independent ownership boundaries: `iamruzaini/secod` is the public
+canonical skills repository, while the separate website repository imports
+immutable SECOD releases.
 The website may project the skill catalog for discovery, but it must not become
 the source of truth for skill metadata or releases.
 
@@ -47,18 +49,17 @@ The Next.js App Router scaffold includes all PRD-required routes:
 - /changelog
 - /sponsor
 
-The install configurator currently models the required inputs and output. It
-deliberately displays an OWNER placeholder and a release warning until the
-repository owner and agent adapter support are verified.
+The install configurator models the required inputs and output. The website
+still needs its repository placeholders replaced with `iamruzaini/secod`, while
+the prerelease warning remains until supported agent adapters are verified.
 
 ## Risks to resolve before implementation proceeds
 
-1. GitHub organization, final repository URL, domain, hosting, and sponsor
-   inventory remain open decisions.
+1. Website domain, hosting, and sponsor inventory remain open decisions.
 2. Provider references must be based on current official documentation and
    carry a source URL plus reviewed date.
-3. Marketplace metadata is only structurally present because the final
-   repository location and supported distribution workflow are not chosen.
+3. Marketplace metadata is only structurally present; supported-agent release
+   verification and final marketplace entries remain incomplete.
 4. Scripts must remain read-only by default and must never transmit project
    content or credentials without explicit user approval.
 5. The release gate requires real insecure fixtures, not only frontmatter
