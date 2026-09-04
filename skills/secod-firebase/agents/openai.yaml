@@ -1,0 +1,3 @@
+display_name: "Firebase"
+short_description: "Deny unauthorized client access through tested Firebase Security Rules; enforce App Check for every detected supported Firebase service after an evidence-based rollout; keep Admin…"
+default_prompt: "Use $secod-firebase to review this project. Preserve missing evidence as Not verified."

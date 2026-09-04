@@ -1,0 +1,3 @@
+display_name: "AWS Cognito"
+short_description: "Satisfy secod-aws-web, secod-identity-access and secod-auth-provider-integrations. Apply when Amazon Cognito User Pools, Identity Pools, managed login/hosted UI, app clients,…"
+default_prompt: "Use $secod-aws-cognito to review this project. Preserve missing evidence as Not verified."

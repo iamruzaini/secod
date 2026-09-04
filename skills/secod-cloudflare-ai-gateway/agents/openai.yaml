@@ -1,0 +1,3 @@
+display_name: "Cloudflare AI Gateway"
+short_description: "Satisfy secod-cloudflare, secod-ai-api-integrations, secod-secrets-config, secod-abuse-limits and secod-observability-response. Apply when AI Gateway endpoints/bindings, BYOK…"
+default_prompt: "Use $secod-cloudflare-ai-gateway to review this project. Preserve missing evidence as Not verified."

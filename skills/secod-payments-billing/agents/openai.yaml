@@ -1,0 +1,3 @@
+display_name: "Payments Billing"
+short_description: "Treat verified provider state as authoritative and maintain correct customer, subscription, entitlement, refund and dispute state under duplicate, delayed, out-of-order, retried…"
+default_prompt: "Use $secod-payments-billing to review this project. Require adapter-backed capability rows, run safe executable fixtures, preserve missing evidence as Not verified, and route readiness to $secod-ship-check."

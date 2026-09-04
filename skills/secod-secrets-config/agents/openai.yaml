@@ -1,0 +1,3 @@
+display_name: "Secrets Config"
+short_description: "Keep privileged credentials and bearer capabilities server-side and least-privileged; separate environments and block unsafe production configuration."
+default_prompt: "Use $secod-secrets-config to review this project. Preserve missing evidence as Not verified."

@@ -1,0 +1,938 @@
+{
+  "schemaVersion": 1,
+  "source": "docs/PRD.md section 8",
+  "skills": [
+    {
+      "slug": "secod-core",
+      "title": "Core",
+      "layer": "General baseline",
+      "summary": "Inventory the application, compute the complete transitive skill dependency closure and route every applicable baseline skill and framework/provider adapter; never treat routing\u2026",
+      "purpose": "Detection of web frameworks, including the installed Next.js and React versions, App Router versus Pages Router, next.config.*, app/, pages/, Route Handlers/API Routes, Server\u2026",
+      "dependencies": []
+    },
+    {
+      "slug": "secod-threat-model",
+      "title": "Threat Model",
+      "layer": "General baseline",
+      "summary": "Establish assets, actors, trust boundaries, tenant boundaries, attacker goals, abuse cases, failure states and high-impact flows before a launch verdict.",
+      "purpose": "Users and admins; data classes; privileged actions; complete API inventory covering hosts, routes, versions, public, internal, deprecated, shadow and debug surfaces; background\u2026",
+      "dependencies": [
+        "secod-core"
+      ]
+    },
+    {
+      "slug": "secod-identity-access",
+      "title": "Identity Access",
+      "layer": "General baseline",
+      "summary": "Enforce authentication and authorization at the backend; validate every credential, authenticator, session, share link and token lifecycle; deny by default across user, tenant,\u2026",
+      "purpose": "Password KDFs, enumeration resistance, throttling, verification, recovery, MFA, re-authentication and security-event notification; passkeys/WebAuthn registration and\u2026",
+      "dependencies": [
+        "secod-core"
+      ]
+    },
+    {
+      "slug": "secod-web-app-security",
+      "title": "Web App Security",
+      "layer": "General baseline",
+      "summary": "Treat all browser-rendered or cross-origin content as untrusted and enforce browser boundaries independently of UI visibility.",
+      "purpose": "XSS prevention, contextual output encoding, safe rendering, HTML sanitization, CSP with nonce/hash discipline and Trusted Types where applicable, CSP report endpoint and report-\u2026",
+      "dependencies": [
+        "secod-core"
+      ]
+    },
+    {
+      "slug": "secod-inputs-apis",
+      "title": "Inputs APIs",
+      "layer": "General baseline",
+      "summary": "Inventory, validate and authorize every server and third-party API boundary; prevent injection and SSRF; bound request, response, redirect, realtime, webhook and exceptional-\u2026",
+      "purpose": "Inventory of API hosts, environments, routes, versions, deprecated/shadow/debug endpoints, retirement owners and sensitive third-party data flows; debug and test surfaces absent\u2026",
+      "dependencies": [
+        "secod-core"
+      ]
+    },
+    {
+      "slug": "secod-runtime-execution",
+      "title": "Runtime Execution",
+      "layer": "General baseline",
+      "summary": "Prevent OS command injection, argument injection and server-side template injection at every server-side execution boundary; avoid shells, use safe process APIs and least-\u2026",
+      "purpose": "Avoid direct OS commands; prefer built-in library functions and platform APIs; hardcode the executable and required flags; argv-array process APIs (Java ProcessBuilder, Node\u2026",
+      "dependencies": [
+        "secod-core"
+      ]
+    },
+    {
+      "slug": "secod-crypto-data-protection",
+      "title": "Crypto Data Protection",
+      "layer": "General baseline",
+      "summary": "Use established cryptographic primitives and libraries; minimize protected data and define its complete key, retention, backup, and deletion lifecycle.",
+      "purpose": "TLS; CSPRNG tokens and nonces; password KDF selection; authenticated encryption where required; key separation, storage, rotation, revocation and recovery; cryptographic agility,\u2026",
+      "dependencies": [
+        "secod-core"
+      ],
+      "controls": [
+        {
+          "id": "SECOD-CDP-01",
+          "title": "TLS and secure communication",
+          "status": "approved",
+          "approvedOn": "2026-08-28"
+        },
+        {
+          "id": "SECOD-CDP-02",
+          "title": "CSPRNG for tokens, nonces, and salts",
+          "status": "approved",
+          "approvedOn": "2026-08-28"
+        },
+        {
+          "id": "SECOD-CDP-03",
+          "title": "Password and secret-derivation KDFs",
+          "status": "approved",
+          "approvedOn": "2026-08-28"
+        },
+        {
+          "id": "SECOD-CDP-04",
+          "title": "Algorithm selection, authenticated encryption, no custom cryptography",
+          "status": "approved",
+          "approvedOn": "2026-08-28"
+        },
+        {
+          "id": "SECOD-CDP-05",
+          "title": "Key management lifecycle, agility, and migration",
+          "status": "approved",
+          "approvedOn": "2026-08-28"
+        },
+        {
+          "id": "SECOD-CDP-06",
+          "title": "Data classification, minimization, sharing, residency",
+          "status": "approved",
+          "approvedOn": "2026-08-28"
+        },
+        {
+          "id": "SECOD-CDP-07",
+          "title": "Analytics, cookie, telemetry, and tracking-data inventory",
+          "status": "approved",
+          "approvedOn": "2026-08-28"
+        },
+        {
+          "id": "SECOD-CDP-08",
+          "title": "Retention schedules and deletion propagation",
+          "status": "approved",
+          "approvedOn": "2026-08-28"
+        },
+        {
+          "id": "SECOD-CDP-09",
+          "title": "Backup encryption and restore verification",
+          "status": "approved",
+          "approvedOn": "2026-08-28"
+        }
+      ]
+    },
+    {
+      "slug": "secod-data-files",
+      "title": "Data Files",
+      "layer": "General baseline",
+      "summary": "Authorize every upload, download, storage object, share link and export; validate actual file content and bound storage and processing.",
+      "purpose": "File type allowlists, magic-byte checks, generated filenames, count/individual/aggregate size limits, decompression-bomb protection, malware-processing decision where relevant,\u2026",
+      "dependencies": [
+        "secod-core"
+      ]
+    },
+    {
+      "slug": "secod-abuse-limits",
+      "title": "Abuse Limits",
+      "layer": "General baseline",
+      "summary": "Bound resource consumption and prevent replay, duplication, race conditions, retry storms and business-logic abuse at user and tenant scope.",
+      "purpose": "Per-IP/user/tenant rate limits and quotas; credential-stuffing defenses; concurrency, backpressure and queue limits; idempotency keys; at-most-once handling where required; replay\u2026",
+      "dependencies": [
+        "secod-core"
+      ]
+    },
+    {
+      "slug": "secod-secrets-config",
+      "title": "Secrets Config",
+      "layer": "General baseline",
+      "summary": "Keep privileged credentials and bearer capabilities server-side and least-privileged; separate environments and block unsafe production configuration.",
+      "purpose": "No secrets in source, client bundles, URLs, logs, traces, prompts, headers or response bodies; do not expose raw session/share/capability verifiers, Access tokens or provider\u2026",
+      "dependencies": [
+        "secod-core"
+      ]
+    },
+    {
+      "slug": "secod-packages-delivery",
+      "title": "Packages Delivery",
+      "layer": "General baseline",
+      "summary": "Make dependencies, CI/CD and releases reproducible, least-privileged, reviewable and rollback-capable.",
+      "purpose": "Frozen lockfiles; dependency maturity and install-script policy; runtime, framework and transitive dependency security-advisory monitoring with supported-version policy and\u2026",
+      "dependencies": [
+        "secod-core"
+      ]
+    },
+    {
+      "slug": "secod-vulnerability-management",
+      "title": "Vulnerability Management",
+      "layer": "General baseline",
+      "summary": "Continuously discover, own, prioritize, remediate and re-verify application and supply-chain vulnerabilities.",
+      "purpose": "SCA, SAST and secret scanning; SBOM generation; build provenance/attestation; severity and exploitability triage; remediation owner and SLA; dependency update policy; exception\u2026",
+      "dependencies": [
+        "secod-core"
+      ]
+    },
+    {
+      "slug": "secod-observability-response",
+      "title": "Observability Response",
+      "layer": "General baseline",
+      "summary": "Produce actionable, redacted security evidence and maintain tested containment, revocation, failure detection, recovery and restoration procedures.",
+      "purpose": "Structured audit events for login, access denial, privilege/admin changes, sensitive reads, payments and webhooks; redaction of passwords, tokens, headers, bodies, prompts and\u2026",
+      "dependencies": [
+        "secod-core"
+      ],
+      "controls": [
+        {
+          "id": "SECOD-OBS-01",
+          "title": "Structured security audit events",
+          "status": "approved",
+          "approvedOn": "2026-08-27"
+        },
+        {
+          "id": "SECOD-OBS-02",
+          "title": "Redaction and log-data minimization",
+          "status": "approved",
+          "approvedOn": "2026-08-27"
+        },
+        {
+          "id": "SECOD-OBS-03",
+          "title": "API-key lifecycle visibility",
+          "status": "approved",
+          "approvedOn": "2026-08-27"
+        },
+        {
+          "id": "SECOD-OBS-04",
+          "title": "Security alerting for control failures",
+          "status": "approved",
+          "approvedOn": "2026-08-27"
+        },
+        {
+          "id": "SECOD-OBS-05",
+          "title": "Incident runbooks and breach-to-containment mapping",
+          "status": "approved",
+          "approvedOn": "2026-08-27"
+        },
+        {
+          "id": "SECOD-OBS-06",
+          "title": "Evidence preservation",
+          "status": "approved",
+          "approvedOn": "2026-08-27"
+        },
+        {
+          "id": "SECOD-OBS-07",
+          "title": "Recovery drills for partial operations and backup restore",
+          "status": "approved",
+          "approvedOn": "2026-08-27"
+        }
+      ]
+    },
+    {
+      "slug": "secod-payments-billing",
+      "title": "Payments Billing",
+      "layer": "General baseline",
+      "summary": "Treat verified provider state as authoritative and maintain correct customer, subscription, entitlement, refund and dispute state under duplicate, delayed, out-of-order, retried\u2026",
+      "purpose": "The server resolves product, price, currency, quantity, discount, tenant and entitlement instead of trusting browser input; provider-hosted checkout or approved components;\u2026",
+      "dependencies": [
+        "secod-core"
+      ]
+    },
+    {
+      "slug": "secod-ai-api-integrations",
+      "title": "AI API Integrations",
+      "layer": "General baseline",
+      "summary": "Secure the application's developer-owned AI API, SDK, RAG, chat, streaming and realtime data paths; keep authentication, authorization, tenancy and consequential application\u2026",
+      "purpose": "Long-lived provider keys remain server-side and users are authenticated before requests are proxied; per-user, tenant, model, request, token, file, stream, retry and monthly-spend\u2026",
+      "dependencies": [
+        "secod-core"
+      ]
+    },
+    {
+      "slug": "secod-container-runtime",
+      "title": "Container Runtime",
+      "layer": "General baseline",
+      "summary": "Apply when Docker, Docker Compose, Kubernetes manifests, Helm, Terraform container resources or another container runtime is detected; make each deployed workload traceable,\u2026",
+      "purpose": "Minimal digest-pinned images; provenance and vulnerability scanning; no build secrets in layers; non-root execution; dropped capabilities; read-only filesystem where possible;\u2026",
+      "dependencies": [
+        "secod-core"
+      ]
+    },
+    {
+      "slug": "secod-email-messaging",
+      "title": "Email Messaging",
+      "layer": "General baseline",
+      "summary": "Apply when an application uses email, SMS, OTP, magic links, invitations or notifications; keep delivery credentials and recipient-bound state server-controlled.",
+      "purpose": "Server-only provider credentials; recipient and tenant binding; single-use expiring magic links/OTPs; anti-enumeration and abuse limits; safe redirect destinations; link-tracking\u2026",
+      "dependencies": [
+        "secod-core"
+      ]
+    },
+    {
+      "slug": "secod-failure-safety",
+      "title": "Failure Safety",
+      "layer": "General baseline",
+      "summary": "Apply to all server-side applications; preserve security and data correctness when dependencies, storage, networks or providers fail.",
+      "purpose": "Global exception handling; authorization and authentication dependencies fail closed; rollback of partial database/payment/entitlement mutations; retry classification; circuit\u2026",
+      "dependencies": [
+        "secod-core"
+      ],
+      "controls": [
+        {
+          "id": "SECOD-FAIL-01",
+          "title": "Centralized global exception handling",
+          "status": "approved",
+          "approvedOn": "2026-08-26"
+        },
+        {
+          "id": "SECOD-FAIL-02",
+          "title": "Fail-closed authentication and authorization dependencies",
+          "status": "approved",
+          "approvedOn": "2026-08-26"
+        },
+        {
+          "id": "SECOD-FAIL-03",
+          "title": "Rollback of partial database, payment, and entitlement mutations",
+          "status": "approved",
+          "approvedOn": "2026-08-26"
+        },
+        {
+          "id": "SECOD-FAIL-04",
+          "title": "Safe retry classification",
+          "status": "approved",
+          "approvedOn": "2026-08-26"
+        },
+        {
+          "id": "SECOD-FAIL-05",
+          "title": "Circuit breakers on failing dependencies",
+          "status": "approved",
+          "approvedOn": "2026-08-26"
+        },
+        {
+          "id": "SECOD-FAIL-06",
+          "title": "Timeout and cancellation propagation",
+          "status": "approved",
+          "approvedOn": "2026-08-26"
+        },
+        {
+          "id": "SECOD-FAIL-07",
+          "title": "Deterministic cleanup",
+          "status": "approved",
+          "approvedOn": "2026-08-26"
+        },
+        {
+          "id": "SECOD-FAIL-08",
+          "title": "Safe degraded states",
+          "status": "approved",
+          "approvedOn": "2026-08-26"
+        },
+        {
+          "id": "SECOD-FAIL-09",
+          "title": "Redacted error responses",
+          "status": "approved",
+          "approvedOn": "2026-08-26"
+        },
+        {
+          "id": "SECOD-FAIL-10",
+          "title": "Failure-mode tests for storage, provider, and network",
+          "status": "approved",
+          "approvedOn": "2026-08-26"
+        }
+      ]
+    },
+    {
+      "slug": "secod-ship-check",
+      "title": "Ship Check",
+      "layer": "General baseline",
+      "summary": "Issue no launch verdict without evidence from every triggered skill and its transitive dependencies; missing, stale or inaccessible evidence can never pass.",
+      "purpose": "Aggregated findings and verification evidence; dependency-closure validation; version-qualified OWASP ASVS, OWASP API Security Top 10 and applicable OWASP LLM Application Top 10\u2026",
+      "dependencies": [
+        "secod-core"
+      ]
+    },
+    {
+      "slug": "secod-supabase-auth",
+      "title": "Supabase Auth",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy secod-identity-access, secod-auth-provider-integrations and secod-supabase; always route with secod-supabase, which remains the owner for database, Storage, Realtime and\u2026",
+      "purpose": "Exact Supabase organization/project/reference, region, plan, custom domain, Auth provider/connection, SMTP, OAuth/SSO, MFA, captcha, rate-limit, redirect, session, Auth Hook and\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-identity-access",
+        "secod-auth-provider-integrations",
+        "secod-supabase"
+      ]
+    },
+    {
+      "slug": "secod-auth0",
+      "title": "Auth0",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy secod-auth-provider-integrations and every applicable secod-identity-access requirement. Apply when @auth0/*, auth0, auth0-react, auth0-spa-js, express-oauth2-jwt-bearer,\u2026",
+      "purpose": "Exact Auth0 tenant, region, custom domain, application/API identifiers, application type, enabled connections, grant types, signing algorithm, tenant/Dashboard administrators, SDK\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-auth-provider-integrations",
+        "secod-identity-access"
+      ]
+    },
+    {
+      "slug": "secod-workos",
+      "title": "Workos",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy secod-auth-provider-integrations and every applicable secod-identity-access requirement. Apply when @workos-inc/*, WorkOS/AuthKit SDKs, WORKOS_API_KEY, WORKOS_CLIENT_ID,\u2026",
+      "purpose": "Explicit Hosted AuthKit UI versus custom Authentication API/SSO flow decision, with an exact application/client ID, canonical custom/hosted authentication domain, environment,\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-auth-provider-integrations",
+        "secod-identity-access"
+      ]
+    },
+    {
+      "slug": "secod-better-auth",
+      "title": "Better Auth",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy secod-auth-provider-integrations and every applicable secod-identity-access requirement. Apply when better-auth, betterAuth(), Better Auth route handlers such as\u2026",
+      "purpose": "Explicit production baseURL/BETTER_AUTH_URL, canonical host and base path; exact trustedOrigins and allowedHosts with no broad production wildcards; exact OAuth/SSO callback and\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-auth-provider-integrations",
+        "secod-identity-access"
+      ]
+    },
+    {
+      "slug": "secod-nextjs",
+      "title": "Next.js",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy every applicable general baseline requirement; apply when the next package, next.config.*, App Router, Pages Router, Route Handlers/API Routes, Server Actions,\u2026",
+      "purpose": "Inventory the exact Next.js/React versions, package lock, App versus Pages Router, Node versus Edge runtime, static export, self-hosted/serverless deployment and official security\u2026",
+      "dependencies": [
+        "secod-core"
+      ]
+    },
+    {
+      "slug": "secod-vercel-platform",
+      "title": "Vercel Platform",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy every applicable general baseline requirement; apply when .vercel/project.json, vercel.json/vercel.ts, a Vercel Git/CLI deployment, VERCEL_* system variables, Vercel\u2026",
+      "purpose": "Inventory the Vercel team/project IDs and names, linked repository, production branch and new-project first-deployment behavior, root/build/install settings, plan/tier, regions\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-vercel-ai"
+      ]
+    },
+    {
+      "slug": "secod-auth-provider-integrations",
+      "title": "Auth Provider Integrations",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy every applicable secod-identity-access requirement; apply when Clerk, Auth0, WorkOS, Better Auth, Supabase Auth or another supported third-party authentication SDK,\u2026",
+      "purpose": "Detect @clerk/*/clerk, @auth0/*, @workos-inc/*, better-auth, @supabase/supabase-js, @supabase/ssr, supabase.auth.*, SUPABASE_*, provider domains, callback/redirect configuration,\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-identity-access"
+      ]
+    },
+    {
+      "slug": "secod-clerk",
+      "title": "Clerk",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy secod-auth-provider-integrations and every applicable secod-identity-access requirement. Apply when @clerk/*, clerk, clerkMiddleware, CLERK_* variables, Clerk webhook\u2026",
+      "purpose": "Backend Clerk SDK authenticateRequest()/verifyToken() validation or manual verification only against the application's fixed Clerk instance JWKS or Dashboard public key; expected\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-auth-provider-integrations",
+        "secod-identity-access"
+      ]
+    },
+    {
+      "slug": "secod-cloudflare",
+      "title": "Cloudflare",
+      "layer": "Framework / provider adapter",
+      "summary": "Act as the Cloudflare account, zone and Developer Platform security router. It supersedes the former monolithic scope of secod-cloudflare-workers and routes every detected\u2026",
+      "purpose": "Exact Cloudflare account, zone, project/script/service, environment, plan, user/service/API token, account/zone role, custom domain/DNS/TLS, Wrangler/IaC/CI, Access\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-cloudflare-workers"
+      ]
+    },
+    {
+      "slug": "secod-cloudflare-workers",
+      "title": "Cloudflare Workers",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy secod-cloudflare, secod-identity-access, secod-inputs-apis, secod-secrets-config, secod-abuse-limits, secod-data-files and secod-observability-response. Apply when\u2026",
+      "purpose": "Exact script/version/route/custom domain, compatibility date/flag, handler/service binding, environment/binding/secret, Durable Object class/namespace/migration, R2 bucket, D1\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-cloudflare",
+        "secod-identity-access",
+        "secod-inputs-apis",
+        "secod-secrets-config",
+        "secod-abuse-limits",
+        "secod-data-files",
+        "secod-observability-response"
+      ]
+    },
+    {
+      "slug": "secod-cloudflare-pages",
+      "title": "Cloudflare Pages",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy secod-cloudflare, secod-packages-delivery, secod-secrets-config, secod-web-app-security and secod-cloudflare-workers when Pages Functions/bindings are present. Apply when\u2026",
+      "purpose": "Exact Pages project, production branch, Git/Direct Upload deployment mode, production and preview build controls, commit/deployment ID and URL, pages.dev/branch/hash/custom\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-cloudflare",
+        "secod-packages-delivery",
+        "secod-secrets-config",
+        "secod-web-app-security",
+        "secod-cloudflare-workers"
+      ]
+    },
+    {
+      "slug": "secod-cloudflare-queues",
+      "title": "Cloudflare Queues",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy secod-cloudflare, secod-inputs-apis, secod-abuse-limits and secod-observability-response. Apply when Queues producers/consumers, queue bindings, HTTP pull consumers,\u2026",
+      "purpose": "Exact queue/DLQ, producer/consumer script or HTTP pull client, account/environment/binding, message schema/classification, producer/consumer API token, batch size/timeout,\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-cloudflare",
+        "secod-inputs-apis",
+        "secod-abuse-limits",
+        "secod-observability-response"
+      ]
+    },
+    {
+      "slug": "secod-cloudflare-workflows",
+      "title": "Cloudflare Workflows",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy secod-cloudflare, secod-inputs-apis, secod-abuse-limits and secod-observability-response. Apply when Workflows definitions/bindings, step.do, retries, waits/events,\u2026",
+      "purpose": "Exact Workflow definition/binding/script/environment, trigger/caller, instance ID/event payload, step name/retry/backoff/timeout, wait-event type/timeout, rollback/compensation,\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-cloudflare",
+        "secod-inputs-apis",
+        "secod-abuse-limits",
+        "secod-observability-response"
+      ]
+    },
+    {
+      "slug": "secod-cloudflare-hyperdrive",
+      "title": "Cloudflare Hyperdrive",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy secod-cloudflare-workers, secod-secrets-config, secod-inputs-apis and secod-data-files. Apply when Hyperdrive configurations/bindings, database connection strings,\u2026",
+      "purpose": "Exact Hyperdrive configuration/binding/environment, origin database/role/host/network path, connection-string/local-connection-string, TLS mode/CA/client certificate,\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-cloudflare-workers",
+        "secod-secrets-config",
+        "secod-inputs-apis",
+        "secod-data-files"
+      ]
+    },
+    {
+      "slug": "secod-cloudflare-vectorize",
+      "title": "Cloudflare Vectorize",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy secod-cloudflare-workers, secod-ai-api-integrations, secod-data-files and secod-observability-response. Apply when Vectorize indexes/bindings, embeddings, vector\u2026",
+      "purpose": "Exact index/binding/environment, embedding model/dimension, source document/R2/D1 data path, namespace, tenant/owner metadata field/index, upsert/delete/query code, returned\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-cloudflare-workers",
+        "secod-ai-api-integrations",
+        "secod-data-files",
+        "secod-observability-response"
+      ]
+    },
+    {
+      "slug": "secod-cloudflare-workers-ai",
+      "title": "Cloudflare Workers AI",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy secod-cloudflare-workers, secod-ai-api-integrations, secod-abuse-limits and secod-observability-response. Apply when Workers AI bindings, env.AI.run, Worker/Pages AI\u2026",
+      "purpose": "Exact AI binding/script/environment, model/task/version, request/stream/batch endpoint, input/output/file/embedding path, rate/usage/billing plan, account/AI Gateway relationship,\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-cloudflare-workers",
+        "secod-ai-api-integrations",
+        "secod-abuse-limits",
+        "secod-observability-response"
+      ]
+    },
+    {
+      "slug": "secod-cloudflare-ai-gateway",
+      "title": "Cloudflare AI Gateway",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy secod-cloudflare, secod-ai-api-integrations, secod-secrets-config, secod-abuse-limits and secod-observability-response. Apply when AI Gateway endpoints/bindings, BYOK\u2026",
+      "purpose": "Exact account/gateway ID/binding/domain, gateway/API token and permissions, provider/BYOK credential, model/route/fallback, authentication, Access policy, logging/payload\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-cloudflare",
+        "secod-ai-api-integrations",
+        "secod-secrets-config",
+        "secod-abuse-limits",
+        "secod-observability-response"
+      ]
+    },
+    {
+      "slug": "secod-supabase",
+      "title": "Supabase",
+      "layer": "Framework / provider adapter",
+      "summary": "Treat RLS, least-privilege Postgres roles and server-side authorization as mandatory for tenant data; never expose or misuse service_role/secret authority. Apply to every detected\u2026",
+      "purpose": "Exact project ref, organization, region, plan, custom domain, exposed schemas, enabled Data/GraphQL/Realtime/Storage/Edge Function/Database Webhook/Queue features and\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-supabase-auth"
+      ]
+    },
+    {
+      "slug": "secod-firebase",
+      "title": "Firebase",
+      "layer": "Framework / provider adapter",
+      "summary": "Deny unauthorized client access through tested Firebase Security Rules; enforce App Check for every detected supported Firebase service after an evidence-based rollout; keep Admin\u2026",
+      "purpose": "Exact Firebase/Google Cloud organization, project number/ID, billing account, application identifiers, region, plan, product, SDK/CLI, service-account, API-key, Auth-provider, App\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-identity-access",
+        "secod-secrets-config",
+        "secod-abuse-limits",
+        "secod-observability-response",
+        "secod-ai-api-integrations"
+      ]
+    },
+    {
+      "slug": "secod-neon",
+      "title": "Neon",
+      "layer": "Framework / provider adapter",
+      "summary": "Enforce least-privileged PostgreSQL roles and RLS, transaction-safe tenant context, protected production branches, encrypted and restricted database connectivity, safe preview-\u2026",
+      "purpose": "Exact Neon organization, project ID, cloud/region, plan, owner/admin/member access, billing, production/default/root/protected/preview branch, database, compute, endpoint, role,\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-identity-access"
+      ]
+    },
+    {
+      "slug": "secod-convex",
+      "title": "Convex",
+      "layer": "Framework / provider adapter",
+      "summary": "Authenticate and authorize every public Convex function at the server boundary; make privileged, scheduled and ctx.run* implementation paths internal-only; treat storage URLs and\u2026",
+      "purpose": "Exact Convex team/project, deployment name/reference/type/region/class, production/development/preview URL, custom domain, Convex/npm/CLI version, auth provider, environment\u2026",
+      "dependencies": [
+        "secod-core"
+      ]
+    },
+    {
+      "slug": "secod-aws-web",
+      "title": "AWS Web",
+      "layer": "Framework / provider adapter",
+      "summary": "Act as the AWS account and IAM security router: use workforce/workload federation and short-lived per-workload roles, least-privilege identity and resource policies, explicit\u2026",
+      "purpose": "Exact AWS Organization, account, partition, Region, environment, VPC, availability zone, service, endpoint, public DNS/domain, IaC stack, principal, role, permission boundary,\u2026",
+      "dependencies": [
+        "secod-core"
+      ]
+    },
+    {
+      "slug": "secod-aws-lambda-api-gateway",
+      "title": "AWS Lambda API Gateway",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy secod-aws-web, secod-identity-access, secod-inputs-apis, secod-abuse-limits and secod-secrets-config. Apply when Lambda, Lambda Function URLs, API Gateway\u2026",
+      "purpose": "Exact function, alias/version, runtime, architecture, layer, Function URL, API Gateway API/stage/route/method/authorizer/integration, ALB, custom domain, CORS, WAF, throttling,\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-aws-web",
+        "secod-identity-access",
+        "secod-inputs-apis",
+        "secod-abuse-limits",
+        "secod-secrets-config"
+      ]
+    },
+    {
+      "slug": "secod-aws-cognito",
+      "title": "AWS Cognito",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy secod-aws-web, secod-identity-access and secod-auth-provider-integrations. Apply when Amazon Cognito User Pools, Identity Pools, managed login/hosted UI, app clients,\u2026",
+      "purpose": "Exact user/identity pool, Region, domain, app client, app-client type, secret, OAuth grant, callback/logout URL, scope/resource server, identity provider, federation/attribute\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-aws-web",
+        "secod-identity-access",
+        "secod-auth-provider-integrations"
+      ]
+    },
+    {
+      "slug": "secod-aws-s3-cloudfront",
+      "title": "AWS S3 Cloudfront",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy secod-aws-web, secod-data-files, secod-secrets-config and secod-abuse-limits. Apply when S3 buckets/access points/object-lambda, CloudFront\u2026",
+      "purpose": "Exact bucket/access point/object prefix, owner/account/Region, Block Public Access, Object Ownership/ACL, bucket/access-point policy, encryption/KMS key,\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-aws-web",
+        "secod-data-files",
+        "secod-secrets-config",
+        "secod-abuse-limits"
+      ]
+    },
+    {
+      "slug": "secod-aws-data-services",
+      "title": "AWS Data Services",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy secod-aws-web, secod-data-files, secod-inputs-apis, secod-secrets-config and secod-observability-response. Apply when RDS/Aurora, DynamoDB, ElastiCache, OpenSearch,\u2026",
+      "purpose": "Exact database/table/cluster/cache/search domain/proxy, engine/version, account/Region, subnet/security group/VPC endpoint, public endpoint, IAM/database role, user/credential,\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-aws-web",
+        "secod-data-files",
+        "secod-inputs-apis",
+        "secod-secrets-config",
+        "secod-observability-response"
+      ]
+    },
+    {
+      "slug": "secod-google-cloud-web",
+      "title": "Google Cloud Web",
+      "layer": "Framework / provider adapter",
+      "summary": "Act as the Google Cloud organization, project and IAM security router: use short-lived federated workload identity and dedicated service accounts, least-privilege IAM and resource\u2026",
+      "purpose": "Exact organization, folder, billing account, project number/ID, Region, environment, VPC/Shared VPC, resource, endpoint/domain, IaC, principal, service account, IAM\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-firebase"
+      ]
+    },
+    {
+      "slug": "secod-google-cloud-storage",
+      "title": "Google Cloud Storage",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy secod-google-cloud-web, secod-data-files, secod-secrets-config and secod-abuse-limits. Apply when Cloud Storage buckets, managed folders, object ACLs, signed URLs/policy\u2026",
+      "purpose": "Exact bucket/project/Region, owner, Uniform bucket-level access, public-access-prevention, IAM/ACL, object prefix, retention/versioning/lifecycle, encryption/KMS key,\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-google-cloud-web",
+        "secod-data-files",
+        "secod-secrets-config",
+        "secod-abuse-limits"
+      ]
+    },
+    {
+      "slug": "secod-stripe",
+      "title": "Stripe",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy every secod-payments-billing requirement; treat verified Stripe state as authoritative and keep secret or restricted keys server-side with test/live isolation.",
+      "purpose": "Publishable/secret/restricted key boundaries; restricted-key/IP controls; key leak response; Checkout and PaymentIntent lifecycle, including PaymentIntent reuse rules and 3DS/SCA;\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-payments-billing"
+      ]
+    },
+    {
+      "slug": "secod-polar",
+      "title": "Polar",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy every secod-payments-billing requirement; bind checkout and customer state to the authenticated application user and grant entitlements only from verified provider state.",
+      "purpose": "Scope-limited server credentials; organization access token versus customer-session token boundary; test/production separation; server-created checkout with embed_origin; customer\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-payments-billing"
+      ]
+    },
+    {
+      "slug": "secod-lemonsqueezy",
+      "title": "Lemonsqueezy",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy every secod-payments-billing requirement; verify all billing events cryptographically and reconcile subscriptions, licenses and entitlements without trusting browser state.",
+      "purpose": "Server-only API key; test/live separation; raw-body X-Signature HMAC verification with constant-time comparison; X-Event-Name and payload resource/type validation; do not demand a\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-payments-billing"
+      ]
+    },
+    {
+      "slug": "secod-dodo-payments",
+      "title": "Dodo Payments",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy every secod-payments-billing requirement; verify and deduplicate every event and maintain correct entitlement state across retries, renewal failures, refunds and disputes.",
+      "purpose": "Server-only credentials; test/live separation; signing-secret rotation; Standard Webhooks raw-body signature and timestamp verification with a freshness window; prohibit test-only\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-payments-billing"
+      ]
+    },
+    {
+      "slug": "secod-whop",
+      "title": "Whop",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy every secod-payments-billing requirement; use least-privileged server credentials and derive membership access only from verified Whop state.",
+      "purpose": "OAuth versus company/app API key boundaries; server-only company/app API keys; permission scoping; environment separation; raw-body verification of Standard Webhooks webhook-\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-payments-billing"
+      ]
+    },
+    {
+      "slug": "secod-openai",
+      "title": "Openai",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy every secod-ai-api-integrations requirement; keep long-lived OpenAI credentials server-side and constrain project, model, user, data-retention, Realtime and spending\u2026",
+      "purpose": "Official OpenAI SDK/Responses/Realtime detection; separate staging and production projects; project-scoped keys, service accounts and Admin API key separation; optional workload\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-ai-api-integrations"
+      ]
+    },
+    {
+      "slug": "secod-anthropic",
+      "title": "Anthropic",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy every secod-ai-api-integrations requirement; keep Anthropic credentials server-side and enforce request, model, token, retention and tenant boundaries.",
+      "purpose": "@anthropic-ai/sdk and API detection; Workload Identity Federation for eligible production workloads; server key scope, expiry and rotation; Admin API key separation; anthropic-\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-ai-api-integrations"
+      ]
+    },
+    {
+      "slug": "secod-google-genai",
+      "title": "Google Genai",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy every secod-ai-api-integrations requirement; restrict Gemini credentials and projects, proxy ordinary requests through the backend, and constrain direct Live API access.",
+      "purpose": "@google/genai, Gemini API and Live API detection; explicit prohibition of production browser API keys except constrained Live API ephemeral tokens; API-key restrictions or managed\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-ai-api-integrations"
+      ]
+    },
+    {
+      "slug": "secod-xai-grok",
+      "title": "Xai Grok",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy every secod-ai-api-integrations requirement; keep xAI credentials server-side and constrain model access, usage, retention and optional transport authentication.",
+      "purpose": "xAI/Grok and OpenAI-compatible client detection; server-only key; API-key endpoint/model ACLs, expiry and per-key QPS/QPM/TPM limits; management-key separation; audit logs;\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-ai-api-integrations"
+      ]
+    },
+    {
+      "slug": "secod-vercel-ai",
+      "title": "Vercel AI",
+      "layer": "Framework / provider adapter",
+      "summary": "Satisfy every secod-ai-api-integrations requirement; scope AI Gateway and AI SDK access to the correct project, providers, models, budgets and telemetry policy.",
+      "purpose": "ai, @ai-sdk/* and AI Gateway detection; prefer short-lived Vercel OIDC over long-lived Gateway API keys; project/team scoping; team-wide provider and model allowlists; per-key\u2026",
+      "dependencies": [
+        "secod-core",
+        "secod-ai-api-integrations"
+      ]
+    }
+  ],
+  "recommendedBaseline": [
+    "secod-core",
+    "secod-threat-model",
+    "secod-identity-access",
+    "secod-web-app-security",
+    "secod-inputs-apis",
+    "secod-runtime-execution",
+    "secod-crypto-data-protection",
+    "secod-data-files",
+    "secod-abuse-limits",
+    "secod-secrets-config",
+    "secod-packages-delivery",
+    "secod-vulnerability-management",
+    "secod-observability-response",
+    "secod-payments-billing",
+    "secod-ai-api-integrations",
+    "secod-container-runtime",
+    "secod-email-messaging",
+    "secod-failure-safety",
+    "secod-ship-check"
+  ],
+  "providers": [
+    {
+      "slug": "supabase",
+      "title": "Supabase",
+      "skill": "secod-supabase",
+      "coverage": "Checks database, Storage, Realtime, Edge Function, key, and production settings."
+    },
+    {
+      "slug": "firebase",
+      "title": "Firebase",
+      "skill": "secod-firebase",
+      "coverage": "Checks Firebase rules, App Check, privileged credentials, Functions, and IAM."
+    },
+    {
+      "slug": "neon",
+      "title": "Neon",
+      "skill": "secod-neon",
+      "coverage": "Checks Postgres roles, RLS, branches, backups, connections, and network boundaries."
+    },
+    {
+      "slug": "convex",
+      "title": "Convex",
+      "skill": "secod-convex",
+      "coverage": "Checks Convex function visibility, validation, authorization, webhooks, and deployment access."
+    },
+    {
+      "slug": "aws",
+      "title": "AWS",
+      "skill": "secod-aws-web",
+      "coverage": "Routes AWS web, Lambda/API Gateway, Cognito, S3/CloudFront, data, IAM, and secret checks."
+    },
+    {
+      "slug": "google-cloud",
+      "title": "Google Cloud",
+      "skill": "secod-google-cloud-web",
+      "coverage": "Routes Google Cloud IAM, secret, and Storage checks."
+    }
+  ],
+  "features": [
+    {
+      "id": "authentication",
+      "label": "User login or accounts",
+      "skills": [
+        "secod-identity-access"
+      ]
+    },
+    {
+      "id": "uploads",
+      "label": "User uploads",
+      "skills": [
+        "secod-data-files"
+      ]
+    },
+    {
+      "id": "payments",
+      "label": "Payments or incoming webhooks",
+      "skills": [
+        "secod-payments-billing"
+      ]
+    },
+    {
+      "id": "ai",
+      "label": "AI features",
+      "skills": [
+        "secod-ai-api-integrations"
+      ]
+    },
+    {
+      "id": "admin",
+      "label": "Admin area",
+      "skills": [
+        "secod-identity-access",
+        "secod-observability-response"
+      ]
+    },
+    {
+      "id": "multitenancy",
+      "label": "Separate customer workspaces",
+      "skills": [
+        "secod-identity-access"
+      ]
+    },
+    {
+      "id": "delivery",
+      "label": "Automated build or deployment",
+      "skills": [
+        "secod-packages-delivery",
+        "secod-failure-safety"
+      ]
+    }
+  ]
+}

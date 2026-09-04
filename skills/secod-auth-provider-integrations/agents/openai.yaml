@@ -1,0 +1,3 @@
+display_name: "Auth Provider Integrations"
+short_description: "Satisfy every applicable secod-identity-access requirement; apply when Clerk, Auth0, WorkOS, Better Auth, Supabase Auth or another supported third-party authentication SDK,…"
+default_prompt: "Use $secod-auth-provider-integrations to review this project. Preserve missing evidence as Not verified."

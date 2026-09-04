@@ -1,0 +1,9 @@
+{
+  "name": "secod",
+  "version": "0.1.0",
+  "description": "Security coding skills for AI builders.",
+  "author": {
+    "name": "SECOD maintainers"
+  },
+  "license": "Apache-2.0"
+}

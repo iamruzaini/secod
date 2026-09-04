@@ -1,0 +1,3 @@
+display_name: "Threat Model"
+short_description: "Establish assets, actors, trust boundaries, tenant boundaries, attacker goals, abuse cases, failure states and high-impact flows before a launch verdict."
+default_prompt: "Use $secod-threat-model to review this project. Preserve missing evidence as Not verified."

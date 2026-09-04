@@ -1,0 +1,24 @@
+{
+  "name": "secod",
+  "version": "0.1.0",
+  "description": "Security coding skills for AI builders.",
+  "author": {
+    "name": "SECOD maintainers"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "security",
+    "agent-skills",
+    "ai-coding"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "SECOD",
+    "shortDescription": "Security coding skills for AI builders.",
+    "longDescription": "Evidence-based security skills for AI-built applications.",
+    "developerName": "SECOD maintainers",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Use SECOD to create a security plan for this project."
+  }
+}

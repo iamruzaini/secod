@@ -1,0 +1,3 @@
+display_name: "Data Files"
+short_description: "Authorize every upload, download, storage object, share link and export; validate actual file content and bound storage and processing."
+default_prompt: "Use $secod-data-files to review this project. Preserve missing evidence as Not verified."
