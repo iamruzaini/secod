@@ -85,7 +85,7 @@ spend, deployment failures and rollback events.
 
 ## Dependencies and routing
 
-Direct dependencies: `secod-core`, `secod-vercel-ai`.
+Direct dependencies: `secod-core`.
 
 When a required dependency is not installed or cannot be invoked, record the affected
 control as **Not verified** and do not issue a passing or launch-ready conclusion.

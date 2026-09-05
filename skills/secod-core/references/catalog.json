@@ -418,8 +418,7 @@
       "summary": "Satisfy every applicable general baseline requirement; apply when .vercel/project.json, vercel.json/vercel.ts, a Vercel Git/CLI deployment, VERCEL_* system variables, Vercel\u2026",
       "purpose": "Inventory the Vercel team/project IDs and names, linked repository, production branch and new-project first-deployment behavior, root/build/install settings, plan/tier, regions\u2026",
       "dependencies": [
-        "secod-core",
-        "secod-vercel-ai"
+        "secod-core"
       ]
     },
     {
@@ -452,8 +451,7 @@
       "summary": "Act as the Cloudflare account, zone and Developer Platform security router. It supersedes the former monolithic scope of secod-cloudflare-workers and routes every detected\u2026",
       "purpose": "Exact Cloudflare account, zone, project/script/service, environment, plan, user/service/API token, account/zone role, custom domain/DNS/TLS, Wrangler/IaC/CI, Access\u2026",
       "dependencies": [
-        "secod-core",
-        "secod-cloudflare-workers"
+        "secod-core"
       ]
     },
     {
@@ -484,8 +482,7 @@
         "secod-cloudflare",
         "secod-packages-delivery",
         "secod-secrets-config",
-        "secod-web-app-security",
-        "secod-cloudflare-workers"
+        "secod-web-app-security"
       ]
     },
     {
@@ -580,8 +577,7 @@
       "summary": "Treat RLS, least-privilege Postgres roles and server-side authorization as mandatory for tenant data; never expose or misuse service_role/secret authority. Apply to every detected\u2026",
       "purpose": "Exact project ref, organization, region, plan, custom domain, exposed schemas, enabled Data/GraphQL/Realtime/Storage/Edge Function/Database Webhook/Queue features and\u2026",
       "dependencies": [
-        "secod-core",
-        "secod-supabase-auth"
+        "secod-core"
       ]
     },
     {
@@ -595,8 +591,7 @@
         "secod-identity-access",
         "secod-secrets-config",
         "secod-abuse-limits",
-        "secod-observability-response",
-        "secod-ai-api-integrations"
+        "secod-observability-response"
       ]
     },
     {
@@ -694,8 +689,7 @@
       "summary": "Act as the Google Cloud organization, project and IAM security router: use short-lived federated workload identity and dedicated service accounts, least-privilege IAM and resource\u2026",
       "purpose": "Exact organization, folder, billing account, project number/ID, Region, environment, VPC/Shared VPC, resource, endpoint/domain, IaC, principal, service account, IAM\u2026",
       "dependencies": [
-        "secod-core",
-        "secod-firebase"
+        "secod-core"
       ]
     },
     {

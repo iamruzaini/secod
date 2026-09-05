@@ -55,7 +55,7 @@ Vault-secret disclosure, migration/branch/environment drift and failed backup re
 
 ## Dependencies and routing
 
-Direct dependencies: `secod-core`, `secod-supabase-auth`.
+Direct dependencies: `secod-core`.
 
 When a required dependency is not installed or cannot be invoked, record the affected
 control as **Not verified** and do not issue a passing or launch-ready conclusion.

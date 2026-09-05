@@ -110,6 +110,19 @@ CONTROL_APPROVAL_DATES = {
     "secod-observability-response": "2026-08-27",
 }
 
+# These profiles mention optional companion skills in their PRD promises. They
+# are routed by detected signals, not installed as unconditional dependencies.
+# Keeping the exceptions here makes regenerated catalogs preserve provider
+# isolation and prevents dependency cycles.
+CONDITIONAL_DEPENDENCY_EXCLUSIONS = {
+    "secod-supabase": {"secod-supabase-auth"},
+    "secod-firebase": {"secod-ai-api-integrations"},
+    "secod-google-cloud-web": {"secod-firebase"},
+    "secod-vercel-platform": {"secod-vercel-ai"},
+    "secod-cloudflare": {"secod-cloudflare-workers"},
+    "secod-cloudflare-pages": {"secod-cloudflare-workers"},
+}
+
 
 def title_from_slug(slug: str) -> str:
     names = {
@@ -169,7 +182,8 @@ def dependencies_for(skill: dict[str, str]) -> list[str]:
         return []
     prefix = skill["promise"].split("Apply when", 1)[0]
     direct = re.findall(r"`(secod-[a-z0-9-]+)`", prefix)
-    dependencies = [name for name in direct if name != slug]
+    exclusions = CONDITIONAL_DEPENDENCY_EXCLUSIONS.get(slug, set())
+    dependencies = [name for name in direct if name != slug and name not in exclusions]
     if "secod-core" not in dependencies:
         dependencies.insert(0, "secod-core")
     return list(dict.fromkeys(dependencies))

@@ -68,7 +68,11 @@ def main() -> int:
             json.loads(runtime_catalog_file.read_text(encoding="utf-8"))
         except (UnicodeDecodeError, json.JSONDecodeError) as error:
             problems.append("secod-core runtime catalog is invalid JSON: " + str(error))
-        if runtime_catalog_file.read_bytes() != catalog_file.read_bytes():
+        # Git checkouts may use LF or CRLF; compare the generated JSON content
+        # independently of platform line endings.
+        normalized_runtime = runtime_catalog_file.read_bytes().replace(b"\r\n", b"\n")
+        normalized_catalog = catalog_file.read_bytes().replace(b"\r\n", b"\n")
+        if normalized_runtime != normalized_catalog:
             problems.append("secod-core runtime catalog differs from catalog.json")
 
     catalog = json.loads(catalog_file.read_text(encoding="utf-8"))

@@ -71,7 +71,7 @@ production drift, and missing alerts or incident evidence.
 
 ## Dependencies and routing
 
-Direct dependencies: `secod-core`, `secod-identity-access`, `secod-secrets-config`, `secod-abuse-limits`, `secod-observability-response`, `secod-ai-api-integrations`.
+Direct dependencies: `secod-core`, `secod-identity-access`, `secod-secrets-config`, `secod-abuse-limits`, `secod-observability-response`.
 
 When a required dependency is not installed or cannot be invoked, record the affected
 control as **Not verified** and do not issue a passing or launch-ready conclusion.

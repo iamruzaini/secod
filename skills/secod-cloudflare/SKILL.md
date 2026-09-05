@@ -49,7 +49,7 @@ logging and configuration drift.
 
 ## Dependencies and routing
 
-Direct dependencies: `secod-core`, `secod-cloudflare-workers`.
+Direct dependencies: `secod-core`.
 
 When a required dependency is not installed or cannot be invoked, record the affected
 control as **Not verified** and do not issue a passing or launch-ready conclusion.

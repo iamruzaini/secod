@@ -157,6 +157,10 @@ Seven skills currently have executable insecure-fixture suites. The remaining
 fixture directories are documentation-only test plans unless explicitly marked
 otherwise.
 
+Phase 6 also includes one cross-skill executable suite covering 14 critical
+insecure behaviors. It is a deterministic fixture contract and does not prove
+that an agent executed every skill against a real application.
+
 Repository validation currently covers catalog structure, Agent Skills
 metadata, source-register requirements, test layout and repository hygiene.
 The executable fixture suites are:
@@ -168,6 +172,13 @@ The executable fixture suites are:
 - `secod-packages-delivery`
 - `secod-payments-billing`
 - `secod-secrets-config`
+
+Cross-skill critical behavior suite:
+
+- `secod-critical-behaviors` (14 categories; not a skill-owned suite)
+
+See [`docs/PHASE-6-BEHAVIOR-EVIDENCE.md`](docs/PHASE-6-BEHAVIOR-EVIDENCE.md) for
+the exact routing, evidence-boundary and critical-behavior results.
 
 Run repository checks from a clone:
 

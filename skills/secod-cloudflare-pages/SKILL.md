@@ -46,7 +46,7 @@ gap, build-log/static-asset/source-map disclosure and Pages Function runtime dri
 
 ## Dependencies and routing
 
-Direct dependencies: `secod-core`, `secod-cloudflare`, `secod-packages-delivery`, `secod-secrets-config`, `secod-web-app-security`, `secod-cloudflare-workers`.
+Direct dependencies: `secod-core`, `secod-cloudflare`, `secod-packages-delivery`, `secod-secrets-config`, `secod-web-app-security`.
 
 When a required dependency is not installed or cannot be invoked, record the affected
 control as **Not verified** and do not issue a passing or launch-ready conclusion.

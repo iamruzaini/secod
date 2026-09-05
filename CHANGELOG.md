@@ -11,6 +11,8 @@
 - Added installation instructions for Codex, Claude Code and Cursor; full
   installation verification remains a release gate.
 - Added seven executable insecure-fixture suites.
+- Added a 57-skill behavior matrix, dependency-routing gate, evidence-boundary
+  gate, and cross-skill fixtures for 14 critical insecure behaviors.
 - Added provider and generalized security skill routing.
 - Added evidence registers and explicit `Not verified` behavior.
 
