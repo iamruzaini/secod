@@ -92,7 +92,7 @@ Record every signal with path/line, evidence class, and environment. Maintain se
 inventories for development, preview, staging, and production. Conflicting or shared
 environment signals are classified `Conflicting` and force affected controls to `Not verified`.
 Discovery commands, per-family signals, the closure algorithm, and conflict rules live in
-[`references/discovery-routing.md`](discovery-routing.md).
+[`references/discovery-routing.md`](references/discovery-routing.md).
 
 ## Review workflow
 
@@ -243,7 +243,7 @@ and surface with classification and route targets. Data-class uncertainty keeps 
 Cloudflare family; payment providers; AI providers.
 
 **Inspect and verify:** Apply the per-family signal lists in
-[`references/discovery-routing.md`](discovery-routing.md): Supabase config/migrations/SDK/`SUPABASE_*`;
+[`references/discovery-routing.md`](references/discovery-routing.md): Supabase config/migrations/SDK/`SUPABASE_*`;
 Firebase config/rules/SDK/`FIREBASE_*`; AWS SDK modules/IaC providers/ARNs/service variables;
 Google Cloud client libraries/Terraform/service references; Cloudflare wrangler configs/bindings/product
 profiles; payment SDK/checkout/webhook/
@@ -277,7 +277,7 @@ their conditional route.
 verdict downstream.
 
 **Inspect and verify:** Compute closure from every directly applicable skill using the algorithm
-in [`references/discovery-routing.md`](discovery-routing.md) against the live catalog: detect
+in [`references/discovery-routing.md`](references/discovery-routing.md) against the live catalog: detect
 cycles, unknown slugs, missing skill directories, load failures. Retain catalog path/hash,
 direct selections, dependency edges, closure order, and failures. Continue independent branches
 after a branch failure; mark all affected coverage `Not verified`. Never silently repair a
@@ -385,13 +385,13 @@ All fixtures for this skill are documentation-only plans; none execute code loca
 | Admin export with undocumented contents | Documentation-only case | PROVISIONAL-core-5 (Unknown data class) |
 | Routed Next.js app before adapter execution | Behavior case | PROVISIONAL-core-8 (routing is not proof) |
 
-Safe local commands: read-only `rg` searches per [`references/discovery-routing.md`](discovery-routing.md).
+Safe local commands: read-only `rg` searches per [`references/discovery-routing.md`](references/discovery-routing.md).
 Never claim Markdown fixture plans executed as code. Never run destructive, production-changing,
 user-creating, payment-creating, refunding, key-rotating, dashboard-changing, or
 account-changing tests without explicit authorization.
 
 ## References
 
-- [`references/discovery-routing.md`](discovery-routing.md) — safe discovery commands, per-family
+- [`references/discovery-routing.md`](references/discovery-routing.md) — safe discovery commands, per-family
   signal lists, closure algorithm, conflict and evidence rules.
-- [`references/sources.md`](sources.md) — source register and review-expiry tracking.
+- [`references/sources.md`](references/sources.md) — source register and review-expiry tracking.

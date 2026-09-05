@@ -344,5 +344,5 @@ key-rotating, dashboard-changing, or account-changing tests without explicit aut
 
 ## References
 
-- [`references/sources.md`](sources.md) — source register and review-expiry tracking for the
+- [`references/sources.md`](references/sources.md) — source register and review-expiry tracking for the
   OWASP standards used in mapping and gate verification.

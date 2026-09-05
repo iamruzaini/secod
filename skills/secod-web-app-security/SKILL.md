@@ -440,6 +440,6 @@ dashboard-changing, or account-changing tests without explicit authorization.
 
 ## References
 
-- [`references/sources.md`](sources.md) — source register: MDN CSP implementation guide, MDN
+- [`references/sources.md`](references/sources.md) — source register: MDN CSP implementation guide, MDN
   script-src/strict-dynamic reference, web.dev strict-CSP guidance, RFC 10017 browser-token
   storage rules.

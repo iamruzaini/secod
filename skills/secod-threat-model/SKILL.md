@@ -382,5 +382,5 @@ account-changing tests without explicit authorization.
 
 ## References
 
-- [`references/sources.md`](sources.md) — source register: OWASP Top 10:2025, OWASP Threat
+- [`references/sources.md`](references/sources.md) — source register: OWASP Top 10:2025, OWASP Threat
   Modeling Cheat Sheet (four-question framework, STRIDE), LINDDUN privacy framework reference.

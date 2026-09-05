@@ -492,6 +492,6 @@ authorization.
 
 ## References
 
-- [`references/sources.md`](sources.md) — source register: portable normative sources (OWASP
+- [`references/sources.md`](references/sources.md) — source register: portable normative sources (OWASP
   Authentication/MFA/OAuth cheat sheets, RFC 9700, W3C WebAuthn L3) and per-provider official
   indexes plus control-specific direct pages with review status.

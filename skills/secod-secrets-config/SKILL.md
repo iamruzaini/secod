@@ -484,5 +484,5 @@ default-credential probes against deployed systems and any history rewrite.
 
 ## References
 
-- [`references/sources.md`](sources.md) — source register with review-expiry tracking for
+- [`references/sources.md`](references/sources.md) — source register with review-expiry tracking for
   history-removal tooling, secret scanning, and default-credential guidance.

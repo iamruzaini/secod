@@ -438,5 +438,5 @@ authorization.
 
 ## References
 
-- [`references/sources.md`](sources.md) — source register: RFC 10017 browser-based OAuth BCP,
+- [`references/sources.md`](references/sources.md) — source register: RFC 10017 browser-based OAuth BCP,
   RFC 9700 OAuth security BCP, OWASP Authentication and Session Management cheat sheets.
