@@ -8,10 +8,21 @@ on:
 jobs:
   validate-test-layout:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        skill:
+          - secod-abuse-limits
+          - secod-crypto-data-protection
+          - secod-failure-safety
+          - secod-observability-response
+          - secod-packages-delivery
+          - secod-payments-billing
+          - secod-secrets-config
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: "3.12"
       - run: python scripts/validate_test_layout.py
-      - run: python tests/insecure-fixtures/secod-failure-safety/run_fixtures.py
+      - run: python tests/insecure-fixtures/${{ matrix.skill }}/run_fixtures.py

@@ -1,11 +1,15 @@
 # Source register: secod-supabase-auth
 
-Use official documentation indexes for discovery only. Verify security-critical claims against
-the direct primary source and refresh this register before its review-expiry date.
+Use official documentation indexes for discovery only. These direct official sources were
+identified on 2026-09-05, but their control mapping still requires substantive review.
+Until that review is complete, affected provider requirements remain **Not verified**.
 
-| Source | URL | Status |
-| --- | --- | --- |
-| Direct official sources | Add the control-specific primary sources required by the PRD. | Pending review |
+| Source ID | Title | Direct official URL | Owner | Reviewed date | Refresh trigger | Status | Control IDs | Assumptions |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| SUPABASE-AUTH-SRC-01 | JWT signing keys | https://supabase.com/docs/guides/auth/signing-keys | Supabase | 2026-09-05 (identification only) | 2027-03-05 or documentation/service behavior change | Pending review | PROVISIONAL-supabase-auth-ALL | Current hosted service; exact plan, region, API/SDK version, enabled features, and deployed configuration must be verified per project. |
+| SUPABASE-AUTH-SRC-02 | Auth sessions | https://supabase.com/docs/guides/auth/sessions | Supabase | 2026-09-05 (identification only) | 2027-03-05 or documentation/service behavior change | Pending review | PROVISIONAL-supabase-auth-ALL | Current hosted service; exact plan, region, API/SDK version, enabled features, and deployed configuration must be verified per project. |
+| SUPABASE-AUTH-SRC-03 | Multi-factor authentication | https://supabase.com/docs/guides/auth/auth-mfa | Supabase | 2026-09-05 (identification only) | 2027-03-05 or documentation/service behavior change | Pending review | PROVISIONAL-supabase-auth-ALL | Current hosted service; exact plan, region, API/SDK version, enabled features, and deployed configuration must be verified per project. |
 
-For every retained source, record version/SDK version, reviewed date, review expiry, content
-hash or ETag where obtainable, owner, plan/tier, region, feature maturity, and SECOD control IDs.
+Status meanings: `Reviewed` means content was read and mapped to controls; `Pending review` means
+the official URL is identified but mapping is incomplete; `Not verified` means evidence is
+inaccessible, stale, or insufficient. URL reachability alone never establishes `Reviewed`.

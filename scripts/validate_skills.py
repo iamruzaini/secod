@@ -13,6 +13,47 @@ def frontmatter_value(content: str, key: str) -> str | None:
     return match.group(1).strip().strip('"') if match else None
 
 
+def source_register_problems(skill: str, content: str) -> list[str]:
+    """Validate release-visible evidence registers without claiming URL review."""
+    problems: list[str] = []
+    lowered = content.lower()
+    if "add the control-specific primary sources" in lowered:
+        problems.append(skill + " source register still contains placeholder evidence")
+    if not re.search(r"https://[^\s|)]+", content):
+        problems.append(skill + " source register has no HTTPS source URL")
+
+    required_headers = {
+        "source identifier": r"\b(source\s+id|id)\b",
+        "title": r"\btitle\b|direct primary source",
+        "direct URL": r"direct[^|]*(url|source)",
+        "owner": r"\bowner\b",
+        "reviewed date": r"\breview(ed| date)\b",
+        "refresh trigger": r"\b(refresh|expiry)\b",
+        "status": r"\bstatus\b",
+        "control mapping": r"\bcontrols?(\s+ids?)?\b|applicable control ids",
+        "assumptions": r"\bassumptions?\b",
+    }
+    header_text = "\n".join(
+        line for line in content.splitlines() if line.startswith("|") and "---" not in line
+    )
+    for label, pattern in required_headers.items():
+        # Older reviewed registers may keep owner/review cadence in prose above a richer table.
+        search_text = content if label in {"owner", "reviewed date", "refresh trigger"} else header_text
+        if not re.search(pattern, search_text, re.IGNORECASE):
+            problems.append(skill + " source register lacks " + label)
+
+    if not re.search(r"\b(Reviewed|Pending review|Not verified)\b", content):
+        problems.append(skill + " source register lacks a recognized status")
+    if not re.search(r"\b\d{4}-\d{2}-\d{2}\b", content):
+        problems.append(skill + " source register lacks a review date")
+    if "| Reviewed |" in content and not all(
+        re.search(pattern, content, re.IGNORECASE)
+        for pattern in (r"\b\d{4}-\d{2}-\d{2}\b", r"\bowner\b", r"\bcontrols?\b")
+    ):
+        problems.append(skill + " has Reviewed evidence without date, owner, and control mapping")
+    return problems
+
+
 def main() -> int:
     root = Path(__file__).resolve().parents[1]
     skills_root = root / "skills"
@@ -88,8 +129,11 @@ def main() -> int:
             problems.append(skill + " needs an informative description")
         if len(content.splitlines()) > 500:
             problems.append(skill + " exceeds the 500-line SKILL.md limit")
-        if not (skills_root / skill / "references" / "sources.md").is_file():
+        source_file = skills_root / skill / "references" / "sources.md"
+        if not source_file.is_file():
             problems.append(skill + " has no references/sources.md")
+        elif not re.search(r"^\s*internal:\s*true\s*$", content, re.MULTILINE):
+            problems.extend(source_register_problems(skill, source_file.read_text(encoding="utf-8")))
         if not (root / "tests" / "trigger-cases" / (skill + ".md")).is_file():
             problems.append(skill + " has no trigger case")
         if not (root / "tests" / "insecure-fixtures" / skill / "README.md").is_file():
