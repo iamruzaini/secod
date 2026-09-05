@@ -1,10 +1,10 @@
 # SECOD v0.1.0 Installation Test Evidence
 
-Test date: 2026-09-05  
-Operating system: Microsoft Windows 11 Home 10.0.26200 (AMD64)  
-Node version: v24.11.1  
-Skills CLI version: 1.5.23  
-Public source: `iamruzaini/secod` `main` at `659cdc41e48cc30ff81ba9742dc2df170f909abf`  
+- Test date: 2026-09-05
+- Operating system: Microsoft Windows 11 Home 10.0.26200 (AMD64)
+- Node version: v24.11.1
+- Skills CLI version: 1.5.23
+- Public source: `iamruzaini/secod` `main` at `659cdc41e48cc30ff81ba9742dc2df170f909abf`
 Temporary test root: `C:\Users\justf\AppData\Local\Temp\secod-v0.1.0-install-test`
 
 All agent tests ran in separate fresh Git repositories under the temporary test root.
