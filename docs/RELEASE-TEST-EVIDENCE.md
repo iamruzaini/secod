@@ -1,42 +1,49 @@
-# Historical installation test evidence: 57-skill catalog
+# v0.1.0 installation test evidence
 
-> This 2026-09-05 run covers the earlier 57-skill catalog at commit
-> `659cdc41e48cc30ff81ba9742dc2df170f909abf`. The current `implementation-v1`
-> catalog contains 60 skills. These results remain historical evidence and do
-> not satisfy the current `v0.1.0` installation gate. Repeat the clean Codex,
-> Claude Code, and Cursor installation tests against the release candidate.
+This 2026-09-07 run tested the merged SECOD release candidate from public
+`main` at commit `e550cc218992cff67990fcc862a53e7214b3dc0d`. The skill tree
+was unchanged by the subsequent release-document-only changes.
 
-- Test date: 2026-09-05
+- Test date: 2026-09-07
 - Operating system: Microsoft Windows 11 Home 10.0.26200 (AMD64)
 - Node version: v24.11.1
 - Skills CLI version: 1.5.23
-- Public source: `iamruzaini/secod` `main` at `659cdc41e48cc30ff81ba9742dc2df170f909abf`
-Temporary test root: `C:\Users\justf\AppData\Local\Temp\secod-v0.1.0-install-test`
+- Public source: `iamruzaini/secod` `main` at `e550cc218992cff67990fcc862a53e7214b3dc0d`
+- Temporary test root: `C:\Users\justf\AppData\Local\Temp\secod-v0.1.0-final-install-b7590d5a2b4f45819e171366aa929a11`
 
-All agent tests ran in separate fresh Git repositories under the temporary test root.
+Every full-agent test ran in a separate fresh Git repository under the
+temporary test root.
 
 | Test date | Operating system | Node version | Skills CLI version | Agent target | Command | Expected skill count | Actual skill count | Result |
 |---|---|---|---|---|---|---:|---:|---|
-| 2026-09-05 | Windows 11 Home 10.0.26200 AMD64 | v24.11.1 | 1.5.23 | Public discovery | `npx skills add iamruzaini/secod --list` | 57 | 57 | PASS |
-| 2026-09-05 | Windows 11 Home 10.0.26200 AMD64 | v24.11.1 | 1.5.23 | Codex | `npx skills add iamruzaini/secod --skill '*' --agent codex --yes` | 57 | 57 | PASS |
-| 2026-09-05 | Windows 11 Home 10.0.26200 AMD64 | v24.11.1 | 1.5.23 | Claude Code | `npx skills add iamruzaini/secod --skill '*' --agent claude-code --yes` | 57 | 57 | PASS |
-| 2026-09-05 | Windows 11 Home 10.0.26200 AMD64 | v24.11.1 | 1.5.23 | Cursor | `npx skills add iamruzaini/secod --skill '*' --agent cursor --yes` | 57 | 57 | PASS |
-| 2026-09-05 | Windows 11 Home 10.0.26200 AMD64 | v24.11.1 | 1.5.23 | Codex selective | `npx skills add iamruzaini/secod --skill secod-core --agent codex --yes` | 1 | 1 | PASS |
-| 2026-09-05 | Windows 11 Home 10.0.26200 AMD64 | v24.11.1 | 1.5.23 | Codex update | `npx skills update` | 57 refreshed | 57 refreshed | PASS |
-| 2026-09-05 | Windows 11 Home 10.0.26200 AMD64 | v24.11.1 | 1.5.23 | Codex repeat install | `npx skills add iamruzaini/secod --skill secod-core --agent codex --yes` (second run) | 1 | 1 | PASS |
-| 2026-09-05 | Windows 11 Home 10.0.26200 AMD64 | v24.11.1 | 1.5.23 | Codex removal | `npx skills remove --skill secod-core --yes` | 1 unrelated skill | 1 unrelated skill | PASS |
+| 2026-09-07 | Windows 11 Home 10.0.26200 AMD64 | v24.11.1 | 1.5.23 | Public discovery | `npx skills add iamruzaini/secod --list` | 60 | 60 | PASS |
+| 2026-09-07 | Windows 11 Home 10.0.26200 AMD64 | v24.11.1 | 1.5.23 | Codex | `npx skills add iamruzaini/secod --skill '*' --agent codex --yes` | 60 | 60 | PASS |
+| 2026-09-07 | Windows 11 Home 10.0.26200 AMD64 | v24.11.1 | 1.5.23 | Claude Code | `npx skills add iamruzaini/secod --skill '*' --agent claude-code --yes` | 60 | 60 | PASS |
+| 2026-09-07 | Windows 11 Home 10.0.26200 AMD64 | v24.11.1 | 1.5.23 | Cursor | `npx skills add iamruzaini/secod --skill '*' --agent cursor --yes` | 60 | 60 | PASS |
+| 2026-09-07 | Windows 11 Home 10.0.26200 AMD64 | v24.11.1 | 1.5.23 | Codex selective | `npx skills add iamruzaini/secod --skill secod-core --agent codex --yes` | 1 | 1 | PASS |
+| 2026-09-07 | Windows 11 Home 10.0.26200 AMD64 | v24.11.1 | 1.5.23 | Codex update | `npx skills update --yes` | 60 refreshed | 60 refreshed | PASS |
+| 2026-09-07 | Windows 11 Home 10.0.26200 AMD64 | v24.11.1 | 1.5.23 | Codex repeat install | `npx skills add iamruzaini/secod --skill secod-core --agent codex --yes` (second run) | 1 | 1 | PASS |
+| 2026-09-07 | Windows 11 Home 10.0.26200 AMD64 | v24.11.1 | 1.5.23 | Project-scope removal | `npx skills remove --skill secod-core --yes` | 1 unrelated skill | 1 unrelated skill | PASS |
 
 ## Verification details
 
-- Discovery listed 57 names; all 57 names were unique; `secod-core` was present; generalized and provider-specific entries were both present.
-- Each full install contained 57 skill directories and 57 `SKILL.md` files.
-- Each full install contained all 216 tracked skill files with zero missing resources.
-- CLI project listings returned 57 skills for Codex, Claude Code and Cursor.
-- Internal Markdown links resolved successfully in the source catalog and all three installed catalogs: zero broken links.
+- Public discovery reported 60 skills. Full installs had 60 unique names and
+  included `secod-core`, generalized coverage such as
+  `secod-identity-access`, and provider coverage such as `secod-firebase`.
+- Each full install contained 60 skill directories, 60 `SKILL.md` files, and
+  zero broken relative resource links.
+- Codex, Claude Code, and Cursor were tested in separate clean repositories;
+  one agent installation did not mask another.
+- The update command completed with `Updated 60 skill(s)` and exit code 0.
 - Selective installation contained only `secod-core`.
 - Reinstalling `secod-core` kept one directory and did not create duplicates.
-- `secod-ai-api-integrations` was installed as an unrelated skill. After removing `secod-core`, it remained present and its `SKILL.md` SHA-256 hash was unchanged.
-- The unattended update verification used `npx skills update -y` to complete the same project update without prompting; it finished with `Updated 57 skill(s)` and exit code 0.
-- For complete project removal, omit `--agent`; an agent-scoped removal can leave the shared project copy under `.agents/skills`.
+- Project-scope removal deleted `secod-core`; an unrelated
+  `secod-ai-api-integrations` skill remained present and its SHA-256 hash was
+  unchanged.
 
-These tests verify discovery, installation, resource copying, update behavior and CLI cleanup. They do not prove that every agent executes every skill correctly inside an application review. No `v0.1.0` tag or GitHub release was created during testing.
+These tests verify public discovery, installation, resource copying, update
+behavior, repeat-install behavior, and CLI cleanup. They do not prove that an
+agent executes every skill correctly inside a real application, nor do they
+certify any application's security or provider deployment. The `v0.1.0` tag
+and GitHub release were created only after the repository and workflow gates
+passed.
