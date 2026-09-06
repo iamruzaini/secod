@@ -121,7 +121,7 @@ latest commit.
 Remove selected skills with the Skills CLI:
 
 ```powershell
-npx skills remove secod-core --agent codex --yes
+npx skills remove --skill secod-core --yes
 ```
 
 To remove all skills installed for one agent, use the CLI's `--all` option:
