@@ -1,3 +1,3 @@
 display_name: "Supabase Auth"
-short_description: "Satisfy secod-identity-access, secod-auth-provider-integrations and secod-supabase; always route with secod-supabase, which remains the owner for database, Storage, Realtime and…"
-default_prompt: "Use $secod-supabase-auth to review this project. Preserve missing evidence as Not verified."
+short_description: "Implement secure, version-qualified Supabase Auth code and provider-specific tests."
+default_prompt: "Use $secod-supabase-auth while implementing this Supabase Auth feature. Resolve exact versions, follow direct official docs, preserve authorization boundaries, and add positive and negative tests."

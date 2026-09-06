@@ -8,9 +8,206 @@ import re
 import sys
 
 
+IMPLEMENTATION_FORMAT = "implementation-v1"
+IMPLEMENTATION_CATEGORIES = {
+    "router",
+    "generalized",
+    "framework",
+    "provider-family",
+    "provider-feature",
+    "mobile",
+    "task-completion",
+}
+IMPLEMENTATION_MATURITY = {"draft", "provisional", "stable"}
+IMPLEMENTATION_SECTIONS = (
+    "Purpose",
+    "When to use",
+    "Context to inspect",
+    "Secure defaults",
+    "Implementation workflow",
+    "Implementation recipes",
+    "Unsafe patterns to avoid",
+    "Tests to add",
+    "Provider and deployment steps",
+    "Official sources",
+)
+LEGACY_OUTPUT_HEADINGS = {
+    "Control requirements",
+    "Evidence to inspect",
+    "Evidence and status rules",
+    "Output schema",
+    "Required output",
+    "Review workflow",
+    "Verification and safe failure",
+}
+LEGACY_OUTPUT_PHRASES = (
+    "generate the Security Plan",
+    "Passed with evidence",
+    "Fix before launch",
+    "Recommended hardening",
+    "final launch-readiness verdict",
+)
+TEMPLATE_PLACEHOLDER = re.compile(
+    r"<(?:skill-name|secod-[^>\n]*|human-readable[^>\n]*|security outcome|"
+    r"concrete[^>\n]*|specific[^>\n]*|feature[^>\n]*|provider[^>\n]*|"
+    r"framework[^>\n]*|runtime[^>\n]*|recipe[^>\n]*|other-skill|boundary|"
+    r"default[^>\n]*|unsafe[^>\n]*|safe alternative|language)[^>\n]*>",
+    re.IGNORECASE,
+)
+
+
+def frontmatter(content: str) -> str | None:
+    match = re.match(r"^---\n(?P<body>.*?)\n---(?:\n|$)", content, re.DOTALL)
+    return match.group("body") if match else None
+
+
 def frontmatter_value(content: str, key: str) -> str | None:
-    match = re.search(r"^" + re.escape(key) + r":\s*(.+)$", content, re.MULTILINE)
+    body = frontmatter(content)
+    if body is None:
+        return None
+    match = re.search(r"^" + re.escape(key) + r":\s*(.+)$", body, re.MULTILINE)
     return match.group(1).strip().strip('"') if match else None
+
+
+def metadata_value(content: str, key: str) -> str | None:
+    body = frontmatter(content)
+    if body is None:
+        return None
+    metadata = re.search(r"^metadata:\s*\n(?P<body>(?:^[ \t]+.*(?:\n|$))*)", body, re.MULTILINE)
+    if metadata is None:
+        return None
+    match = re.search(
+        r"^[ \t]+" + re.escape(key) + r":\s*(.+)$",
+        metadata.group("body"),
+        re.MULTILINE,
+    )
+    return match.group(1).strip().strip('"').strip("'") if match else None
+
+
+def markdown_reference_targets(content: str) -> set[str]:
+    return {
+        match.group(1).replace("\\", "/")
+        for match in re.finditer(r"\]\((references/[^)#?]+)(?:#[^)]*)?\)", content)
+    }
+
+
+def implementation_source_register_problems(
+    skill: str, content: str, recipe_names: set[str]
+) -> list[str]:
+    problems: list[str] = []
+    lowered = content.lower()
+    if "<official" in lowered or "src-<" in lowered or "yyyy-mm-dd" in lowered:
+        problems.append(skill + " implementation source register contains template placeholders")
+
+    table_lines = [line.strip() for line in content.splitlines() if line.strip().startswith("|")]
+    header_index = next(
+        (
+            index
+            for index, line in enumerate(table_lines)
+            if "source id" in line.lower() and "direct official url" in line.lower()
+        ),
+        None,
+    )
+    if header_index is None:
+        return problems + [skill + " implementation source register lacks required source table"]
+
+    headers = [cell.strip().lower() for cell in table_lines[header_index].strip("|").split("|")]
+    required_headers = {
+        "source id",
+        "title",
+        "source type",
+        "direct official url",
+        "owner",
+        "reviewed date",
+        "refresh trigger",
+        "status",
+        "recipes or decisions supported",
+    }
+    missing_headers = sorted(required_headers - set(headers))
+    if missing_headers:
+        problems.append(
+            skill + " implementation source register lacks columns: " + ", ".join(missing_headers)
+        )
+        return problems
+
+    rows: list[dict[str, str]] = []
+    for line in table_lines[header_index + 1 :]:
+        cells = [cell.strip() for cell in line.strip("|").split("|")]
+        if cells and all(re.fullmatch(r":?-{3,}:?", cell) for cell in cells):
+            continue
+        if len(cells) != len(headers):
+            continue
+        rows.append(dict(zip(headers, cells)))
+
+    if not rows:
+        return problems + [skill + " implementation source register has no source rows"]
+
+    reviewed = 0
+    recognized_statuses = {"Reviewed", "Pending review", "Unavailable"}
+    for row in rows:
+        source_id = row.get("source id", "<unknown>")
+        status = row.get("status", "")
+        if status not in recognized_statuses:
+            problems.append(skill + " source " + source_id + " has unsupported status: " + status)
+        url = row.get("direct official url", "")
+        if not re.fullmatch(r"https://[^\s|]+", url):
+            problems.append(skill + " source " + source_id + " lacks a direct HTTPS URL")
+        if status != "Reviewed":
+            continue
+        reviewed += 1
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", row.get("reviewed date", "")):
+            problems.append(skill + " source " + source_id + " lacks an exact reviewed date")
+        mapping = row.get("recipes or decisions supported", "")
+        if not any(recipe in mapping for recipe in recipe_names):
+            problems.append(skill + " source " + source_id + " is not mapped to a linked recipe")
+
+    if reviewed == 0:
+        problems.append(skill + " implementation source register has no Reviewed source")
+    return problems
+
+
+def implementation_skill_problems(skill: str, skill_root: Path, content: str) -> list[str]:
+    problems: list[str] = []
+    category = metadata_value(content, "secod-category")
+    maturity = metadata_value(content, "secod-maturity")
+    if category not in IMPLEMENTATION_CATEGORIES:
+        problems.append(skill + " has invalid or missing metadata.secod-category")
+    if maturity not in IMPLEMENTATION_MATURITY:
+        problems.append(skill + " has invalid or missing metadata.secod-maturity")
+
+    headings = set(re.findall(r"^##\s+(.+?)\s*$", content, re.MULTILINE))
+    for section in IMPLEMENTATION_SECTIONS:
+        if section not in headings:
+            problems.append(skill + " implementation-v1 skill lacks section: " + section)
+    for heading in sorted(LEGACY_OUTPUT_HEADINGS & headings):
+        problems.append(skill + " implementation-v1 skill retains legacy heading: " + heading)
+    for phrase in LEGACY_OUTPUT_PHRASES:
+        if phrase.lower() in content.lower():
+            problems.append(skill + " implementation-v1 skill retains legacy output phrase: " + phrase)
+
+    if "[TODO:" in content or TEMPLATE_PLACEHOLDER.search(content):
+        problems.append(skill + " implementation-v1 skill contains an unfinished template placeholder")
+
+    reference_targets = markdown_reference_targets(content)
+    for target in sorted(reference_targets):
+        if not (skill_root / target).is_file():
+            problems.append(skill + " links missing reference: " + target)
+
+    recipe_targets = {
+        target for target in reference_targets if target.lower() != "references/sources.md"
+    }
+    if not recipe_targets:
+        problems.append(skill + " implementation-v1 skill links no implementation recipe")
+
+    source_file = skill_root / "references" / "sources.md"
+    if source_file.is_file():
+        recipe_names = {Path(target).name for target in recipe_targets}
+        problems.extend(
+            implementation_source_register_problems(
+                skill, source_file.read_text(encoding="utf-8"), recipe_names
+            )
+        )
+    return problems
 
 
 def source_register_problems(skill: str, content: str) -> list[str]:
@@ -80,6 +277,7 @@ def main() -> int:
     catalog_skills = {item["slug"]: item for item in catalog["skills"]}
     actual_skills = {path.name for path in skills_root.iterdir() if path.is_dir()}
     seen_control_ids: set[str] = set()
+    implementation_count = 0
 
     if actual_skills != expected_skills:
         missing = sorted(expected_skills - actual_skills)
@@ -107,6 +305,14 @@ def main() -> int:
                 problems.append(skill + " default prompt does not name the skill")
 
         content = skill_file.read_text(encoding="utf-8")
+        skill_format = metadata_value(content, "secod-format")
+        is_implementation = skill_format == IMPLEMENTATION_FORMAT
+        if skill_format and not is_implementation:
+            problems.append(skill + " has unsupported metadata.secod-format: " + skill_format)
+        if is_implementation:
+            implementation_count += 1
+            problems.extend(implementation_skill_problems(skill, skills_root / skill, content))
+
         approved_controls = catalog_skills[skill].get("controls", [])
         for control in approved_controls:
             control_id = control.get("id", "")
@@ -117,9 +323,9 @@ def main() -> int:
             seen_control_ids.add(control_id)
             if control.get("status") != "approved" or not control.get("approvedOn"):
                 problems.append(skill + " control lacks approval metadata: " + control_id)
-            if f"### `{control_id}`" not in content:
+            if not is_implementation and f"### `{control_id}`" not in content:
                 problems.append(skill + " does not define catalog control " + control_id)
-        if approved_controls and re.search(r"PROVISIONAL-[A-Z0-9]+-", content):
+        if not is_implementation and approved_controls and re.search(r"PROVISIONAL-[A-Z0-9]+-", content):
             problems.append(skill + " retains provisional IDs after catalog approval")
         if "[TODO:" in content:
             problems.append(skill + " still contains a TODO template")
@@ -136,7 +342,9 @@ def main() -> int:
         source_file = skills_root / skill / "references" / "sources.md"
         if not source_file.is_file():
             problems.append(skill + " has no references/sources.md")
-        elif not re.search(r"^\s*internal:\s*true\s*$", content, re.MULTILINE):
+        elif not is_implementation and not re.search(
+            r"^\s*internal:\s*true\s*$", content, re.MULTILINE
+        ):
             problems.extend(source_register_problems(skill, source_file.read_text(encoding="utf-8")))
         if not (root / "tests" / "trigger-cases" / (skill + ".md")).is_file():
             problems.append(skill + " has no trigger case")
@@ -144,6 +352,26 @@ def main() -> int:
             problems.append(skill + " has no insecure fixture plan")
         if not (root / "tests" / "expected-results" / (skill + ".md")).is_file():
             problems.append(skill + " has no expected result")
+
+    ship_check = (skills_root / "secod-ship-check" / "SKILL.md").read_text(encoding="utf-8")
+    for required_term in (
+        "files changed during the current task",
+        "selected SECOD skill instructions",
+        "tests added or executed",
+        "accidentally introduced secrets",
+        "external provider actions",
+        "Ignore unrelated repository conditions",
+    ):
+        if required_term.lower() not in ship_check.lower():
+            problems.append("secod-ship-check missing scoped completion rule: " + required_term)
+    for prohibited_term in (
+        "final launch-readiness verdict",
+        "Passed with evidence",
+        "Do not ship",
+        "generate the Security Plan",
+    ):
+        if prohibited_term.lower() in ship_check.lower():
+            problems.append("secod-ship-check retains launch-owner behavior: " + prohibited_term)
 
     failure_fixture = root / "tests" / "insecure-fixtures" / "secod-failure-safety"
     for name in ("fixture_app.py", "test_failure_safety.py", "run_fixtures.py"):
@@ -174,32 +402,13 @@ def main() -> int:
     for name in (
         "fixture_app.py",
         "test_abuse_limits.py",
-        "test_evidence_validator.py",
         "run_fixtures.py",
     ):
         if not (abuse_fixture / name).is_file():
             problems.append("secod-abuse-limits executable fixture missing " + name)
 
-    abuse_evidence_validator = (
-        root / "skills" / "secod-abuse-limits" / "scripts" / "validate_evidence_bundle.py"
-    )
-    if not abuse_evidence_validator.is_file():
-        problems.append("secod-abuse-limits evidence validator is missing")
-
-    observability_evidence_validator = (
-        root / "skills" / "secod-observability-response" / "scripts" / "validate_evidence_bundle.py"
-    )
-    if not observability_evidence_validator.is_file():
-        problems.append("secod-observability-response evidence validator is missing")
-
-    crypto_evidence_validator = (
-        root / "skills" / "secod-crypto-data-protection" / "scripts" / "validate_evidence_bundle.py"
-    )
-    if not crypto_evidence_validator.is_file():
-        problems.append("secod-crypto-data-protection evidence validator is missing")
-
     crypto_fixture = root / "tests" / "insecure-fixtures" / "secod-crypto-data-protection"
-    for name in ("test_evidence_validator.py", "run_fixtures.py"):
+    for name in ("fixture_app.py", "test_secure_patterns.py", "run_fixtures.py"):
         if not (crypto_fixture / name).is_file():
             problems.append("secod-crypto-data-protection executable fixture missing " + name)
 
@@ -209,7 +418,16 @@ def main() -> int:
             print("- " + problem)
         return 1
 
-    print("Validated " + str(len(expected_skills)) + " catalog-derived SECOD skill structures.")
+    legacy_count = len(expected_skills) - implementation_count
+    print(
+        "Validated "
+        + str(len(expected_skills))
+        + " SECOD skill structures ("
+        + str(implementation_count)
+        + " implementation-v1, "
+        + str(legacy_count)
+        + " legacy)."
+    )
     return 0
 
 

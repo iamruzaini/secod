@@ -1,5 +1,17 @@
 # Trigger case: secod-email-messaging
 
-Positive prompt: `Use secod-email-messaging to review this project.`
+## Should trigger
 
-Negative prompt: a request outside this skill's stated applicability must not claim coverage.
+```text
+Add password-reset email and SMS OTP.
+```
+
+Expected: Generate purpose-bound tokens, store verifiers safely, prevent enumeration, constrain redirects, rate-limit, and test replay.
+
+## Should not trigger
+
+```text
+Change an in-app label without messaging.
+```
+
+Expected: skill excluded.

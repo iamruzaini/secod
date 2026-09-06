@@ -1,5 +1,17 @@
 # Trigger case: secod-vercel-ai
 
-Positive prompt: `Use secod-vercel-ai to review this project.`
+## Should trigger
 
-Negative prompt: a request outside this skill's stated applicability must not claim coverage.
+```text
+Implement a Vercel AI SDK feature using the installed provider SDK and add security tests.
+```
+
+Expected: resolve version, apply provider-family defaults, implement provider code, and add tests.
+
+## Should not trigger
+
+```text
+Change unrelated documentation with no Vercel AI SDK code or configuration.
+```
+
+Expected: skill excluded.

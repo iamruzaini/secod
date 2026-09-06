@@ -1,84 +1,69 @@
 ---
 name: secod-cloudflare-workers
-description: Satisfy secod-cloudflare, secod-identity-access, secod-inputs-apis, secod-secrets-config, secod-abuse-limits, secod-data-files and secod-observability-response. Apply when…
+description: >-
+  Help coding agents securely implement Cloudflare Workers features using version-matched official APIs, secure defaults, and provider-specific tests. Use when Workers handlers, bindings, Durable Objects, service bindings, routes, compatibility dates, or Wrangler.
+license: Apache-2.0
+metadata:
+  secod-category: "provider-feature"
+  secod-format: "implementation-v1"
+  secod-maturity: "provisional"
 ---
 
-# SECOD Cloudflare Workers
+# Secure Cloudflare Workers implementation
 
-## Scope and applicability
+## Purpose
 
-Satisfy `secod-cloudflare`, `secod-identity-access`, `secod-inputs-apis`, `secod-secrets-
-config`, `secod-abuse-limits`, `secod-data-files` and `secod-observability-response`. Apply when
-Workers, Pages Functions, Durable Objects, R2, D1, KV, service bindings, Browser Rendering,
-WebRTC/Realtimes, `wrangler.*` or Workers runtime testing are detected. Verify the selected
-controls in the actual workerd/Workers runtime.
+Implement Cloudflare Workers features securely. Provider-family router supplies shared context; this skill owns exact product decisions and version-qualified SDK/runtime use.
 
-## Control requirements
+## When to use
 
-Exact script/version/route/custom domain, compatibility date/flag, handler/service binding,
-environment/binding/secret, Durable Object class/namespace/migration, R2 bucket, D1 database, KV
-namespace, Browser Rendering/WebRTC configuration, outbound host/egress,
-CPU/memory/request/subrequest/concurrency limits, local/remote test and production/preview
-inventory; every Worker route has deliberate public/private authentication and backend
-tenant/object/action authorization, no raw Access, session, share, Durable Object or service
-capability bearer verifier reaches browser code, user-authored code or client RPC, and service
-bindings are scoped to a named target with a documented caller/authorization boundary; each
-Durable Object has one authoritative writer and explicit tenant/object keying, serialization,
-alarm/retry/idempotency, migration and deletion behavior, does not use a client-provided object
-ID as authorization, and has no long-lived privileged bearer token in client RPC; R2/D1/KV data
-access is tenant/owner/role checked in Worker code and, where supported, storage
-policy/namespace/bucket/database bindings are separately scoped, D1 SQL is parameterized with
-migration/backup/restore evidence, R2 signed/capability URLs inherit expiry/revocation/upload
-validation, and KV cache/state is not used as authoritative authorization without
-expiry/invalidation; every user-controlled `fetch` has scheme/credential/host/DNS/IP/private-
-address/redirect-hop/response-size/time/concurrency validation, strips credentials on cross-
-origin redirect and has egress/cost failure tests; Workers secrets are encrypted secrets rather
-than `vars`, `wrangler` environments bind the expected resource IDs/types, production rejects
-local `.dev.vars`, process environment and insecure compatibility overrides, and every
-compatibility-date/flag change is reviewed for runtime and security impact; test suites run in
-workerd/Workers and fail if they silently fall back to Node, with production runtime, binding
-and remote-service differences evidenced; Browser Rendering/export has navigation, host, time,
-input/output size, page/item, memory, pending-call and concurrency limits plus cancellation and
-deterministic browser/session cleanup, while WebRTC/STUN/TURN egress is contained/tested or
-explicitly accepted; negative tests for route/authz/capability/DO-ID bypass, cross-tenant
-R2/D1/KV access, binding or Wrangler environment confusion, SSRF/redirect/credential-forwarding
-bypass, compatibility/runtime fallback, rendering resource leak and WebRTC egress escape.
+Use when Workers handlers, bindings, Durable Objects, service bindings, routes, compatibility dates, or Wrangler. Do not activate from package presence alone when current feature does not use Cloudflare Workers.
 
-## Evidence to inspect
+## Context to inspect
 
-- Repository code, configuration, tests, deployment definitions, and CI evidence relevant to this skill.
-- Provider or framework dashboard/API evidence when the required setting cannot be established from the repository.
-- Direct primary-source evidence recorded in `references/sources.md`; absent, stale, or inaccessible evidence is **Not verified**.
+Inspect current feature, imports and calls, manifest/lockfile, runtime configuration, environment, identity/tenant model, data classes, trust boundaries, provider-family context, and nearby tests. Never collect secret values.
 
-## Dependencies and routing
+## Secure defaults
 
-Direct dependencies: `secod-core`, `secod-cloudflare`, `secod-identity-access`, `secod-inputs-apis`, `secod-secrets-config`, `secod-abuse-limits`, `secod-data-files`, `secod-observability-response`.
+- Keep privileged credentials and provider management calls server/runtime-only.
+- Authenticate, validate, and authorize every reachable handler or event boundary.
+- Separate production, preview, and development resources/configuration.
+- Bound concurrency, retries, subrequests, execution time, and failure effects.
+- Validate and authorize requests, keep secrets in bindings, bound subrequests/resources, and separate environments.
 
-When a required dependency is not installed or cannot be invoked, record the affected
-control as **Not verified** and do not issue a passing or launch-ready conclusion.
+## Implementation workflow
 
-## Negative fixtures and tests
+1. Resolve exact installed SDK/runtime/API version and product features in use.
+2. Read version-matched direct official documentation before writing provider calls.
+3. Reuse project conventions; implement validation and authorization before provider effect.
+4. Add idempotency, limits, safe failure, redaction, and environment separation where applicable.
+5. Add successful, denied, cross-tenant, malformed, replay/retry, and provider-failure tests.
 
-- Run the maintained trigger case and insecure fixture plan at `tests/` for this skill.
-- Test the unsafe or missing-control cases implied by the control requirements, including
-  unavailable-provider and partial-failure behavior where applicable.
-- Keep tests read-only unless the user explicitly authorizes a change.
+## Implementation recipes
 
-## Output schema
+- [Supported versions](references/versions.md) — resolve compatible SDK, runtime, and API surfaces.
+- [Secure implementation recipe](references/runtime-deployment.md) — provider-specific boundaries and coding sequence.
+- [Security-focused tests](references/tests.md) — positive, denied, replay, failure, and version tests.
 
-For each finding return: `control_id`, `status`, `evidence`, `impact`, `recommended_fix`,
-`verification`, `limitations`, and `source_refs`. Valid status values are `Do not ship`,
-`Fix before launch`, `Recommended hardening`, `Passed with evidence`, and `Not verified`.
+## Unsafe patterns to avoid
 
-## Verification and safe failure
+- Inventing SDK methods, options, model capabilities, service behavior, or dashboard state.
+- Copying examples for another major version or runtime without checking installed version.
+- Trusting client-controlled identity, tenant, resource, price, tool, or authority fields.
+- Replacing implementation with findings, score, account audit, or certification language.
 
-Never infer dashboard, deployment, provider, or production settings from package presence.
-Redact secrets and bearer credentials. Fail closed: preserve unknown or failed checks as
-**Not verified**, identify the next verification step, and never claim launch readiness from
-incomplete evidence.
+## Tests to add
 
-## References
+Test version-compatible setup, expected success, missing identity, wrong tenant/resource, malformed input, duplicate/replay where applicable, timeout/provider failure, secret/log redaction, and unavailable external configuration.
 
-Use the source register in `references/sources.md`. For each security-critical source,
-record the direct URL, documentation index URL, version, reviewed date, review expiry,
-hash/ETag when available, owner, plan/tier, region, feature maturity, and linked control IDs.
+## Provider and deployment steps
+
+Implement repository-owned code first. For required external settings, name exact official page and verification action. If inaccessible, do not claim setting was checked.
+
+## Official sources
+
+Use [source register](references/sources.md). llms.txt indexes aid discovery only; direct provider documentation governs implementation.
+
+## Completion handoff
+
+State SDK/runtime/API version used, secure boundary implemented, tests run, provider-family defaults applied, assumptions, and exact external step remaining. Never claim whole application or provider account is secure.

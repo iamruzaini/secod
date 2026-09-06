@@ -1,19 +1,7 @@
-# Insecure fixture plan: secod-ai-api-integrations
+# Implementation fixture plan: secod-ai-api-integrations
 
-Create a minimal reproducible unsafe case for the control requirements in the skill contract. Include a missing-evidence case and, where applicable, a partial-failure or replay case.
+Given an implementation that violates this skill's portable invariants, replace unsafe boundary with pattern in `references/secure-patterns.md` and add successful, rejected, boundary, retry, and failure tests where applicable.
 
-Fixture status:
+Expected: Protect keys, minimize data, authorize retrieval/tools, validate output, confirm effects, and add prompt-injection/cross-tenant tests.
 
-- `artifact_type: documentation_only`
-- `execution_status: not_executed`
-- No executable harness or application fixture exists in this directory.
-- Reading or reviewing this Markdown plan never counts as execution.
-
-Required planned cases:
-
-- Repository-only AI integration with no Dashboard/API proof for provider retention, training use,
-  ZDR, telemetry, spend ceilings or provider-side deletion completion.
-- Realtime integration using a short-lived client token but lacking current direct official
-  documentation for the exact provider mechanism.
-- Partial deletion leaving provider/vector-store state pending or uncorrelated.
-- Fallback provider with unverified retention/training/telemetry parity.
+This documentation plan is not scanner execution or proof of deployed behavior.

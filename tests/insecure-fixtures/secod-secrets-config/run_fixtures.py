@@ -20,10 +20,10 @@ def main() -> int:
         "errors": len(result.errors),
         "skipped": len(result.skipped),
         "expectations_reproduced": result.wasSuccessful(),
-        "production_evidence": False,
+        "production_state_inspected": False,
         "release_handoff": {
-            "verdict_owner": "secod-ship-check",
-            "readiness_verdict": "not_issued",
+            "completion_owner": "secod-ship-check",
+            "application_verdict": "not_produced",
         },
     }
     print(json.dumps(payload, sort_keys=True))

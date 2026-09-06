@@ -1,3 +1,3 @@
 display_name: "Cloudflare Workers AI"
-short_description: "Satisfy secod-cloudflare-workers, secod-ai-api-integrations, secod-abuse-limits and secod-observability-response. Apply when Workers AI bindings, env.AI.run, Worker/Pages AI…"
-default_prompt: "Use $secod-cloudflare-workers-ai to review this project. Preserve missing evidence as Not verified."
+short_description: "Implement secure, version-qualified Cloudflare Workers AI code and provider-specific tests."
+default_prompt: "Use $secod-cloudflare-workers-ai while implementing this Cloudflare Workers AI feature. Resolve exact versions, follow direct official docs, preserve authorization boundaries, and add positive and negative tests."

@@ -1,3 +1,5 @@
 # Expected result: secod-aws-lambda-api-gateway
 
-The skill identifies the insecure fixture, reports evidence safely, provides a verification path, and uses `Not verified` for unavailable evidence.
+Resolve and state exact SDK/runtime/API version. Use minimal execution roles, explicit invocation permissions, route authorization, schema validation, and bounded concurrency/retries. Follow direct official documentation, preserve local authorization, and add positive and negative tests.
+
+Never invent provider APIs, claim inaccessible settings were checked, or emit an account-wide scanner verdict.

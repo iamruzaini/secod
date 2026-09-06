@@ -1,15 +1,9 @@
-# Source register: secod-openai
+# Official source register
 
-Use official documentation indexes for discovery only. These direct official sources were
-identified on 2026-09-05, but their control mapping still requires substantive review.
-Until that review is complete, affected provider requirements remain **Not verified**.
-
-| Source ID | Title | Direct official URL | Owner | Reviewed date | Refresh trigger | Status | Control IDs | Assumptions |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| OPENAI-SRC-01 | Project service-account API keys | https://developers.openai.com/api/reference/cli/resources/admin/subresources/organization/subresources/projects/subresources/service_accounts/subresources/api_keys/methods/create | OpenAI | 2026-09-05 (identification only) | 2027-03-05 or documentation/service behavior change | Pending review | PROVISIONAL-openai-ALL | Current hosted service; exact plan, region, API/SDK version, enabled features, and deployed configuration must be verified per project. |
-| OPENAI-SRC-02 | Webhook verification | https://platform.openai.com/docs/guides/webhooks | OpenAI | 2026-09-05 (identification only) | 2027-03-05 or documentation/service behavior change | Pending review | PROVISIONAL-openai-ALL | Current hosted service; exact plan, region, API/SDK version, enabled features, and deployed configuration must be verified per project. |
-| OPENAI-SRC-03 | Data controls | https://platform.openai.com/docs/guides/your-data | OpenAI | 2026-09-05 (identification only) | 2027-03-05 or documentation/service behavior change | Pending review | PROVISIONAL-openai-ALL | Current hosted service; exact plan, region, API/SDK version, enabled features, and deployed configuration must be verified per project. |
-
-Status meanings: `Reviewed` means content was read and mapped to controls; `Pending review` means
-the official URL is identified but mapping is incomplete; `Not verified` means evidence is
-inaccessible, stale, or insufficient. URL reachability alone never establishes `Reviewed`.
+| Source ID | Title | Source type | Direct official URL | Owner | Reviewed date | Refresh trigger | Status | Recipes or decisions supported | Assumptions/notes |
+|---|---|---|---|---|---|---|---|---|---|
+| OPENAI-SRC-001 | Structured model outputs | Direct implementation guide | https://developers.openai.com/api/docs/guides/structured-outputs | OpenAI | 2026-09-06 | SDK, model, or guide change | Reviewed | openai-server-tools.md: schema-constrained output and local validation | Confirm chosen model support. |
+| OPENAI-SRC-002 | Function calling | Direct implementation guide | https://developers.openai.com/api/docs/guides/function-calling | OpenAI | 2026-09-06 | Tool API or SDK change | Reviewed | openai-server-tools.md: tool schema, argument validation, execution loop | Application owns authorization. |
+| OPENAI-SRC-003 | Webhooks | Direct implementation guide | https://developers.openai.com/api/docs/guides/webhooks | OpenAI | 2026-09-06 | Webhook SDK or signature change | Reviewed | openai-server-tools.md: official verification before effects | Use installed SDK helper. |
+| OPENAI-SRC-004 | Your data | Direct data-control guide | https://developers.openai.com/api/docs/guides/your-data | OpenAI | 2026-09-06 | Retention/control change | Reviewed | openai-server-tools.md: data minimization and retention decisions | Account settings require separate confirmation. |
+| OPENAI-SRC-005 | OpenAI developer documentation index | Official llms.txt | https://developers.openai.com/llms.txt | OpenAI | 2026-09-06 | Index change | Reviewed | openai-server-tools.md: current direct-page discovery | Index is not sole support for code. |

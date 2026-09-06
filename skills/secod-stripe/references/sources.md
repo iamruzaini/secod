@@ -1,15 +1,8 @@
-# Source register: secod-stripe
+# Official source register
 
-Use official documentation indexes for discovery only. These direct official sources were
-identified on 2026-09-05, but their control mapping still requires substantive review.
-Until that review is complete, affected provider requirements remain **Not verified**.
-
-| Source ID | Title | Direct official URL | Owner | Reviewed date | Refresh trigger | Status | Control IDs | Assumptions |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| STRIPE-SRC-01 | API keys | https://docs.stripe.com/keys | Stripe | 2026-09-05 (identification only) | 2027-03-05 or documentation/service behavior change | Pending review | PROVISIONAL-stripe-ALL | Current hosted service; exact plan, region, API/SDK version, enabled features, and deployed configuration must be verified per project. |
-| STRIPE-SRC-02 | Webhook verification and delivery | https://docs.stripe.com/webhooks | Stripe | 2026-09-05 (identification only) | 2027-03-05 or documentation/service behavior change | Pending review | PROVISIONAL-stripe-ALL | Current hosted service; exact plan, region, API/SDK version, enabled features, and deployed configuration must be verified per project. |
-| STRIPE-SRC-03 | Idempotent API requests | https://docs.stripe.com/api/idempotent_requests | Stripe | 2026-09-05 (identification only) | 2027-03-05 or documentation/service behavior change | Pending review | PROVISIONAL-stripe-ALL | Current hosted service; exact plan, region, API/SDK version, enabled features, and deployed configuration must be verified per project. |
-
-Status meanings: `Reviewed` means content was read and mapped to controls; `Pending review` means
-the official URL is identified but mapping is incomplete; `Not verified` means evidence is
-inaccessible, stale, or insufficient. URL reachability alone never establishes `Reviewed`.
+| Source ID | Title | Source type | Direct official URL | Owner | Reviewed date | Refresh trigger | Status | Recipes or decisions supported | Assumptions/notes |
+|---|---|---|---|---|---|---|---|---|---|
+| STRIPE-SRC-001 | API keys | Direct security guide | https://docs.stripe.com/keys | Stripe | 2026-09-06 | Key model change | Reviewed | stripe-server-webhooks.md: publishable/restricted/secret and sandbox/live boundaries | Prefer restricted key when supported. |
+| STRIPE-SRC-002 | Receive webhook events | Direct implementation guide | https://docs.stripe.com/webhooks | Stripe | 2026-09-06 | Webhook API or delivery change | Reviewed | stripe-server-webhooks.md: raw-body verification, events, local testing | Endpoint-specific secret required. |
+| STRIPE-SRC-003 | Idempotent requests | API reference | https://docs.stripe.com/api/idempotent_requests | Stripe | 2026-09-06 | API-version behavior change | Reviewed | stripe-server-webhooks.md: stable idempotency key and retry behavior | Confirm SDK request-options shape. |
+| STRIPE-SRC-004 | Stripe documentation index | Official llms.txt | https://docs.stripe.com/llms.txt | Stripe | 2026-09-06 | Index change | Reviewed | stripe-server-webhooks.md: current direct-page discovery | Index is not sole support for code. |

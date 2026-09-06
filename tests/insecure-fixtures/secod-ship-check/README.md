@@ -1,3 +1,6 @@
-# Insecure fixture plan: secod-ship-check
+# Implementation fixture: secod-ship-check
 
-Create a minimal reproducible unsafe case for the control requirements in the skill contract. Include a missing-evidence case and, where applicable, a partial-failure or replay case.
+Given completed feature code, inspect only current task changes. Verify selected-skill invariants,
+tests added/executed, absence of introduced secrets, and exact external provider handoff.
+
+Unrelated repository conditions must not block handoff. Fixture does not decide shipping or certify application.

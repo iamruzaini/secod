@@ -1,5 +1,17 @@
 # Trigger case: secod-ship-check
 
-Positive prompt: `Use secod-ship-check to review this project.`
+## Should trigger
 
-Negative prompt: a request outside this skill's stated applicability must not claim coverage.
+```text
+Finish this Firebase upload feature, run its security tests, and tell me exact console action remaining.
+```
+
+Expected: verify applicable implementation, tests, dependencies, and external handoff.
+
+## Should not trigger
+
+```text
+Rewrite this marketing paragraph without reviewing or changing application behavior.
+```
+
+Expected: skill excluded.

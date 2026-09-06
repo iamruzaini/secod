@@ -1,63 +1,83 @@
 ---
 name: secod-openai
-description: Satisfy every secod-ai-api-integrations requirement; keep long-lived OpenAI credentials server-side and constrain project, model, user, data-retention, Realtime and spending…
+description: >-
+  Help coding agents implement OpenAI API features with server-side credentials,
+  authorized tools, validated structured output, tenant-isolated data, bounded usage,
+  verified webhooks, and privacy-aware logging.
+license: Apache-2.0
+compatibility: "Requires OpenAI API; inspect current SDK, model, Responses API, tool, and data settings."
+metadata:
+  secod-category: "provider-feature"
+  secod-format: "implementation-v1"
+  secod-maturity: "provisional"
 ---
 
-# SECOD Openai
+# Secure OpenAI implementation
 
-## Scope and applicability
+## Purpose
 
-Satisfy every `secod-ai-api-integrations` requirement; keep long-lived OpenAI credentials
-server-side and constrain project, model, user, data-retention, Realtime and spending
-boundaries.
+Build OpenAI features where credentials stay trusted, users/tenants are authorized, model input is
+minimized, output is validated, tools reauthorize every effect, and usage/failure is bounded.
 
-## Control requirements
+## When to use
 
-Official OpenAI SDK/Responses/Realtime detection; separate staging and production projects;
-project-scoped keys, service accounts and Admin API key separation; optional workload identity
-and IP controls where supported; model allowlists and snapshot/deprecation tests; per-user usage
-and spend controls; endpoint-by-endpoint retention eligibility and `store` behavior; upload,
-file and vector-store expiry/deletion; stateful Responses and conversation lifecycle; training
-and zero-data-retention settings where supported; request/stream/retry limits; webhook signature
-verification; structured response validation; Realtime short-lived client secrets only where
-officially supported and within their official expiry/configuration constraints; telemetry, safe
-logging and incident rotation.
+Use for OpenAI SDK/API, Responses API, structured outputs, tools/function calling, files, retrieval,
+webhooks, streaming, realtime, batches, or background responses. Do not activate for other model providers.
 
-## Evidence to inspect
+## Context to inspect
 
-- Repository code, configuration, tests, deployment definitions, and CI evidence relevant to this skill.
-- Provider or framework dashboard/API evidence when the required setting cannot be established from the repository.
-- Direct primary-source evidence recorded in `references/sources.md`; absent, stale, or inaccessible evidence is **Not verified**.
+Resolve SDK/API pattern, model capability, server/client boundary, user/tenant, input/data classes,
+retention requirement, tools and effects, files/vector stores, streaming, webhook route, limits,
+timeouts/retries, and logging.
 
-## Dependencies and routing
+## Secure defaults
 
-Direct dependencies: `secod-core`, `secod-ai-api-integrations`.
+- Keep project/service credentials server-side and scoped to correct environment/project.
+- Authorize user, tenant, model, file, vector store, and tool access before API calls.
+- Minimize prompts/files/metadata and keep secrets out of model input and logs.
+- Prefer structured outputs with strict schema where application consumes fields.
+- Treat model output and tool arguments as untrusted; validate and reauthorize at tool boundary.
+- Bound model allowlist, input/output size, tools, timeout, concurrency, retries, and spend.
+- Verify OpenAI webhooks with official SDK before processing events.
 
-When a required dependency is not installed or cannot be invoked, record the affected
-control as **Not verified** and do not issue a passing or launch-ready conclusion.
+## Implementation workflow
 
-## Negative fixtures and tests
+1. Map user request, tenant data, OpenAI resources, model, tool effects, and returned output.
+2. Create trusted server client and enforce access before request.
+3. Use supported structured-output/tool API for installed SDK and chosen model.
+4. Validate output/tool arguments and reauthorize each consequential action.
+5. Add malformed output, prompt-injection, cross-tenant, tool abuse, timeout, and webhook tests.
 
-- Run the maintained trigger case and insecure fixture plan at `tests/` for this skill.
-- Test the unsafe or missing-control cases implied by the control requirements, including
-  unavailable-provider and partial-failure behavior where applicable.
-- Keep tests read-only unless the user explicitly authorizes a change.
+## Implementation recipes
 
-## Output schema
+- [`references/openai-server-tools.md`](references/openai-server-tools.md) — server client,
+  structured output, tool authorization, webhook verification, and usage bounds.
 
-For each finding return: `control_id`, `status`, `evidence`, `impact`, `recommended_fix`,
-`verification`, `limitations`, and `source_refs`. Valid status values are `Do not ship`,
-`Fix before launch`, `Recommended hardening`, `Passed with evidence`, and `Not verified`.
+## Unsafe patterns to avoid
 
-## Verification and safe failure
+- Shipping API keys to browser/mobile client.
+- Giving model direct unrestricted database, shell, payment, email, or admin access.
+- Trusting model JSON because prompt requested a format.
+- Mixing tenants in prompts, caches, files, vector stores, threads, or logs.
+- Retrying consequential tool effects without idempotency.
 
-Never infer dashboard, deployment, provider, or production settings from package presence.
-Redact secrets and bearer credentials. Fail closed: preserve unknown or failed checks as
-**Not verified**, identify the next verification step, and never claim launch readiness from
-incomplete evidence.
+## Tests to add
 
-## References
+Test allowed request, unauthorized model/resource, schema-invalid output, injected tool argument,
+cross-tenant retrieval, secret redaction, timeout/rate failure, duplicate tool effect, invalid webhook,
+and bounded fallback behavior.
 
-Use the source register in `references/sources.md`. For each security-critical source,
-record the direct URL, documentation index URL, version, reviewed date, review expiry,
-hash/ETag when available, owner, plan/tier, region, feature maturity, and linked control IDs.
+## Provider and deployment steps
+
+Configure project-scoped credentials, allowed models, budgets/limits, webhook secret, and data controls
+as required. State exact uninspected setting; do not claim provider configuration was checked.
+
+## Official sources
+
+Use [`references/sources.md`](references/sources.md); OpenAI `developers.openai.com/llms.txt` helps
+discover current pages, while direct guides support APIs.
+
+## Completion handoff
+
+State credential boundary, model/resources, data minimization, validation/tool controls, tests run,
+and provider configuration remaining. Never claim AI feature is secure or certified.

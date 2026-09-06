@@ -1,76 +1,69 @@
 ---
 name: secod-cloudflare-hyperdrive
-description: Satisfy secod-cloudflare-workers, secod-secrets-config, secod-inputs-apis and secod-data-files. Apply when Hyperdrive configurations/bindings, database connection strings,…
+description: >-
+  Help coding agents securely implement Cloudflare Hyperdrive features using version-matched official APIs, secure defaults, and provider-specific tests. Use when Hyperdrive bindings, database connections, Wrangler Hyperdrive configuration, TLS, or pooling.
+license: Apache-2.0
+metadata:
+  secod-category: "provider-feature"
+  secod-format: "implementation-v1"
+  secod-maturity: "provisional"
 ---
 
-# SECOD Cloudflare Hyperdrive
+# Secure Cloudflare Hyperdrive implementation
 
-## Scope and applicability
+## Purpose
 
-Satisfy `secod-cloudflare-workers`, `secod-secrets-config`, `secod-inputs-apis` and `secod-data-
-files`. Apply when Hyperdrive configurations/bindings, database connection strings, Cloudflare
-Tunnel/Workers VPC database paths, TLS/mTLS certificates, Hyperdrive credential rotation or
-supported database drivers are detected. Hyperdrive is transport/pooling; application and
-database authorization remain mandatory.
+Implement Cloudflare Hyperdrive features securely. Provider-family router supplies shared context; this skill owns exact product decisions and version-qualified SDK/runtime use.
 
-## Control requirements
+## When to use
 
-Exact Hyperdrive configuration/binding/environment, origin database/role/host/network path,
-connection-string/local-connection-string, TLS mode/CA/client certificate, Tunnel/Access service
-token or Workers VPC service, database firewall, driver/ORM/version, query
-timeout/transaction/pool behavior, credential rotation and production/preview inventory; origin
-database connection credentials, CA and client-key material remain in Cloudflare
-secret/configuration storage and never source, CLI history/build log/browser or
-`localConnectionString` shared with production, production and preview bind distinct
-Hyperdrive/database roles, and Worker code never returns the generated Hyperdrive connection
-string; database connections use TLS with `verify-full`/equivalent hostname and CA validation
-where supported, mTLS is used when required, private databases use Workers VPC or Cloudflare
-Tunnel with an exact Access service-auth/token policy rather than broad public firewall
-exposure, and any Cloudflare-IP allowlist is minimum and reviewed; database roles are least
-privilege with parameterized queries, RLS/tenant/object authorization, backup/restore and
-credential rotation/revocation tests, while Hyperdrive binding alone is not treated as database
-authorization; database client is created inside each request/queue/workflow handler rather than
-global scope, long transactions and persistent Durable Object connections are bounded to avoid
-pool exhaustion, and connection/error/timeout metrics exclude credentials; negative tests for
-direct public database path, TLS/CA/hostname downgrade, leaked local/origin/Hyperdrive
-credential, broad Access Tunnel/service token or firewall, app/admin database role use,
-SQL/tenant bypass, global-client/pool exhaustion and production-preview binding/database drift.
+Use when Hyperdrive bindings, database connections, Wrangler Hyperdrive configuration, TLS, or pooling. Do not activate from package presence alone when current feature does not use Cloudflare Hyperdrive.
 
-## Evidence to inspect
+## Context to inspect
 
-- Repository code, configuration, tests, deployment definitions, and CI evidence relevant to this skill.
-- Provider or framework dashboard/API evidence when the required setting cannot be established from the repository.
-- Direct primary-source evidence recorded in `references/sources.md`; absent, stale, or inaccessible evidence is **Not verified**.
+Inspect current feature, imports and calls, manifest/lockfile, runtime configuration, environment, identity/tenant model, data classes, trust boundaries, provider-family context, and nearby tests. Never collect secret values.
 
-## Dependencies and routing
+## Secure defaults
 
-Direct dependencies: `secod-core`, `secod-cloudflare-workers`, `secod-secrets-config`, `secod-inputs-apis`, `secod-data-files`.
+- Authorize every query/object against trusted user, tenant, and ownership state.
+- Use parameterized/structured APIs and least-privilege workload credentials.
+- Keep data private by default and bound query, upload, result, and connection resources.
+- Test cross-tenant, unauthorized, malformed, duplicate, and dependency-failure paths.
+- Keep credentials in bindings/secrets, verify database identity with TLS, and authorize/query safely in Worker code.
 
-When a required dependency is not installed or cannot be invoked, record the affected
-control as **Not verified** and do not issue a passing or launch-ready conclusion.
+## Implementation workflow
 
-## Negative fixtures and tests
+1. Resolve exact installed SDK/runtime/API version and product features in use.
+2. Read version-matched direct official documentation before writing provider calls.
+3. Reuse project conventions; implement validation and authorization before provider effect.
+4. Add idempotency, limits, safe failure, redaction, and environment separation where applicable.
+5. Add successful, denied, cross-tenant, malformed, replay/retry, and provider-failure tests.
 
-- Run the maintained trigger case and insecure fixture plan at `tests/` for this skill.
-- Test the unsafe or missing-control cases implied by the control requirements, including
-  unavailable-provider and partial-failure behavior where applicable.
-- Keep tests read-only unless the user explicitly authorizes a change.
+## Implementation recipes
 
-## Output schema
+- [Supported versions](references/versions.md) — resolve compatible SDK, runtime, and API surfaces.
+- [Secure implementation recipe](references/data-access.md) — provider-specific boundaries and coding sequence.
+- [Security-focused tests](references/tests.md) — positive, denied, replay, failure, and version tests.
 
-For each finding return: `control_id`, `status`, `evidence`, `impact`, `recommended_fix`,
-`verification`, `limitations`, and `source_refs`. Valid status values are `Do not ship`,
-`Fix before launch`, `Recommended hardening`, `Passed with evidence`, and `Not verified`.
+## Unsafe patterns to avoid
 
-## Verification and safe failure
+- Inventing SDK methods, options, model capabilities, service behavior, or dashboard state.
+- Copying examples for another major version or runtime without checking installed version.
+- Trusting client-controlled identity, tenant, resource, price, tool, or authority fields.
+- Replacing implementation with findings, score, account audit, or certification language.
 
-Never infer dashboard, deployment, provider, or production settings from package presence.
-Redact secrets and bearer credentials. Fail closed: preserve unknown or failed checks as
-**Not verified**, identify the next verification step, and never claim launch readiness from
-incomplete evidence.
+## Tests to add
 
-## References
+Test version-compatible setup, expected success, missing identity, wrong tenant/resource, malformed input, duplicate/replay where applicable, timeout/provider failure, secret/log redaction, and unavailable external configuration.
 
-Use the source register in `references/sources.md`. For each security-critical source,
-record the direct URL, documentation index URL, version, reviewed date, review expiry,
-hash/ETag when available, owner, plan/tier, region, feature maturity, and linked control IDs.
+## Provider and deployment steps
+
+Implement repository-owned code first. For required external settings, name exact official page and verification action. If inaccessible, do not claim setting was checked.
+
+## Official sources
+
+Use [source register](references/sources.md). llms.txt indexes aid discovery only; direct provider documentation governs implementation.
+
+## Completion handoff
+
+State SDK/runtime/API version used, secure boundary implemented, tests run, provider-family defaults applied, assumptions, and exact external step remaining. Never claim whole application or provider account is secure.

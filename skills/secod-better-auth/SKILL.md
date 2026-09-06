@@ -1,94 +1,69 @@
 ---
 name: secod-better-auth
-description: Satisfy secod-auth-provider-integrations and every applicable secod-identity-access requirement. Apply when better-auth, betterAuth(), Better Auth route handlers such as…
+description: >-
+  Help coding agents securely implement Better Auth features using version-matched official APIs, secure defaults, and provider-specific tests. Use when Better Auth server/client setup, plugins, sessions, callbacks, organizations, or trusted origins.
+license: Apache-2.0
+metadata:
+  secod-category: "provider-feature"
+  secod-format: "implementation-v1"
+  secod-maturity: "provisional"
 ---
 
-# SECOD Better Auth
+# Secure Better Auth implementation
 
-## Scope and applicability
+## Purpose
 
-Satisfy `secod-auth-provider-integrations` and every applicable `secod-identity-access`
-requirement. Apply when `better-auth`, `betterAuth()`, Better Auth route handlers such as
-`/api/auth/*`, `BETTER_AUTH_SECRET`/`BETTER_AUTH_*`, Better Auth plugins, or Better Auth
-session/account tables are detected. Better Auth establishes identity; all application
-authorization remains backend-enforced.
+Implement Better Auth features securely. Provider-family router supplies shared context; this skill owns exact product decisions and version-qualified SDK/runtime use.
 
-## Control requirements
+## When to use
 
-Explicit production `baseURL`/`BETTER_AUTH_URL`, canonical host and base path; exact
-`trustedOrigins` and `allowedHosts` with no broad production wildcards; exact OAuth/SSO callback
-and redirect destinations; prohibit `advanced.disableCSRFCheck`, `advanced.disableOriginCheck`,
-`account.skipStateCookieCheck`, request-derived production base URLs, and unsafe custom
-redirect/callback validation; secure cookie attributes and names, narrowly scoped cross-
-subdomain cookie domain, and production `useSecureCookies`; reverse-proxy, IP-header and
-`trustedProxies` evidence showing clients cannot spoof rate-limit/session IPs and the origin is
-reachable only through trusted proxies; server-only, high-entropy `BETTER_AUTH_SECRET` plus
-`secrets`/`BETTER_AUTH_SECRETS` versioned rotation and decryption-retirement plan; explicit
-session expiry, `updateAge`, freshness, cookie-cache and secondary-storage strategy,
-device/session listing, per-session/all-session revocation and sensitive-action
-reauthentication; OAuth Authorization Code + PKCE/state/nonce, bounded state lifetime, exact
-provider callbacks and minimum scopes; if a custom `verifyIdToken` callback is used,
-independently verify signature, issuer, audience and expiry; OAuth access/refresh tokens are
-server-only and encrypted before database storage with managed key rotation because Better Auth
-does not encrypt them by default; conservative account-linking policy with explicit trusted
-providers, verified provider identity and recent authentication—do not rely on default automatic
-verified-email/cross-provider linking; complete enabled-plugin inventory and per-plugin
-route/control review for Admin, Organization, SSO/SAML/OIDC, SCIM, API Key, Passkey, 2FA, Magic
-Link, Email OTP, One-Time Token, Bearer/JWT, OAuth/OIDC Provider, Device Authorization,
-Anonymous, Phone and Username; Admin roles, impersonation, ban and user-management actions have
-server-side authorization, audit evidence and step-up protection; Organization
-membership/role/permission and organization-creation policy are backend-enforced; SSO/OIDC
-discovery and SCIM bearer endpoints use fixed trusted configuration, least privilege, rotation,
-organization scope, event reconciliation and deprovisioning; API keys are scoped,
-expiry/revocation/audit controlled and never exposed after initial presentation; Magic Link, OTP
-and One-Time Token use expiry, single-use, rate limits and safe exact callbacks; passkeys
-satisfy the shared WebAuthn contract; production endpoint rate limits, durable shared storage in
-serverless/multi-instance deployments, per-route rules and explicit limits for server-side
-`auth.api` calls because those bypass Better Auth's built-in client-request limiter; secure
-`scrypt` password hashing or an approved custom KDF with hash-migration evidence,
-verification/recovery/email-enumeration policy and password-reset/account-deletion controls;
-exact Better Auth, plugin and adapter versions plus migration, downgrade and
-development/production evidence; negative tests for malicious origin/callback/state/PKCE/ID-
-token validation, CSRF-disablement, proxy-IP spoofing, cookie-domain leakage, session
-expiry/revocation, unencrypted OAuth tokens, automatic account takeover linking, cross-tenant
-organization/admin/API-key/SCIM/SSO privilege escalation, rate-limit bypass and stale database
-schema.
+Use when Better Auth server/client setup, plugins, sessions, callbacks, organizations, or trusted origins. Do not activate from package presence alone when current feature does not use Better Auth.
 
-## Evidence to inspect
+## Context to inspect
 
-- Repository code, configuration, tests, deployment definitions, and CI evidence relevant to this skill.
-- Provider or framework dashboard/API evidence when the required setting cannot be established from the repository.
-- Direct primary-source evidence recorded in `references/sources.md`; absent, stale, or inaccessible evidence is **Not verified**.
+Inspect current feature, imports and calls, manifest/lockfile, runtime configuration, environment, identity/tenant model, data classes, trust boundaries, provider-family context, and nearby tests. Never collect secret values.
 
-## Dependencies and routing
+## Secure defaults
 
-Direct dependencies: `secod-core`, `secod-auth-provider-integrations`, `secod-identity-access`.
+- Validate provider credentials and tokens at trusted server boundary.
+- Keep client/server redirect, cookie, state, nonce, PKCE, and secret boundaries intact.
+- Map provider identity to local user/tenant using immutable identifiers.
+- Authorize each application resource and action independently.
+- Keep server configuration authoritative and preserve CSRF/origin, cookie, session, and plugin boundaries.
 
-When a required dependency is not installed or cannot be invoked, record the affected
-control as **Not verified** and do not issue a passing or launch-ready conclusion.
+## Implementation workflow
 
-## Negative fixtures and tests
+1. Resolve exact installed SDK/runtime/API version and product features in use.
+2. Read version-matched direct official documentation before writing provider calls.
+3. Reuse project conventions; implement validation and authorization before provider effect.
+4. Add idempotency, limits, safe failure, redaction, and environment separation where applicable.
+5. Add successful, denied, cross-tenant, malformed, replay/retry, and provider-failure tests.
 
-- Run the maintained trigger case and insecure fixture plan at `tests/` for this skill.
-- Test the unsafe or missing-control cases implied by the control requirements, including
-  unavailable-provider and partial-failure behavior where applicable.
-- Keep tests read-only unless the user explicitly authorizes a change.
+## Implementation recipes
 
-## Output schema
+- [Supported versions](references/versions.md) — resolve compatible SDK, runtime, and API surfaces.
+- [Secure implementation recipe](references/sessions-callbacks.md) — provider-specific boundaries and coding sequence.
+- [Security-focused tests](references/tests.md) — positive, denied, replay, failure, and version tests.
 
-For each finding return: `control_id`, `status`, `evidence`, `impact`, `recommended_fix`,
-`verification`, `limitations`, and `source_refs`. Valid status values are `Do not ship`,
-`Fix before launch`, `Recommended hardening`, `Passed with evidence`, and `Not verified`.
+## Unsafe patterns to avoid
 
-## Verification and safe failure
+- Inventing SDK methods, options, model capabilities, service behavior, or dashboard state.
+- Copying examples for another major version or runtime without checking installed version.
+- Trusting client-controlled identity, tenant, resource, price, tool, or authority fields.
+- Replacing implementation with findings, score, account audit, or certification language.
 
-Never infer dashboard, deployment, provider, or production settings from package presence.
-Redact secrets and bearer credentials. Fail closed: preserve unknown or failed checks as
-**Not verified**, identify the next verification step, and never claim launch readiness from
-incomplete evidence.
+## Tests to add
 
-## References
+Test version-compatible setup, expected success, missing identity, wrong tenant/resource, malformed input, duplicate/replay where applicable, timeout/provider failure, secret/log redaction, and unavailable external configuration.
 
-Use the source register in `references/sources.md`. For each security-critical source,
-record the direct URL, documentation index URL, version, reviewed date, review expiry,
-hash/ETag when available, owner, plan/tier, region, feature maturity, and linked control IDs.
+## Provider and deployment steps
+
+Implement repository-owned code first. For required external settings, name exact official page and verification action. If inaccessible, do not claim setting was checked.
+
+## Official sources
+
+Use [source register](references/sources.md). llms.txt indexes aid discovery only; direct provider documentation governs implementation.
+
+## Completion handoff
+
+State SDK/runtime/API version used, secure boundary implemented, tests run, provider-family defaults applied, assumptions, and exact external step remaining. Never claim whole application or provider account is secure.

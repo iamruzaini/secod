@@ -1,16 +1,7 @@
-# Executable failure-safety fixtures
+# Implementation fixture plan: secod-failure-safety
 
-Run from `secod/`:
+Given an implementation that violates this skill's portable invariants, replace unsafe boundary with pattern in `references/secure-patterns.md` and add successful, rejected, boundary, retry, and failure tests where applicable.
 
-```text
-python tests/insecure-fixtures/secod-failure-safety/run_fixtures.py
-```
+Expected: Fail authorization closed, bound timeouts/retries, preserve invariants with transaction/compensation, and test injected failures.
 
-Runner uses Python standard library only, writes no files, makes no network calls and emits JSON.
-Exit `0` means all nine fixture expectations were reproduced. It does not prove reviewed
-application or production safety.
-
-Cases: clean secure behavior, exception detail leak, IdP-timeout fail-open, interrupted multi-step
-mutation, blind retry plus webhook replay, absent circuit breaker, orphaned cleanup, cross-tenant
-degraded cache and missing production evidence. Expected statuses live in
-`tests/expected-results/secod-failure-safety.md`.
+This documentation plan is not scanner execution or proof of deployed behavior.

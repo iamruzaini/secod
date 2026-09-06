@@ -4,7 +4,7 @@ This table groups the complete `secod/skills` catalog by provider. All skills fo
 
 | Provider | Generalized scope | Skills | Count |
 | --- | --- | --- | ---: |
-| Generalized | Cross-provider application security: discovery and routing, threat modeling, identity, web and API security, cryptography, files, abuse prevention, secrets, software delivery, vulnerability management, observability and response, billing, AI integrations, containers, messaging, runtime execution, failure safety, and launch verification. | `secod-abuse-limits`<br>`secod-ai-api-integrations`<br>`secod-auth-provider-integrations`<br>`secod-container-runtime`<br>`secod-core`<br>`secod-crypto-data-protection`<br>`secod-data-files`<br>`secod-email-messaging`<br>`secod-failure-safety`<br>`secod-identity-access`<br>`secod-inputs-apis`<br>`secod-observability-response`<br>`secod-packages-delivery`<br>`secod-payments-billing`<br>`secod-runtime-execution`<br>`secod-secrets-config`<br>`secod-ship-check`<br>`secod-threat-model`<br>`secod-vulnerability-management`<br>`secod-web-app-security` | 20 |
+| Generalized | Cross-provider application security: discovery and routing, threat modeling, identity, web and API security, cryptography, files, abuse prevention, secrets, software delivery, vulnerability management, observability and response, billing, AI integrations, containers, messaging, runtime execution, failure safety, and scoped task completion. | `secod-abuse-limits`<br>`secod-ai-api-integrations`<br>`secod-auth-provider-integrations`<br>`secod-container-runtime`<br>`secod-core`<br>`secod-crypto-data-protection`<br>`secod-data-files`<br>`secod-email-messaging`<br>`secod-failure-safety`<br>`secod-identity-access`<br>`secod-inputs-apis`<br>`secod-observability-response`<br>`secod-packages-delivery`<br>`secod-payments-billing`<br>`secod-runtime-execution`<br>`secod-secrets-config`<br>`secod-ship-check`<br>`secod-threat-model`<br>`secod-vulnerability-management`<br>`secod-web-app-security` | 20 |
 | Anthropic | Secure Anthropic API credentials, model and token usage, retention, and tenant boundaries. | `secod-anthropic` | 1 |
 | Auth0 | Secure Auth0 authentication, authorization, sessions, tokens, callbacks, and webhooks. | `secod-auth0` | 1 |
 | AWS | Secure AWS accounts and IAM plus Lambda/API Gateway, Cognito, storage/CDN, and managed data services. | `secod-aws-web`<br>`secod-aws-lambda-api-gateway`<br>`secod-aws-cognito`<br>`secod-aws-s3-cloudfront`<br>`secod-aws-data-services` | 5 |
@@ -17,6 +17,7 @@ This table groups the complete `secod/skills` catalog by provider. All skills fo
 | Google Cloud | Secure Google Cloud organizations, projects, IAM, secrets, and Cloud Storage. | `secod-google-cloud-web`<br>`secod-google-cloud-storage` | 2 |
 | Google Gemini | Secure Gemini credentials, projects, backend proxying, model usage, and Live API access. | `secod-google-genai` | 1 |
 | Lemon Squeezy | Secure Lemon Squeezy webhooks, subscriptions, licenses, and entitlement reconciliation. | `secod-lemonsqueezy` | 1 |
+| Mobile | Portable mobile boundaries plus React Native/Expo and Flutter storage, links, permissions, notifications, provider SDKs, and release builds. | `secod-mobile-app-security`<br>`secod-react-native-expo`<br>`secod-flutter` | 3 |
 | Neon | Secure Neon Postgres roles, RLS, tenant context, branches, connectivity, and preview environments. | `secod-neon` | 1 |
 | Next.js | Secure Next.js App and Pages Routers, route handlers, Server Actions, rendering boundaries, and deployment configuration. | `secod-nextjs` | 1 |
 | OpenAI | Secure OpenAI credentials, projects, models, users, retention, Realtime access, and spend controls. | `secod-openai` | 1 |
@@ -28,4 +29,4 @@ This table groups the complete `secod/skills` catalog by provider. All skills fo
 | WorkOS | Secure WorkOS and AuthKit identity flows, sessions, organizations, roles, credentials, and webhooks. | `secod-workos` | 1 |
 | xAI | Secure xAI/Grok credentials, model access, usage, retention, and transport authentication. | `secod-xai-grok` | 1 |
 
-**Total: 57 skills across 23 rows (22 named providers/frameworks plus Generalized).**
+**Total: 60 skills across 24 rows (22 named providers/frameworks, Mobile, and Generalized).**

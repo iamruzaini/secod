@@ -1,5 +1,17 @@
 # Trigger case: secod-threat-model
 
-Positive prompt: `Use secod-threat-model to review this project.`
+## Should trigger
 
-Negative prompt: a request outside this skill's stated applicability must not claim coverage.
+```text
+Add tenant file sharing; identify trust boundaries and abuse cases before coding.
+```
+
+Expected: Produce feature-scoped security requirements, implement them with selected skills, and add abuse-case tests.
+
+## Should not trigger
+
+```text
+Fix README punctuation only.
+```
+
+Expected: skill excluded.

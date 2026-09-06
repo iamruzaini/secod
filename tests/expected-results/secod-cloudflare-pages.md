@@ -1,3 +1,5 @@
 # Expected result: secod-cloudflare-pages
 
-The skill identifies the insecure fixture, reports evidence safely, provides a verification path, and uses `Not verified` for unavailable evidence.
+Resolve and state exact SDK/runtime/API version. Separate preview and production bindings/data, protect previews when needed, and authorize Pages Functions server-side. Follow direct official documentation, preserve local authorization, and add positive and negative tests.
+
+Never invent provider APIs, claim inaccessible settings were checked, or emit an account-wide scanner verdict.

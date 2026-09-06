@@ -1,77 +1,69 @@
 ---
 name: secod-cloudflare-workflows
-description: Satisfy secod-cloudflare, secod-inputs-apis, secod-abuse-limits and secod-observability-response. Apply when Workflows definitions/bindings, step.do, retries, waits/events,…
+description: >-
+  Help coding agents securely implement Cloudflare Workflows features using version-matched official APIs, secure defaults, and provider-specific tests. Use when Workflow definitions, instances, events, steps, retries, waits, or durable state.
+license: Apache-2.0
+metadata:
+  secod-category: "provider-feature"
+  secod-format: "implementation-v1"
+  secod-maturity: "provisional"
 ---
 
-# SECOD Cloudflare Workflows
+# Secure Cloudflare Workflows implementation
 
-## Scope and applicability
+## Purpose
 
-Satisfy `secod-cloudflare`, `secod-inputs-apis`, `secod-abuse-limits` and `secod-observability-
-response`. Apply when Workflows definitions/bindings, `step.do`, retries, waits/events, rollback
-handlers, schedules, Queue/Worker/HTTP triggers or Workflow instance APIs are detected. Durable
-execution does not make input valid, side effects authorized or retries safe.
+Implement Cloudflare Workflows features securely. Provider-family router supplies shared context; this skill owns exact product decisions and version-qualified SDK/runtime use.
 
-## Control requirements
+## When to use
 
-Exact Workflow definition/binding/script/environment, trigger/caller, instance ID/event payload,
-step name/retry/backoff/timeout, wait-event type/timeout, rollback/compensation, schedule,
-retention, status/log/metrics, queue/service binding and production/preview inventory; only
-named trusted Worker/service bindings or separately authenticated/authorized HTTP paths can
-create, inspect, restart, terminate or send events to an instance, instance ID and event type
-cannot grant cross-tenant access, all create/send-event payloads are
-schema/tenant/object/signature checked before persistence, and TypeScript types are not mistaken
-for runtime validation; every external effect is inside a deterministic granular `step.do`, uses
-idempotency key/provider retrieval/reconciliation, has explicit retry
-classification/backoff/timeout and `NonRetryableError` behavior, stores no secret or unnecessary
-private data in step return/event/state, and registers plus tests compensating rollback where
-partial payment, entitlement, deletion or external write must be reversed; top-level state is
-derived from durable step return values, no security-relevant state relies on memory or mutable
-incoming event, deterministic step names/control flow prevent accidental replay, wait events
-have exact type/timeout/authentication and a safe timeout/cancellation path, and
-successful/error instance retention/deletion/export follows data classification; schedules,
-Queue triggers and child workflows have bounded concurrency, duplicate/cancel/restart semantics,
-observability and operator recovery, while every Workflow binding and target is isolated across
-production/preview; negative tests for untrusted trigger/instance/event access,
-payload/schema/tenant validation failure, side effect outside step, step
-retry/rollback/restart/duplicate/cancel defects, stale secret/state retention, wait-event
-timeout/replay and cross-environment binding.
+Use when Workflow definitions, instances, events, steps, retries, waits, or durable state. Do not activate from package presence alone when current feature does not use Cloudflare Workflows.
 
-## Evidence to inspect
+## Context to inspect
 
-- Repository code, configuration, tests, deployment definitions, and CI evidence relevant to this skill.
-- Provider or framework dashboard/API evidence when the required setting cannot be established from the repository.
-- Direct primary-source evidence recorded in `references/sources.md`; absent, stale, or inaccessible evidence is **Not verified**.
+Inspect current feature, imports and calls, manifest/lockfile, runtime configuration, environment, identity/tenant model, data classes, trust boundaries, provider-family context, and nearby tests. Never collect secret values.
 
-## Dependencies and routing
+## Secure defaults
 
-Direct dependencies: `secod-core`, `secod-cloudflare`, `secod-inputs-apis`, `secod-abuse-limits`, `secod-observability-response`.
+- Keep privileged credentials and provider management calls server/runtime-only.
+- Authenticate, validate, and authorize every reachable handler or event boundary.
+- Separate production, preview, and development resources/configuration.
+- Bound concurrency, retries, subrequests, execution time, and failure effects.
+- Validate events, make steps replay-safe, authorize starts/signals, and bound retries and retained sensitive state.
 
-When a required dependency is not installed or cannot be invoked, record the affected
-control as **Not verified** and do not issue a passing or launch-ready conclusion.
+## Implementation workflow
 
-## Negative fixtures and tests
+1. Resolve exact installed SDK/runtime/API version and product features in use.
+2. Read version-matched direct official documentation before writing provider calls.
+3. Reuse project conventions; implement validation and authorization before provider effect.
+4. Add idempotency, limits, safe failure, redaction, and environment separation where applicable.
+5. Add successful, denied, cross-tenant, malformed, replay/retry, and provider-failure tests.
 
-- Run the maintained trigger case and insecure fixture plan at `tests/` for this skill.
-- Test the unsafe or missing-control cases implied by the control requirements, including
-  unavailable-provider and partial-failure behavior where applicable.
-- Keep tests read-only unless the user explicitly authorizes a change.
+## Implementation recipes
 
-## Output schema
+- [Supported versions](references/versions.md) — resolve compatible SDK, runtime, and API surfaces.
+- [Secure implementation recipe](references/runtime-deployment.md) — provider-specific boundaries and coding sequence.
+- [Security-focused tests](references/tests.md) — positive, denied, replay, failure, and version tests.
 
-For each finding return: `control_id`, `status`, `evidence`, `impact`, `recommended_fix`,
-`verification`, `limitations`, and `source_refs`. Valid status values are `Do not ship`,
-`Fix before launch`, `Recommended hardening`, `Passed with evidence`, and `Not verified`.
+## Unsafe patterns to avoid
 
-## Verification and safe failure
+- Inventing SDK methods, options, model capabilities, service behavior, or dashboard state.
+- Copying examples for another major version or runtime without checking installed version.
+- Trusting client-controlled identity, tenant, resource, price, tool, or authority fields.
+- Replacing implementation with findings, score, account audit, or certification language.
 
-Never infer dashboard, deployment, provider, or production settings from package presence.
-Redact secrets and bearer credentials. Fail closed: preserve unknown or failed checks as
-**Not verified**, identify the next verification step, and never claim launch readiness from
-incomplete evidence.
+## Tests to add
 
-## References
+Test version-compatible setup, expected success, missing identity, wrong tenant/resource, malformed input, duplicate/replay where applicable, timeout/provider failure, secret/log redaction, and unavailable external configuration.
 
-Use the source register in `references/sources.md`. For each security-critical source,
-record the direct URL, documentation index URL, version, reviewed date, review expiry,
-hash/ETag when available, owner, plan/tier, region, feature maturity, and linked control IDs.
+## Provider and deployment steps
+
+Implement repository-owned code first. For required external settings, name exact official page and verification action. If inaccessible, do not claim setting was checked.
+
+## Official sources
+
+Use [source register](references/sources.md). llms.txt indexes aid discovery only; direct provider documentation governs implementation.
+
+## Completion handoff
+
+State SDK/runtime/API version used, secure boundary implemented, tests run, provider-family defaults applied, assumptions, and exact external step remaining. Never claim whole application or provider account is secure.

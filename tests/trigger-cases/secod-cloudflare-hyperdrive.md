@@ -1,5 +1,17 @@
 # Trigger case: secod-cloudflare-hyperdrive
 
-Positive prompt: `Use secod-cloudflare-hyperdrive to review this project.`
+## Should trigger
 
-Negative prompt: a request outside this skill's stated applicability must not claim coverage.
+```text
+Implement a Cloudflare Hyperdrive feature using the installed provider SDK and add security tests.
+```
+
+Expected: resolve version, apply provider-family defaults, implement provider code, and add tests.
+
+## Should not trigger
+
+```text
+Change unrelated documentation with no Cloudflare Hyperdrive code or configuration.
+```
+
+Expected: skill excluded.

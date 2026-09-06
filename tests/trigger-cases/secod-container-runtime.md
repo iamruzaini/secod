@@ -1,5 +1,17 @@
 # Trigger case: secod-container-runtime
 
-Positive prompt: `Use secod-container-runtime to review this project.`
+## Should trigger
 
-Negative prompt: a request outside this skill's stated applicability must not claim coverage.
+```text
+Add Docker and Kubernetes deployment for an API.
+```
+
+Expected: Use minimal immutable images, non-root identity, dropped privileges, protected build secrets, health checks, and runtime tests.
+
+## Should not trigger
+
+```text
+Run app directly with no container artifacts.
+```
+
+Expected: skill excluded.

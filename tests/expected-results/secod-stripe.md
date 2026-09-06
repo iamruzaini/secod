@@ -1,3 +1,6 @@
 # Expected result: secod-stripe
 
-The skill identifies the insecure fixture, reports evidence safely, provides a verification path, and uses `Not verified` for unavailable evidence.
+The agent keeps secret keys server-side, separates test/live configuration, derives price and
+customer ownership from trusted storage, passes idempotency keys for retryable mutations, verifies
+webhooks over raw bytes, and grants entitlement from verified Stripe state rather than redirects.
+Tests cover duplicates, out-of-order events, invalid signatures, and tenant mismatch.

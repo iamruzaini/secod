@@ -1,3 +1,7 @@
-# Insecure fixture plan: secod-email-messaging
+# Implementation fixture plan: secod-email-messaging
 
-Create a minimal reproducible unsafe case for the control requirements in the skill contract. Include a missing-evidence case and, where applicable, a partial-failure or replay case.
+Given an implementation that violates this skill's portable invariants, replace unsafe boundary with pattern in `references/secure-patterns.md` and add successful, rejected, boundary, retry, and failure tests where applicable.
+
+Expected: Generate purpose-bound tokens, store verifiers safely, prevent enumeration, constrain redirects, rate-limit, and test replay.
+
+This documentation plan is not scanner execution or proof of deployed behavior.

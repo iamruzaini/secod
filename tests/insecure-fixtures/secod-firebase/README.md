@@ -1,3 +1,11 @@
-# Insecure fixture plan: secod-firebase
+# Executable implementation fixtures: secod-firebase
 
-Create a minimal reproducible unsafe case for the control requirements in the skill contract. Include a missing-evidence case and, where applicable, a partial-failure or replay case.
+Run:
+
+```text
+python tests/insecure-fixtures/secod-firebase/run_fixtures.py
+```
+
+The fixture models broad Firestore reads, tenant-scoped Storage writes, content and size checks,
+server-only Admin SDK use, and service-account credential boundaries. It is an in-memory contract
+similar to an Emulator test; it does not contact Firebase or inspect deployed Rules/App Check.

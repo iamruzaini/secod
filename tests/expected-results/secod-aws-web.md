@@ -1,3 +1,7 @@
 # Expected result: secod-aws-web
 
-The skill identifies the insecure fixture, reports evidence safely, provides a verification path, and uses `Not verified` for unavailable evidence.
+Select Lambda/API Gateway and data-services adapters, apply short-lived identity and scoped IAM defaults, then implement tests.
+
+Missing context: Exact AWS services, SDK versions, account, Region, and workload identity are unclear; inspect code and IaC before routing.
+
+Rejected behavior: Do not select Cognito or S3/CloudFront without use and do not inventory the whole AWS account.

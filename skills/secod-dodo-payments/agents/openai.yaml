@@ -1,3 +1,3 @@
 display_name: "Dodo Payments"
-short_description: "Satisfy every secod-payments-billing requirement; verify and deduplicate every event and maintain correct entitlement state across retries, renewal failures, refunds and disputes."
-default_prompt: "Use $secod-dodo-payments to review this project. Preserve missing evidence as Not verified."
+short_description: "Implement secure, version-qualified Dodo Payments code and provider-specific tests."
+default_prompt: "Use $secod-dodo-payments while implementing this Dodo Payments feature. Resolve exact versions, follow direct official docs, preserve authorization boundaries, and add positive and negative tests."

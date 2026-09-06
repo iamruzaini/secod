@@ -111,17 +111,17 @@ class AlertRoute:
 
 def runbook_status(*, covers_applicable_breaches: bool, dated_exercise: bool) -> str:
     return (
-        "Passed with evidence"
+        "secure pattern confirmed"
         if covers_applicable_breaches and dated_exercise
-        else "Not verified"
+        else "external state not inspected"
     )
 
 
 def recovery_status(*, restore_artifact: bool, partial_recovery_observed: bool) -> str:
     return (
-        "Passed with evidence"
+        "secure pattern confirmed"
         if restore_artifact and partial_recovery_observed
-        else "Not verified"
+        else "external state not inspected"
     )
 
 
@@ -129,7 +129,7 @@ def external_evidence_status(
     *, production_sink: bool, alert_delivery: bool, runbook_exercise: bool, restore_drill: bool
 ) -> str:
     return (
-        "Passed with evidence"
+        "secure pattern confirmed"
         if all((production_sink, alert_delivery, runbook_exercise, restore_drill))
-        else "Not verified"
+        else "external state not inspected"
     )

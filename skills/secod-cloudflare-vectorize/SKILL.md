@@ -1,75 +1,69 @@
 ---
 name: secod-cloudflare-vectorize
-description: Satisfy secod-cloudflare-workers, secod-ai-api-integrations, secod-data-files and secod-observability-response. Apply when Vectorize indexes/bindings, embeddings, vector…
+description: >-
+  Help coding agents securely implement Cloudflare Vectorize features using version-matched official APIs, secure defaults, and provider-specific tests. Use when Vectorize indexes, namespaces, metadata filters, embeddings, upserts, queries, or RAG.
+license: Apache-2.0
+metadata:
+  secod-category: "provider-feature"
+  secod-format: "implementation-v1"
+  secod-maturity: "provisional"
 ---
 
-# SECOD Cloudflare Vectorize
+# Secure Cloudflare Vectorize implementation
 
-## Scope and applicability
+## Purpose
 
-Satisfy `secod-cloudflare-workers`, `secod-ai-api-integrations`, `secod-data-files` and `secod-
-observability-response`. Apply when Vectorize indexes/bindings, embeddings, vector
-query/upsert/delete, namespaces, metadata indexes or Vectorize-backed RAG are detected.
-Similarity search is not authorization; every retrieval remains tenant scoped.
+Implement Cloudflare Vectorize features securely. Provider-family router supplies shared context; this skill owns exact product decisions and version-qualified SDK/runtime use.
 
-## Control requirements
+## When to use
 
-Exact index/binding/environment, embedding model/dimension, source document/R2/D1 data path,
-namespace, tenant/owner metadata field/index, upsert/delete/query code, returned
-values/metadata/topK, retention/deletion/reindex, Worker/Pages binding and production/preview
-inventory; indexes and bindings are separated by environment and sensitive tenant where
-architecture requires it, clients cannot choose arbitrary index, namespace, metadata filter,
-embedding model or topK, and server code always applies a tenant/owner namespace plus metadata
-filter before query, with the needed metadata index created before relevant vectors are inserted
-or re-upserted after index creation; source-document authorization/filtering occurs before
-embedding, vector IDs/metadata contain no secrets/unnecessary private data, query responses
-return the minimum values/metadata and are re-authorized before display or model context, and
-retrieved text/model output remains untrusted under `secod-ai-api-integrations`;
-ingestion/update/delete is authenticated, tenant-bound and idempotent, Vectorize's asynchronous
-delete is tracked to completion, source/R2/D1/cache/vector deletion and retention are
-reconciled, and stale vectors/metadata indexes cannot preserve revoked tenant data;
-query/input/topK/returned payload, embedding, ingestion, retries and cost are bounded, safe logs
-omit raw private corpus/query/result where not required, and model/index/version migration and
-re-embedding are reviewed; negative tests for missing/wrong namespace or metadata filter,
-client-selected/cross-tenant index/query, vector/source deletion lag, metadata/value over-
-return, untrusted retrieved-content prompt injection, embedding/cost abuse and production-
-preview index/binding/data drift.
+Use when Vectorize indexes, namespaces, metadata filters, embeddings, upserts, queries, or RAG. Do not activate from package presence alone when current feature does not use Cloudflare Vectorize.
 
-## Evidence to inspect
+## Context to inspect
 
-- Repository code, configuration, tests, deployment definitions, and CI evidence relevant to this skill.
-- Provider or framework dashboard/API evidence when the required setting cannot be established from the repository.
-- Direct primary-source evidence recorded in `references/sources.md`; absent, stale, or inaccessible evidence is **Not verified**.
+Inspect current feature, imports and calls, manifest/lockfile, runtime configuration, environment, identity/tenant model, data classes, trust boundaries, provider-family context, and nearby tests. Never collect secret values.
 
-## Dependencies and routing
+## Secure defaults
 
-Direct dependencies: `secod-core`, `secod-cloudflare-workers`, `secod-ai-api-integrations`, `secod-data-files`, `secod-observability-response`.
+- Authorize every query/object against trusted user, tenant, and ownership state.
+- Use parameterized/structured APIs and least-privilege workload credentials.
+- Keep data private by default and bound query, upload, result, and connection resources.
+- Test cross-tenant, unauthorized, malformed, duplicate, and dependency-failure paths.
+- Encode tenant/resource scope in trusted metadata filters and authorize retrieval before returning matches.
 
-When a required dependency is not installed or cannot be invoked, record the affected
-control as **Not verified** and do not issue a passing or launch-ready conclusion.
+## Implementation workflow
 
-## Negative fixtures and tests
+1. Resolve exact installed SDK/runtime/API version and product features in use.
+2. Read version-matched direct official documentation before writing provider calls.
+3. Reuse project conventions; implement validation and authorization before provider effect.
+4. Add idempotency, limits, safe failure, redaction, and environment separation where applicable.
+5. Add successful, denied, cross-tenant, malformed, replay/retry, and provider-failure tests.
 
-- Run the maintained trigger case and insecure fixture plan at `tests/` for this skill.
-- Test the unsafe or missing-control cases implied by the control requirements, including
-  unavailable-provider and partial-failure behavior where applicable.
-- Keep tests read-only unless the user explicitly authorizes a change.
+## Implementation recipes
 
-## Output schema
+- [Supported versions](references/versions.md) — resolve compatible SDK, runtime, and API surfaces.
+- [Secure implementation recipe](references/data-access.md) — provider-specific boundaries and coding sequence.
+- [Security-focused tests](references/tests.md) — positive, denied, replay, failure, and version tests.
 
-For each finding return: `control_id`, `status`, `evidence`, `impact`, `recommended_fix`,
-`verification`, `limitations`, and `source_refs`. Valid status values are `Do not ship`,
-`Fix before launch`, `Recommended hardening`, `Passed with evidence`, and `Not verified`.
+## Unsafe patterns to avoid
 
-## Verification and safe failure
+- Inventing SDK methods, options, model capabilities, service behavior, or dashboard state.
+- Copying examples for another major version or runtime without checking installed version.
+- Trusting client-controlled identity, tenant, resource, price, tool, or authority fields.
+- Replacing implementation with findings, score, account audit, or certification language.
 
-Never infer dashboard, deployment, provider, or production settings from package presence.
-Redact secrets and bearer credentials. Fail closed: preserve unknown or failed checks as
-**Not verified**, identify the next verification step, and never claim launch readiness from
-incomplete evidence.
+## Tests to add
 
-## References
+Test version-compatible setup, expected success, missing identity, wrong tenant/resource, malformed input, duplicate/replay where applicable, timeout/provider failure, secret/log redaction, and unavailable external configuration.
 
-Use the source register in `references/sources.md`. For each security-critical source,
-record the direct URL, documentation index URL, version, reviewed date, review expiry,
-hash/ETag when available, owner, plan/tier, region, feature maturity, and linked control IDs.
+## Provider and deployment steps
+
+Implement repository-owned code first. For required external settings, name exact official page and verification action. If inaccessible, do not claim setting was checked.
+
+## Official sources
+
+Use [source register](references/sources.md). llms.txt indexes aid discovery only; direct provider documentation governs implementation.
+
+## Completion handoff
+
+State SDK/runtime/API version used, secure boundary implemented, tests run, provider-family defaults applied, assumptions, and exact external step remaining. Never claim whole application or provider account is secure.

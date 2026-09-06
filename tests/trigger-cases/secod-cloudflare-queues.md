@@ -1,5 +1,17 @@
 # Trigger case: secod-cloudflare-queues
 
-Positive prompt: `Use secod-cloudflare-queues to review this project.`
+## Should trigger
 
-Negative prompt: a request outside this skill's stated applicability must not claim coverage.
+```text
+Implement a Cloudflare Queues feature using the installed provider SDK and add security tests.
+```
+
+Expected: resolve version, apply provider-family defaults, implement provider code, and add tests.
+
+## Should not trigger
+
+```text
+Change unrelated documentation with no Cloudflare Queues code or configuration.
+```
+
+Expected: skill excluded.

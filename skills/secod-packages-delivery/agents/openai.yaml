@@ -1,3 +1,3 @@
 display_name: "Packages Delivery"
-short_description: "Make dependencies, CI/CD and releases reproducible, least-privileged, reviewable and rollback-capable."
-default_prompt: "Use $secod-packages-delivery to review this project. Preserve missing evidence as Not verified."
+short_description: "Select trustworthy dependencies and implement reproducible, least-privilege build and release paths."
+default_prompt: "Use $secod-packages-delivery while implementing this feature. Preserve portable security invariants, apply provider adapters for exact SDK behavior, and add positive and negative tests."

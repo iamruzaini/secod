@@ -1,8 +1,17 @@
 # Trigger case: secod-failure-safety
 
-Positive prompt: `Use secod-failure-safety to review this project.`
+## Should trigger
 
-Negative prompt: a request outside this skill's stated applicability must not claim coverage.
+```text
+Add a multi-step mutation that calls a provider and database.
+```
 
-Fixture prompt: `Run the executable secod-failure-safety fixtures and report which expectations
-were reproduced. Do not treat fixture success as production evidence.`
+Expected: Fail authorization closed, bound timeouts/retries, preserve invariants with transaction/compensation, and test injected failures.
+
+## Should not trigger
+
+```text
+Change static documentation.
+```
+
+Expected: skill excluded.

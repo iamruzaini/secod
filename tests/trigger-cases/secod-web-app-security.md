@@ -1,5 +1,17 @@
 # Trigger case: secod-web-app-security
 
-Positive prompt: `Use secod-web-app-security to review this project.`
+## Should trigger
 
-Negative prompt: a request outside this skill's stated applicability must not claim coverage.
+```text
+Add a rich-text form using authenticated cookies.
+```
+
+Expected: Use safe rendering, server authorization, appropriate CSRF protection, narrow origins, and browser-boundary tests.
+
+## Should not trigger
+
+```text
+Change server-only database indexing.
+```
+
+Expected: skill excluded.

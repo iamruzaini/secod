@@ -69,11 +69,11 @@ def main() -> int:
         "missing_test_ids": missing,
         "unexpected_test_ids": unexpected,
         "expectations_reproduced": reproduced,
-        "production_evidence": False,
-        "readiness_verdict": "not_issued",
-        "blockers": [
-            "local fixtures reproduce guarded and insecure behavior only",
-            "fixture execution does not prove reviewed application or production behavior",
+        "production_state_inspected": False,
+        "application_certification": "not_produced",
+        "limitations": [
+            "local fixtures exercise guarded and insecure implementation behavior only",
+            "fixture execution does not inspect a deployed application",
         ],
     }
     print(json.dumps(payload, sort_keys=True))

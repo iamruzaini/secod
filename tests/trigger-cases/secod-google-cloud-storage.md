@@ -1,5 +1,17 @@
 # Trigger case: secod-google-cloud-storage
 
-Positive prompt: `Use secod-google-cloud-storage to review this project.`
+## Should trigger
 
-Negative prompt: a request outside this skill's stated applicability must not claim coverage.
+```text
+Implement a Google Cloud Storage feature using the installed provider SDK and add security tests.
+```
+
+Expected: resolve version, apply provider-family defaults, implement provider code, and add tests.
+
+## Should not trigger
+
+```text
+Change unrelated documentation with no Google Cloud Storage code or configuration.
+```
+
+Expected: skill excluded.

@@ -215,15 +215,17 @@ def render(slug: str, owner: str, rows: list[tuple[str, str]]) -> str:
 
 Use official documentation indexes for discovery only. These direct official sources were
 identified on {REVIEWED_DATE}, but their control mapping still requires substantive review.
-Until that review is complete, affected provider requirements remain **Not verified**.
+Until that review is complete, keep source status **Pending review** and do not use it to support
+implementation decisions.
 
 | Source ID | Title | Direct official URL | Owner | Reviewed date | Refresh trigger | Status | Control IDs | Assumptions |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 {"\n".join(table_rows)}
 
 Status meanings: `Reviewed` means content was read and mapped to controls; `Pending review` means
-the official URL is identified but mapping is incomplete; `Not verified` means evidence is
-inaccessible, stale, or insufficient. URL reachability alone never establishes `Reviewed`.
+the official URL is identified but mapping is incomplete; `Not verified` is reserved for source
+evidence that is inaccessible, stale, or insufficient. These are source-register statuses, not
+routine coding-output labels. URL reachability alone never establishes `Reviewed`.
 """
 
 

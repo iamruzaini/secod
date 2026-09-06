@@ -1,3 +1,11 @@
-# Insecure fixture plan: secod-supabase
+# Executable implementation fixtures: secod-supabase
 
-Create a minimal reproducible unsafe case for the control requirements in the skill contract. Include a missing-evidence case and, where applicable, a partial-failure or replay case.
+Run:
+
+```text
+python tests/insecure-fixtures/secod-supabase/run_fixtures.py
+```
+
+The fixture models missing RLS, tenant-scoped row access, private Storage objects, service-role
+credential boundaries, and server-owned row updates. It uses in-memory data and does not contact a
+Supabase project; deployed RLS, Storage policies, and secrets remain external configuration.

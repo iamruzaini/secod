@@ -1,82 +1,69 @@
 ---
 name: secod-aws-lambda-api-gateway
-description: Satisfy secod-aws-web, secod-identity-access, secod-inputs-apis, secod-abuse-limits and secod-secrets-config. Apply when Lambda, Lambda Function URLs, API Gateway…
+description: >-
+  Help coding agents securely implement AWS Lambda and API Gateway features using version-matched official APIs, secure defaults, and provider-specific tests. Use when Lambda functions/URLs, API Gateway routes/authorizers, event sources, layers, or execution roles.
+license: Apache-2.0
+metadata:
+  secod-category: "provider-feature"
+  secod-format: "implementation-v1"
+  secod-maturity: "provisional"
 ---
 
-# SECOD AWS Lambda API Gateway
+# Secure AWS Lambda and API Gateway implementation
 
-## Scope and applicability
+## Purpose
 
-Satisfy `secod-aws-web`, `secod-identity-access`, `secod-inputs-apis`, `secod-abuse-limits` and
-`secod-secrets-config`. Apply when Lambda, Lambda Function URLs, API Gateway REST/HTTP/WebSocket
-APIs, ALB Lambda targets, SAM/CDK/serverless framework API definitions, Lambda layers or Lambda
-event-source mappings are detected. Every internet-reachable invocation path must be identified
-and intentionally authenticated/authorized.
+Implement AWS Lambda and API Gateway features securely. Provider-family router supplies shared context; this skill owns exact product decisions and version-qualified SDK/runtime use.
 
-## Control requirements
+## When to use
 
-Exact function, alias/version, runtime, architecture, layer, Function URL, API Gateway
-API/stage/route/method/authorizer/integration, ALB, custom domain, CORS, WAF, throttling, usage
-plan, event-source, concurrency, DLQ/destination, VPC/subnet/security-group, environment/secret
-and production/preview inventory; a unique least-privilege Lambda execution role per workload
-with only required logs/data/network permissions, separate deployment/invoker roles, no shared
-administrator role, scoped Lambda resource policies for every service/cross-account invoker
-using the expected principal and `SourceArn`/`SourceAccount`, and review of aliases, versions,
-layers and code-signing/deployment provenance; each Function URL has an explicit `AWS_IAM` or
-intentionally public `NONE` decision, with public `NONE` URLs treated as unauthenticated
-internet endpoints requiring application authentication/authorization, request limits and abuse
-controls, and resource-policy conditions such as `lambda:InvokedViaFunctionUrl` so access cannot
-expand through another invocation path; API Gateway uses a real authorizer, Cognito JWT
-authorizer, Lambda authorizer or IAM authorization for protected routes, verifies authorization
-at the backend as well as at the gateway, has exact route/method/stage/domain/CORS/request-
-validation/body-size/timeout/throttle/quota/WAF/resource-policy/private-endpoint configuration,
-and never treats API Gateway API keys or usage plans as authentication or authorization—they are
-consumer-usage tracking and limiting controls only; correct authorizer/JWT issuer, JWKS,
-audience/client, algorithm, expiry, scopes and tenant claims, no credentials/tokens in query
-strings or logs, webhook raw-body signature/replay handling, strict integration response/error
-redaction and no unauthenticated proxy to privileged AWS APIs; reserved/provisioned concurrency,
-event-source batch/visibility/retry/failure/DLQ/destination, idempotency and partial-failure
-behavior bounded against duplicate delivery, and safe deploy/rollback/canary/alias traffic
-policy; no public Lambda/API Gateway/ALB route, permissive CORS, `NONE` Function URL, wildcard
-invocation policy, overbroad execution role, unauthenticated authorizer fallthrough, API-key-
-only protection, layer/runtime CVE, event replay, or public backend integration without explicit
-evidence and negative tests.
+Use when Lambda functions/URLs, API Gateway routes/authorizers, event sources, layers, or execution roles. Do not activate from package presence alone when current feature does not use AWS Lambda and API Gateway.
 
-## Evidence to inspect
+## Context to inspect
 
-- Repository code, configuration, tests, deployment definitions, and CI evidence relevant to this skill.
-- Provider or framework dashboard/API evidence when the required setting cannot be established from the repository.
-- Direct primary-source evidence recorded in `references/sources.md`; absent, stale, or inaccessible evidence is **Not verified**.
+Inspect current feature, imports and calls, manifest/lockfile, runtime configuration, environment, identity/tenant model, data classes, trust boundaries, provider-family context, and nearby tests. Never collect secret values.
 
-## Dependencies and routing
+## Secure defaults
 
-Direct dependencies: `secod-core`, `secod-aws-web`, `secod-identity-access`, `secod-inputs-apis`, `secod-abuse-limits`, `secod-secrets-config`.
+- Keep privileged credentials and provider management calls server/runtime-only.
+- Authenticate, validate, and authorize every reachable handler or event boundary.
+- Separate production, preview, and development resources/configuration.
+- Bound concurrency, retries, subrequests, execution time, and failure effects.
+- Use minimal execution roles, explicit invocation permissions, route authorization, schema validation, and bounded concurrency/retries.
 
-When a required dependency is not installed or cannot be invoked, record the affected
-control as **Not verified** and do not issue a passing or launch-ready conclusion.
+## Implementation workflow
 
-## Negative fixtures and tests
+1. Resolve exact installed SDK/runtime/API version and product features in use.
+2. Read version-matched direct official documentation before writing provider calls.
+3. Reuse project conventions; implement validation and authorization before provider effect.
+4. Add idempotency, limits, safe failure, redaction, and environment separation where applicable.
+5. Add successful, denied, cross-tenant, malformed, replay/retry, and provider-failure tests.
 
-- Run the maintained trigger case and insecure fixture plan at `tests/` for this skill.
-- Test the unsafe or missing-control cases implied by the control requirements, including
-  unavailable-provider and partial-failure behavior where applicable.
-- Keep tests read-only unless the user explicitly authorizes a change.
+## Implementation recipes
 
-## Output schema
+- [Supported versions](references/versions.md) — resolve compatible SDK, runtime, and API surfaces.
+- [Secure implementation recipe](references/runtime-deployment.md) — provider-specific boundaries and coding sequence.
+- [Security-focused tests](references/tests.md) — positive, denied, replay, failure, and version tests.
 
-For each finding return: `control_id`, `status`, `evidence`, `impact`, `recommended_fix`,
-`verification`, `limitations`, and `source_refs`. Valid status values are `Do not ship`,
-`Fix before launch`, `Recommended hardening`, `Passed with evidence`, and `Not verified`.
+## Unsafe patterns to avoid
 
-## Verification and safe failure
+- Inventing SDK methods, options, model capabilities, service behavior, or dashboard state.
+- Copying examples for another major version or runtime without checking installed version.
+- Trusting client-controlled identity, tenant, resource, price, tool, or authority fields.
+- Replacing implementation with findings, score, account audit, or certification language.
 
-Never infer dashboard, deployment, provider, or production settings from package presence.
-Redact secrets and bearer credentials. Fail closed: preserve unknown or failed checks as
-**Not verified**, identify the next verification step, and never claim launch readiness from
-incomplete evidence.
+## Tests to add
 
-## References
+Test version-compatible setup, expected success, missing identity, wrong tenant/resource, malformed input, duplicate/replay where applicable, timeout/provider failure, secret/log redaction, and unavailable external configuration.
 
-Use the source register in `references/sources.md`. For each security-critical source,
-record the direct URL, documentation index URL, version, reviewed date, review expiry,
-hash/ETag when available, owner, plan/tier, region, feature maturity, and linked control IDs.
+## Provider and deployment steps
+
+Implement repository-owned code first. For required external settings, name exact official page and verification action. If inaccessible, do not claim setting was checked.
+
+## Official sources
+
+Use [source register](references/sources.md). llms.txt indexes aid discovery only; direct provider documentation governs implementation.
+
+## Completion handoff
+
+State SDK/runtime/API version used, secure boundary implemented, tests run, provider-family defaults applied, assumptions, and exact external step remaining. Never claim whole application or provider account is secure.

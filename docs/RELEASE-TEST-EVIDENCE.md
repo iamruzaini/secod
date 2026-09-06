@@ -1,4 +1,10 @@
-# SECOD v0.1.0 Installation Test Evidence
+# Historical installation test evidence: 57-skill catalog
+
+> This 2026-09-05 run covers the earlier 57-skill catalog at commit
+> `659cdc41e48cc30ff81ba9742dc2df170f909abf`. The current `implementation-v1`
+> catalog contains 60 skills. These results remain historical evidence and do
+> not satisfy the current `v0.1.0` installation gate. Repeat the clean Codex,
+> Claude Code, and Cursor installation tests against the release candidate.
 
 - Test date: 2026-09-05
 - Operating system: Microsoft Windows 11 Home 10.0.26200 (AMD64)

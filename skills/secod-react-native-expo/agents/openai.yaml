@@ -1,0 +1,3 @@
+display_name: "React Native and Expo"
+short_description: "Build secure Expo and React Native mobile features using supported APIs."
+default_prompt: "Use $secod-react-native-expo while implementing this feature. Resolve installed Expo and React Native versions, keep secrets off-device, secure storage and links, minimize permissions, and test release behavior."

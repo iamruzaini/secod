@@ -1,117 +1,69 @@
 ---
 name: secod-vercel-platform
-description: Satisfy every applicable general baseline requirement; apply when .vercel/project.json, vercel.json/vercel.ts, a Vercel Git/CLI deployment, VERCEL_* system variables, Vercel…
+description: >-
+  Help coding agents securely implement Vercel Platform features using version-matched official APIs, secure defaults, and provider-specific tests. Use when Vercel deployments, Functions, environment variables, preview URLs, cron, domains, or deployment protection.
+license: Apache-2.0
+metadata:
+  secod-category: "provider-feature"
+  secod-format: "implementation-v1"
+  secod-maturity: "provisional"
 ---
 
-# SECOD Vercel Platform
+# Secure Vercel Platform implementation
 
-## Scope and applicability
+## Purpose
 
-Satisfy every applicable general baseline requirement; apply when `.vercel/project.json`,
-`vercel.json`/`vercel.ts`, a Vercel Git/CLI deployment, `VERCEL_*` system variables, Vercel
-Functions/Cron/Queues, OIDC or a Vercel deployment URL is detected; verify repository
-configuration plus current team/project dashboard or API evidence because code alone cannot
-prove deployment protection, access, environment, domain or plan-dependent controls; never allow
-`secod-vercel-ai` to substitute for deployment-platform review.
+Implement Vercel Platform features securely. Provider-family router supplies shared context; this skill owns exact product decisions and version-qualified SDK/runtime use.
 
-## Control requirements
+## When to use
 
-Inventory the Vercel team/project IDs and names, linked repository, production branch and new-
-project first-deployment behavior, root/build/install settings, plan/tier, regions and runtimes;
-prevent an unreviewed repository from becoming the initial Production deployment; inventory
-Local/Development, Preview, Production and custom environments plus every current and retained
-deployment URL, generated URL, branch alias, production alias and custom domain, with an
-explicit retention/deletion owner for old deployments; record which URLs are public and which
-protection method/scope actually covers each URL class, including Standard, All Deployments,
-legacy modes, Trusted IPs, Password, Vercel Authentication/Passport, plan limitations and
-unauthenticated negative tests; never assume Standard Protection covers production domains;
-inventory and review every Deployment Protection Exception, OPTIONS allowlist, Shareable Link
-and automation bypass; treat `VERCEL_AUTOMATION_BYPASS_SECRET`, share-link query values and
-bypass cookies as revocable bearer capabilities; use separate least-privilege automation
-secrets, prefer the header over query strings, permit query parameters only when a third party
-cannot send headers, prevent URL/log/referrer leakage, constrain cookie `SameSite`, monitor use,
-rotate/revoke promptly and redeploy when required; explicitly account for automation bypass
-disabling deployment protection and some firewall/bot mitigations across the project; enforce
-exact Production/Preview/Development/custom/branch targeting for project, shared and integration
-environment variables; keep preview deployments and untrusted branches away from production
-credentials, databases, regulated data and write-capable services unless explicitly approved and
-isolated; use Sensitive Environment Variables where supported, review users who can read
-ordinary values, prevent client/framework-public prefixes from exposing secrets, protect local
-`vercel env pull` files and verify rotations/redeployments across every linked project and
-retained deployment because old deployments keep old values; enable Git Fork Protection and
-prevent untrusted fork/PR builds from receiving privileged variables, OIDC tokens, protected
-caches, production deploy rights or deploy-hook secrets; review Vercel access tokens, deploy
-hooks, Git integration permissions, team/project/access-group roles, production-deployment
-permissions, owner/admin separation, MFA/SSO policy where available and periodic access removal;
-prefer short-lived Vercel OIDC over static cloud credentials and restrict trust to the expected
-team-scoped issuer, audience, subject, team/project and environment claims with JWKS
-signature/time validation; account for team/project renames changing claims; review
-`vercel.json`/`vercel.ts`, project settings, ignored-build commands, Build Output API,
-install/build scripts, build cache and CLI `--public`/`public: true` overrides as privileged
-configuration; verify immutable commit/deployment identity and re-run security gates against the
-resulting Production deployment because promoting a Preview deployment can rebuild with
-Production environment variables rather than promote the identical artifact; require protected
-promotion/rollback permissions, health checks, audit evidence, rollback drills and
-database/schema/credential compatibility because rollback can route traffic to an older
-deployment without rebuilding it; compare repository, dashboard/API, Preview and Production
-configuration to detect environment drift; verify domain DNS ownership, team/project assignment,
-aliases, branch domains, TLS, canonical redirects, wildcard/custom-domain tenant ownership and
-removal of dangling or stale domains; when Vercel Firewall/WAF/Bot/Attack Mode is used, review
-rule scope, order, bypass actions, managed/custom rules, environment/domain coverage, logging-
-before-deny rollout and plan capabilities while retaining application-layer authentication,
-authorization, validation and rate limiting; when Secure Compute, private connectivity or static
-egress IPs are used, verify environment/network isolation, region and failover assumptions,
-destination allowlists and credential boundaries; keep Build Logs and Source Protection enabled,
-prohibit accidental `/_src`/`/_logs`, `--public` or `public: true` exposure, minimize temporary
-Vercel Support code visibility and protect log drains, activity/audit logs and retention; verify
-or delete retained deployments because changing source/log protection does not necessarily
-repair earlier deployments; use Protected Source Maps or remove public maps, while separately
-checking inline maps, server-side maps and copies uploaded to third parties because Vercel's
-protected-map control does not cover them; never rely solely on automatic build-log redaction
-and scan build/runtime/drain logs for short, derived, encoded and multiline secrets; inventory
-Vercel Functions, public paths, runtimes, regions, memory, duration, concurrency, retry and cost
-limits; authenticate Cron endpoints with a strong rotated `CRON_SECRET`, fail closed when
-absent, and require idempotency/replay/race controls for scheduled work; when Vercel Queues is
-detected, verify project/environment/topic and consumer-group scope, OIDC or credential
-boundaries, retry/idempotency, poison-message handling and reconciliation; alert on
-protection/bypass/domain/RBAC/OIDC/environment/firewall/source-visibility changes, abnormal
-spend, deployment failures and rollback events.
+Use when Vercel deployments, Functions, environment variables, preview URLs, cron, domains, or deployment protection. Do not activate from package presence alone when current feature does not use Vercel Platform.
 
-## Evidence to inspect
+## Context to inspect
 
-- Repository code, configuration, tests, deployment definitions, and CI evidence relevant to this skill.
-- Provider or framework dashboard/API evidence when the required setting cannot be established from the repository.
-- Direct primary-source evidence recorded in `references/sources.md`; absent, stale, or inaccessible evidence is **Not verified**.
+Inspect current feature, imports and calls, manifest/lockfile, runtime configuration, environment, identity/tenant model, data classes, trust boundaries, provider-family context, and nearby tests. Never collect secret values.
 
-## Dependencies and routing
+## Secure defaults
 
-Direct dependencies: `secod-core`.
+- Keep privileged credentials and provider management calls server/runtime-only.
+- Authenticate, validate, and authorize every reachable handler or event boundary.
+- Separate production, preview, and development resources/configuration.
+- Bound concurrency, retries, subrequests, execution time, and failure effects.
+- Separate preview/production secrets and data, authorize functions, constrain deployment access, and protect production domains.
 
-When a required dependency is not installed or cannot be invoked, record the affected
-control as **Not verified** and do not issue a passing or launch-ready conclusion.
+## Implementation workflow
 
-## Negative fixtures and tests
+1. Resolve exact installed SDK/runtime/API version and product features in use.
+2. Read version-matched direct official documentation before writing provider calls.
+3. Reuse project conventions; implement validation and authorization before provider effect.
+4. Add idempotency, limits, safe failure, redaction, and environment separation where applicable.
+5. Add successful, denied, cross-tenant, malformed, replay/retry, and provider-failure tests.
 
-- Run the maintained trigger case and insecure fixture plan at `tests/` for this skill.
-- Test the unsafe or missing-control cases implied by the control requirements, including
-  unavailable-provider and partial-failure behavior where applicable.
-- Keep tests read-only unless the user explicitly authorizes a change.
+## Implementation recipes
 
-## Output schema
+- [Supported versions](references/versions.md) — resolve compatible SDK, runtime, and API surfaces.
+- [Secure implementation recipe](references/runtime-deployment.md) — provider-specific boundaries and coding sequence.
+- [Security-focused tests](references/tests.md) — positive, denied, replay, failure, and version tests.
 
-For each finding return: `control_id`, `status`, `evidence`, `impact`, `recommended_fix`,
-`verification`, `limitations`, and `source_refs`. Valid status values are `Do not ship`,
-`Fix before launch`, `Recommended hardening`, `Passed with evidence`, and `Not verified`.
+## Unsafe patterns to avoid
 
-## Verification and safe failure
+- Inventing SDK methods, options, model capabilities, service behavior, or dashboard state.
+- Copying examples for another major version or runtime without checking installed version.
+- Trusting client-controlled identity, tenant, resource, price, tool, or authority fields.
+- Replacing implementation with findings, score, account audit, or certification language.
 
-Never infer dashboard, deployment, provider, or production settings from package presence.
-Redact secrets and bearer credentials. Fail closed: preserve unknown or failed checks as
-**Not verified**, identify the next verification step, and never claim launch readiness from
-incomplete evidence.
+## Tests to add
 
-## References
+Test version-compatible setup, expected success, missing identity, wrong tenant/resource, malformed input, duplicate/replay where applicable, timeout/provider failure, secret/log redaction, and unavailable external configuration.
 
-Use the source register in `references/sources.md`. For each security-critical source,
-record the direct URL, documentation index URL, version, reviewed date, review expiry,
-hash/ETag when available, owner, plan/tier, region, feature maturity, and linked control IDs.
+## Provider and deployment steps
+
+Implement repository-owned code first. For required external settings, name exact official page and verification action. If inaccessible, do not claim setting was checked.
+
+## Official sources
+
+Use [source register](references/sources.md). llms.txt indexes aid discovery only; direct provider documentation governs implementation.
+
+## Completion handoff
+
+State SDK/runtime/API version used, secure boundary implemented, tests run, provider-family defaults applied, assumptions, and exact external step remaining. Never claim whole application or provider account is secure.

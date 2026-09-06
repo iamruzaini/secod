@@ -23,8 +23,9 @@ the source of truth for skill metadata or releases.
 
 ## Core architectural decisions from the PRD
 
-- Preserve the complete 57-skill catalog from the start. Do not represent an
-  incomplete subset as SECOD v1.0.
+- Preserve the original 57-skill migration inventory. The current catalog has
+  60 `implementation-v1` skills after adding mobile, React Native/Expo, and
+  Flutter coverage; the published count must come from the generated catalog.
 - Keep the foundation, universal, and provider layers separate so each skill
   remains small, portable, and independently testable.
 - Treat SECOD Core as a routing and planning skill, not as an implicit
@@ -32,7 +33,8 @@ the source of truth for skill metadata or releases.
 - Keep agent-facing security instructions free of marketing, sponsors,
   credentials, and unrelated tutorial material.
 - Make the Ship Check the only cross-project pre-launch decision surface.
-- Preserve Not verified whenever a configuration or evidence source is absent.
+- Continue repository-owned implementation when external configuration is absent; name exact
+  uninspected setting and verification step without inventing its state.
 
 ## Website information architecture
 
@@ -50,8 +52,8 @@ The Next.js App Router scaffold includes all PRD-required routes:
 - /sponsor
 
 The install configurator models the required inputs and output. The website
-still needs its repository placeholders replaced with `iamruzaini/secod`, while
-the prerelease warning remains until supported agent adapters are verified.
+imports the generated 60-skill catalog and uses `iamruzaini/secod`; release
+status must remain pre-release until supported agent installation is verified.
 
 ## Risks to resolve before implementation proceeds
 

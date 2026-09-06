@@ -1,5 +1,17 @@
 # Trigger case: secod-payments-billing
 
-Positive prompt: `Use secod-payments-billing to review this project.`
+## Should trigger
 
-Negative prompt: a request outside this skill's stated applicability must not claim coverage.
+```text
+Add checkout, subscriptions, refunds, and entitlement state.
+```
+
+Expected: Use server-owned commercial state, authenticated provider events, idempotent transitions, reconciliation, and replay tests.
+
+## Should not trigger
+
+```text
+Add a free feature with no billing state.
+```
+
+Expected: skill excluded.

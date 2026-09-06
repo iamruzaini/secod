@@ -1,3 +1,6 @@
 # Expected result: secod-supabase
 
-The skill identifies the insecure fixture, reports evidence safely, provides a verification path, and uses `Not verified` for unavailable evidence.
+The agent enables RLS and writes explicit tenant/member policies, preserves caller identity for
+ordinary requests, confines secret/service authority to trusted server paths, and tests owner,
+member, cross-tenant, unauthenticated, Storage, and elevated-operation cases. Missing schema or JWT
+claim context is resolved before emitting policy SQL.

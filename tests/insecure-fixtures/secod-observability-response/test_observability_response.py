@@ -2,19 +2,8 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
-from pathlib import Path
-import sys
-import tempfile
 import unittest
-
-
-SECOD_ROOT = Path(__file__).resolve().parents[3]
-VALIDATOR_ROOT = SECOD_ROOT / "skills" / "secod-observability-response" / "scripts"
-sys.path.insert(0, str(VALIDATOR_ROOT))
-
-from validate_evidence_bundle import validate_bundle
 
 from fixture_app import (
     AlertRoute,
@@ -79,21 +68,21 @@ class ObservabilityResponseFixtures(unittest.TestCase):
     def test_07_unexercised_runbook(self) -> None:
         self.assertEqual(
             runbook_status(covers_applicable_breaches=True, dated_exercise=True),
-            "Passed with evidence",
+            "secure pattern confirmed",
         )
         self.assertEqual(
             runbook_status(covers_applicable_breaches=True, dated_exercise=False),
-            "Not verified",
+            "external state not inspected",
         )
 
     def test_08_backup_schedule_without_restore(self) -> None:
         self.assertEqual(
             recovery_status(restore_artifact=True, partial_recovery_observed=True),
-            "Passed with evidence",
+            "secure pattern confirmed",
         )
         self.assertEqual(
             recovery_status(restore_artifact=False, partial_recovery_observed=True),
-            "Not verified",
+            "external state not inspected",
         )
 
     def test_09_repository_only_external_evidence(self) -> None:
@@ -104,67 +93,8 @@ class ObservabilityResponseFixtures(unittest.TestCase):
                 runbook_exercise=False,
                 restore_drill=False,
             ),
-            "Not verified",
+            "external state not inspected",
         )
-
-    def test_10_evidence_bundle_validator(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            event_path = root / "event.json"
-            sink_path = root / "sink.json"
-            event_path.write_text('{"event":"redacted"}', encoding="utf-8")
-            sink_path.write_text('{"sink":"retained"}', encoding="utf-8")
-
-            def artifact(name: str, kind: str, path: Path) -> dict[str, object]:
-                return {
-                    "id": name,
-                    "kind": kind,
-                    "control_ids": ["SECOD-OBS-01"],
-                    "environment": "production",
-                    "deployment_id": "deploy-fixture",
-                    "source": "fixture export",
-                    "captured_at": "2026-08-27T09:30:00+05:30",
-                    "path": path.name,
-                    "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
-                    "redacted": True,
-                    "authorized": True,
-                }
-
-            manifest_path = root / "manifest.json"
-            manifest_path.write_text(
-                json.dumps(
-                    {
-                        "schema_version": 1,
-                        "applicable_controls": ["SECOD-OBS-01"],
-                        "artifacts": [
-                            artifact("sink", "production_sink", sink_path),
-                            artifact("event", "emitted_security_event", event_path),
-                        ],
-                    }
-                ),
-                encoding="utf-8",
-            )
-            result = validate_bundle(manifest_path)
-            self.assertTrue(result["valid"])
-            self.assertEqual(
-                result["controls"]["SECOD-OBS-01"]["intake_status"],
-                "Bundle complete",
-            )
-
-            incomplete = json.loads(manifest_path.read_text(encoding="utf-8"))
-            incomplete["artifacts"] = incomplete["artifacts"][:1]
-            manifest_path.write_text(json.dumps(incomplete), encoding="utf-8")
-            result = validate_bundle(manifest_path)
-            self.assertFalse(result["valid"])
-            self.assertEqual(
-                result["controls"]["SECOD-OBS-01"]["intake_status"],
-                "Not verified",
-            )
-            self.assertEqual(
-                result["controls"]["SECOD-OBS-01"]["missing_artifact_kinds"],
-                ["emitted_security_event"],
-            )
-
 
 if __name__ == "__main__":
     unittest.main()

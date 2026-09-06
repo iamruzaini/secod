@@ -33,13 +33,13 @@ class PackagesDeliveryFixtures(unittest.TestCase):
         self.sources = parse_source_register(SOURCE_REGISTER)
 
     def test_01_source_register_is_reviewed_current_and_complete(self) -> None:
-        self.assertEqual(len(self.sources), 8)
+        self.assertEqual(len(self.sources), 1)
         self.assertTrue(source_register_ready(self.sources, self.reviewed_on))
 
     def test_02_complete_synthetic_evidence_passes_all_controls(self) -> None:
         outcomes = evaluate(complete_evidence(self.sources, self.reviewed_on))
         self.assertEqual(set(outcomes), set(CONTROL_IDS))
-        self.assertEqual(set(outcomes.values()), {"Passed with evidence"})
+        self.assertEqual(set(outcomes.values()), {"secure pattern confirmed"})
 
     def test_03_each_insecure_case_has_specific_status(self) -> None:
         baseline = complete_evidence(self.sources, self.reviewed_on)
@@ -56,9 +56,9 @@ class PackagesDeliveryFixtures(unittest.TestCase):
         outcomes = evaluate(evidence)
         for control_id in CONTROL_IDS:
             expected = (
-                "Not verified"
+                "external state not inspected"
                 if control_id in EXTERNAL_EVIDENCE_CONTROLS
-                else "Passed with evidence"
+                else "secure pattern confirmed"
             )
             self.assertEqual(outcomes[control_id], expected)
 
@@ -73,10 +73,10 @@ class PackagesDeliveryFixtures(unittest.TestCase):
             negative_test_controls=frozenset(set(CONTROL_IDS) - {"PROVISIONAL-packages-9"}),
         )
         self.assertEqual(
-            evaluate(no_repository_evidence)["PROVISIONAL-packages-1"], "Not verified"
+            evaluate(no_repository_evidence)["PROVISIONAL-packages-1"], "external state not inspected"
         )
         self.assertEqual(
-            evaluate(failed_negative_test)["PROVISIONAL-packages-9"], "Not verified"
+            evaluate(failed_negative_test)["PROVISIONAL-packages-9"], "external state not inspected"
         )
 
     def test_06_pending_or_expired_source_blocks_passes(self) -> None:
@@ -87,7 +87,7 @@ class PackagesDeliveryFixtures(unittest.TestCase):
             with self.subTest(source=source):
                 records = (source,) + self.sources[1:]
                 outcomes = evaluate(replace(baseline, sources=records))
-                self.assertEqual(set(outcomes.values()), {"Not verified"})
+                self.assertEqual(set(outcomes.values()), {"external state not inspected"})
 
     def test_07_static_unsafe_patterns_are_reproduced(self) -> None:
         full_sha = "actions/checkout@" + "a" * 40

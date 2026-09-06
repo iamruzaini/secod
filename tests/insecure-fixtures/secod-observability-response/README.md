@@ -1,16 +1,7 @@
-# Executable observability-response fixtures
+# Implementation fixture plan: secod-observability-response
 
-Run from `secod/`:
+Given an implementation that violates this skill's portable invariants, replace unsafe boundary with pattern in `references/secure-patterns.md` and add successful, rejected, boundary, retry, and failure tests where applicable.
 
-```text
-python tests/insecure-fixtures/secod-observability-response/run_fixtures.py
-```
+Expected: Emit structured redacted events, stable correlation, bounded metrics, actionable alerts, and containment/recovery tests.
 
-Runner uses Python standard library only, makes no network calls and emits JSON. Exit `0` means
-all maintained fixture expectations were reproduced. It does not prove reviewed application or
-production behavior.
-
-Cases cover structured audit events, nested redaction bypass, revoked-key replay, alert routes
-without delivery, delivered alert capture, silent sink failure, unexercised runbooks, backup
-schedules without restore artifacts, repository-only evidence limits and evidence-bundle intake.
-Expected results live in `tests/expected-results/secod-observability-response.md`.
+This documentation plan is not scanner execution or proof of deployed behavior.

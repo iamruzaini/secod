@@ -20,7 +20,7 @@ service behavior changes.
 Do not report sensitive details through a public GitHub issue, discussion,
 pull request or chat message.
 
-After private vulnerability reporting is enabled for this repository, use:
+Use the repository's private vulnerability reporting path:
 
 1. Open the repository's **Security** tab.
 2. Open **Advisories**.

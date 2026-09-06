@@ -1,34 +1,34 @@
-# Insecure fixture plan: secod-core
+# Routing fixture plan: secod-core
 
-Minimal reproducible unsafe cases for routing/classification controls. Documentation-only plan;
-no executable code is maintained in this repository.
+These documentation fixtures test routing decisions. They do not scan an application or represent
+executed integration tests.
 
-## F1 — Manifest-only provider signal
+## F1 — Mixed providers, narrow feature
 
-`package.json` contains `@clerk/nextjs`; no imports, no `clerkMiddleware`, no `CLERK_*` names,
-no webhook route. Expected classification: `Candidate`. Failure mode under test: reporting
-Clerk as active or secure from package presence alone.
+Repository contains Firebase, Stripe, and OpenAI packages. Current task adds Firestore-backed
+tenant documents. Expected: Firebase and relevant generalized skills selected; Stripe and OpenAI
+excluded.
 
-## F2 — Environment version conflict
+## F2 — Package-only signal
 
-Lockfile resolves `next@15.x`; supplied production build artifact reports `next@14.x`.
-Expected classification: `Conflicting`, routed to `secod-nextjs`, launch coverage blocked until
-reconciled.
+Repository contains `@clerk/nextjs`, but no imports, initialization, routes, or current auth task.
+Expected: Clerk not selected.
 
-## F3 — Closure defects
+## F3 — Version evidence
 
-Dependency graph contains cycle `a -> b -> a` and edge `x -> unknown-slug`. Expected: both
-branches terminate with named reports, unrelated branches continue, affected controls
-`Not verified`, launch verdict prohibited.
+Manifest permits several Next.js versions while lockfile resolves one version. Expected: resolved
+version enters task context; no deployed-version claim.
 
-## F4 — Missing-evidence case
+## F4 — Dependency closure defects
 
-Search over one workspace root times out mid-enumeration. Expected: mechanism failure recorded,
-searched scope stated, partial evidence retained, inventory completeness `Not verified`, next
-verification step named. Never `Passed with evidence`.
+Catalog contains cycle `a -> b -> a` and `x -> unknown`. Expected: affected branches stop, defects
+are named, and unrelated roots continue.
 
-## F5 — Undocumented sensitive export
+## F5 — Shared context
 
-Admin endpoint `/admin/export` streams a database dump; contents not documented anywhere.
-Expected: flow classified `Unknown`, routed to `secod-crypto-data-protection` review, launch
-readiness prevented until authorized evidence reclassifies it.
+Three selected skills receive same feature, stack, versions, boundaries, provider products, and
+file scope. Expected: no skill restarts a repository-wide audit.
+
+## F6 — Non-trigger
+
+Task edits documentation typography only. Expected: core does not activate.
