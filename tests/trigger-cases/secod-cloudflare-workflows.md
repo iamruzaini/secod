@@ -1,5 +1,17 @@
 # Trigger case: secod-cloudflare-workflows
 
-Positive prompt: `Use secod-cloudflare-workflows to review this project.`
+## Should trigger
 
-Negative prompt: a request outside this skill's stated applicability must not claim coverage.
+```text
+Implement a Cloudflare Workflows feature using the installed provider SDK and add security tests.
+```
+
+Expected: resolve version, apply provider-family defaults, implement provider code, and add tests.
+
+## Should not trigger
+
+```text
+Change unrelated documentation with no Cloudflare Workflows code or configuration.
+```
+
+Expected: skill excluded.

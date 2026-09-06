@@ -1,3 +1,5 @@
 # Expected result: secod-ship-check
 
-The skill identifies the insecure fixture, reports evidence safely, provides a verification path, and uses `Not verified` for unavailable evidence.
+Inspect only current feature and changed files. Check selected-skill invariants, tests added and
+executed, accidental secrets in changed content, and exact external configuration remaining.
+Unrelated repository conditions do not block handoff. Never decide shipping or certify application security.

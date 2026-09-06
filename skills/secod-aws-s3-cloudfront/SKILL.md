@@ -1,80 +1,69 @@
 ---
 name: secod-aws-s3-cloudfront
-description: Satisfy secod-aws-web, secod-data-files, secod-secrets-config and secod-abuse-limits. Apply when S3 buckets/access points/object-lambda, CloudFront…
+description: >-
+  Help coding agents securely implement AWS S3 and CloudFront features using version-matched official APIs, secure defaults, and provider-specific tests. Use when S3 buckets/objects, presigned URLs, CloudFront distributions, OAC, uploads, or downloads.
+license: Apache-2.0
+metadata:
+  secod-category: "provider-feature"
+  secod-format: "implementation-v1"
+  secod-maturity: "provisional"
 ---
 
-# SECOD AWS S3 Cloudfront
+# Secure AWS S3 and CloudFront implementation
 
-## Scope and applicability
+## Purpose
 
-Satisfy `secod-aws-web`, `secod-data-files`, `secod-secrets-config` and `secod-abuse-limits`.
-Apply when S3 buckets/access points/object-lambda, CloudFront
-distributions/functions/Lambda@Edge, signed URLs/cookies, S3 website hosting, presigned
-upload/downloads, or static assets are detected. Default to private origins and explicit,
-bounded sharing.
+Implement AWS S3 and CloudFront features securely. Provider-family router supplies shared context; this skill owns exact product decisions and version-qualified SDK/runtime use.
 
-## Control requirements
+## When to use
 
-Exact bucket/access point/object prefix, owner/account/Region, Block Public Access, Object
-Ownership/ACL, bucket/access-point policy, encryption/KMS key,
-versioning/lifecycle/replication/logging, static website, presigned URL/POST, CloudFront
-distribution/behavior/cache/origin/OAC/OAI/WAF/function/domain/certificate/signed URL/cookie and
-environment inventory; all non-public buckets have account and bucket Block Public Access,
-Bucket owner enforced Object Ownership with ACLs disabled unless a documented exception, minimum
-bucket/access-point policy and IAM role access, TLS-only `aws:SecureTransport` denial,
-encryption/KMS key/grant separation, versioning/lifecycle/retention and access/data-event
-logging, no wildcard public write, no browser/server secret or unrestricted bucket credential,
-and presigned upload/download URLs limited by object key/prefix, content type/length/checksum,
-expiry, operation, tenant/owner authorization and revocation/lifecycle plan; CloudFront is the
-only intended viewer path to a private S3 origin, uses Origin Access Control with signed origin
-requests rather than legacy OAI unless an accepted migration exception exists, restricts the
-bucket policy to the exact distribution, keeps the S3 origin private, validates SSE-KMS key
-permission, enforces viewer HTTPS, uses exact cache/origin-request policy with no unintended
-forwarding/caching of authorization, cookies or private responses, applies WAF/rate-limit/bot
-and signed URL/cookie policy when required, and protects custom domain/certificate/DNS changes;
-static website hosting or intentionally public content has an explicit read-only public
-decision, no secrets/PII/private uploads, upload/write path separated from public asset origin,
-and no reliance on obscurity, CORS or CloudFront alone for authorization; negative tests for
-public bucket/access point/ACL or wildcard policy, direct S3-origin bypass, unsigned/overbroad
-CloudFront origin access, presigned URL cross-tenant/key/content/expiry abuse, cache/private-
-response leakage, insecure transport/KMS denial, public website write, and production-preview
-bucket/domain policy drift.
+Use when S3 buckets/objects, presigned URLs, CloudFront distributions, OAC, uploads, or downloads. Do not activate from package presence alone when current feature does not use AWS S3 and CloudFront.
 
-## Evidence to inspect
+## Context to inspect
 
-- Repository code, configuration, tests, deployment definitions, and CI evidence relevant to this skill.
-- Provider or framework dashboard/API evidence when the required setting cannot be established from the repository.
-- Direct primary-source evidence recorded in `references/sources.md`; absent, stale, or inaccessible evidence is **Not verified**.
+Inspect current feature, imports and calls, manifest/lockfile, runtime configuration, environment, identity/tenant model, data classes, trust boundaries, provider-family context, and nearby tests. Never collect secret values.
 
-## Dependencies and routing
+## Secure defaults
 
-Direct dependencies: `secod-core`, `secod-aws-web`, `secod-data-files`, `secod-secrets-config`, `secod-abuse-limits`.
+- Authorize every query/object against trusted user, tenant, and ownership state.
+- Use parameterized/structured APIs and least-privilege workload credentials.
+- Keep data private by default and bound query, upload, result, and connection resources.
+- Test cross-tenant, unauthorized, malformed, duplicate, and dependency-failure paths.
+- Keep S3 private, use scoped object authorization and Origin Access Control, and bound presigned operations.
 
-When a required dependency is not installed or cannot be invoked, record the affected
-control as **Not verified** and do not issue a passing or launch-ready conclusion.
+## Implementation workflow
 
-## Negative fixtures and tests
+1. Resolve exact installed SDK/runtime/API version and product features in use.
+2. Read version-matched direct official documentation before writing provider calls.
+3. Reuse project conventions; implement validation and authorization before provider effect.
+4. Add idempotency, limits, safe failure, redaction, and environment separation where applicable.
+5. Add successful, denied, cross-tenant, malformed, replay/retry, and provider-failure tests.
 
-- Run the maintained trigger case and insecure fixture plan at `tests/` for this skill.
-- Test the unsafe or missing-control cases implied by the control requirements, including
-  unavailable-provider and partial-failure behavior where applicable.
-- Keep tests read-only unless the user explicitly authorizes a change.
+## Implementation recipes
 
-## Output schema
+- [Supported versions](references/versions.md) — resolve compatible SDK, runtime, and API surfaces.
+- [Secure implementation recipe](references/data-access.md) — provider-specific boundaries and coding sequence.
+- [Security-focused tests](references/tests.md) — positive, denied, replay, failure, and version tests.
 
-For each finding return: `control_id`, `status`, `evidence`, `impact`, `recommended_fix`,
-`verification`, `limitations`, and `source_refs`. Valid status values are `Do not ship`,
-`Fix before launch`, `Recommended hardening`, `Passed with evidence`, and `Not verified`.
+## Unsafe patterns to avoid
 
-## Verification and safe failure
+- Inventing SDK methods, options, model capabilities, service behavior, or dashboard state.
+- Copying examples for another major version or runtime without checking installed version.
+- Trusting client-controlled identity, tenant, resource, price, tool, or authority fields.
+- Replacing implementation with findings, score, account audit, or certification language.
 
-Never infer dashboard, deployment, provider, or production settings from package presence.
-Redact secrets and bearer credentials. Fail closed: preserve unknown or failed checks as
-**Not verified**, identify the next verification step, and never claim launch readiness from
-incomplete evidence.
+## Tests to add
 
-## References
+Test version-compatible setup, expected success, missing identity, wrong tenant/resource, malformed input, duplicate/replay where applicable, timeout/provider failure, secret/log redaction, and unavailable external configuration.
 
-Use the source register in `references/sources.md`. For each security-critical source,
-record the direct URL, documentation index URL, version, reviewed date, review expiry,
-hash/ETag when available, owner, plan/tier, region, feature maturity, and linked control IDs.
+## Provider and deployment steps
+
+Implement repository-owned code first. For required external settings, name exact official page and verification action. If inaccessible, do not claim setting was checked.
+
+## Official sources
+
+Use [source register](references/sources.md). llms.txt indexes aid discovery only; direct provider documentation governs implementation.
+
+## Completion handoff
+
+State SDK/runtime/API version used, secure boundary implemented, tests run, provider-family defaults applied, assumptions, and exact external step remaining. Never claim whole application or provider account is secure.

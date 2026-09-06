@@ -8,13 +8,43 @@ import re
 import sys
 
 
-REQUIRED_LABELS = (
+LEGACY_LABELS = (
     "Trigger request",
     "Non-trigger request",
     "Missing-evidence scenario",
     "Expected finding",
     "Expected non-finding",
 )
+IMPLEMENTATION_LABELS = (
+    "Trigger request",
+    "Non-trigger request",
+    "Dependency routing",
+    "Missing-context scenario",
+    "Expected implementation",
+    "Expected rejected behavior",
+    "External configuration handoff",
+    "API support boundary",
+)
+
+
+def skill_format(root: Path, slug: str) -> str | None:
+    content = (root / "skills" / slug / "SKILL.md").read_text(encoding="utf-8")
+    frontmatter = re.match(r"^---\n(?P<body>.*?)\n---(?:\n|$)", content, re.DOTALL)
+    if frontmatter is None:
+        return None
+    metadata = re.search(
+        r"^metadata:\s*\n(?P<body>(?:^[ \t]+.*(?:\n|$))*)",
+        frontmatter.group("body"),
+        re.MULTILINE,
+    )
+    if metadata is None:
+        return None
+    match = re.search(
+        r"^[ \t]+secod-format:\s*['\"]?([^'\"\n]+)['\"]?\s*$",
+        metadata.group("body"),
+        re.MULTILINE,
+    )
+    return match.group(1).strip() if match else None
 
 
 def validate_matrix(root: Path) -> list[str]:
@@ -43,17 +73,35 @@ def validate_matrix(root: Path) -> list[str]:
         problems.append("Skills missing behavior sections: " + ", ".join(missing))
     if unexpected:
         problems.append("Unexpected behavior sections: " + ", ".join(unexpected))
-    if "not proof" not in content.lower():
+    formats = {slug: skill_format(root, slug) for slug in expected}
+    legacy_exists = any(value != "implementation-v1" for value in formats.values())
+    if legacy_exists and "not proof" not in content.lower():
         problems.append("Behavior matrix must state that cases are not proof of execution")
 
     for index, heading in enumerate(headings):
         slug = heading.group(1)
         end = headings[index + 1].start() if index + 1 < len(headings) else len(content)
         section = content[heading.end() : end]
-        for label in REQUIRED_LABELS:
+        implementation = formats.get(slug) == "implementation-v1"
+        required_labels = IMPLEMENTATION_LABELS if implementation else LEGACY_LABELS
+        for label in required_labels:
             match = re.search(rf"^- {re.escape(label)}:\s*(.+)$", section, re.MULTILINE)
             if not match or not match.group(1).strip():
                 problems.append(f"{slug} lacks {label}")
+        if implementation:
+            for legacy_label in ("Missing-evidence scenario", "Expected finding", "Expected non-finding"):
+                if re.search(rf"^- {re.escape(legacy_label)}:", section, re.MULTILINE):
+                    problems.append(f"{slug} implementation behavior retains {legacy_label}")
+            rejected_match = re.search(
+                r"^- Expected rejected behavior:\s*(.+)$", section, re.MULTILINE
+            )
+            if rejected_match and not re.search(
+                r"\b(no|not|never|reject|deny|refuse|without)\b",
+                rejected_match.group(1),
+                re.IGNORECASE,
+            ):
+                problems.append(f"{slug} expected rejected behavior is not explicit")
+            continue
         missing_match = re.search(
             r"^- Missing-evidence scenario:\s*(.+)$", section, re.MULTILINE
         )

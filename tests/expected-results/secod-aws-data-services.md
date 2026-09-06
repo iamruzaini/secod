@@ -1,3 +1,5 @@
 # Expected result: secod-aws-data-services
 
-The skill identifies the insecure fixture, reports evidence safely, provides a verification path, and uses `Not verified` for unavailable evidence.
+Resolve and state exact SDK/runtime/API version. Use service-specific least privilege, private connectivity, encryption, parameterized access, and tenant-safe data keys. Follow direct official documentation, preserve local authorization, and add positive and negative tests.
+
+Never invent provider APIs, claim inaccessible settings were checked, or emit an account-wide scanner verdict.

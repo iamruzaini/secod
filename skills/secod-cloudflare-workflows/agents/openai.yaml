@@ -1,3 +1,3 @@
 display_name: "Cloudflare Workflows"
-short_description: "Satisfy secod-cloudflare, secod-inputs-apis, secod-abuse-limits and secod-observability-response. Apply when Workflows definitions/bindings, step.do, retries, waits/events,…"
-default_prompt: "Use $secod-cloudflare-workflows to review this project. Preserve missing evidence as Not verified."
+short_description: "Implement secure, version-qualified Cloudflare Workflows code and provider-specific tests."
+default_prompt: "Use $secod-cloudflare-workflows while implementing this Cloudflare Workflows feature. Resolve exact versions, follow direct official docs, preserve authorization boundaries, and add positive and negative tests."

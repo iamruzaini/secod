@@ -1,18 +1,7 @@
-# Executable secod-secrets-config fixtures
+# Implementation fixture plan: secod-secrets-config
 
-Run from `secod/`:
+Given an implementation that violates this skill's portable invariants, replace unsafe boundary with pattern in `references/secure-patterns.md` and add successful, rejected, boundary, retry, and failure tests where applicable.
 
-```text
-python tests/insecure-fixtures/secod-secrets-config/run_fixtures.py
-```
+Expected: Keep credentials server-only, validate configuration, scope authority, separate environments, and document rotation/revocation.
 
-Runner uses Python standard library only, makes no network calls, changes no repository or
-provider state, and emits JSON. Exit `0` means all maintained fixture expectations were
-reproduced. It does not prove reviewed application, deployed environment, provider, rotation,
-revocation, push-protection, cache-purge, or fork/clone state.
-
-Cases cover redacted source/log detection, bearer leakage, excess privilege, template parity,
-plaintext/client-exposed secrets, environment conflicts, rotation evidence, revocation paths,
-production bypasses, revoke-first history response, default credentials, unauthorized probes,
-and a clean repository case. Synthetic markers are not usable credentials. Expected results
-live in `tests/expected-results/secod-secrets-config.md`.
+This documentation plan is not scanner execution or proof of deployed behavior.

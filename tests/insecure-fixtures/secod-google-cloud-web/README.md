@@ -1,3 +1,7 @@
-# Insecure fixture plan: secod-google-cloud-web
+# Routing fixture plan: secod-google-cloud-web
 
-Create a minimal reproducible unsafe case for the control requirements in the skill contract. Include a missing-evidence case and, where applicable, a partial-failure or replay case.
+Test exact product activation, sibling exclusion, shared defaults, transitive dependencies, missing-version handling, and provider-specific implementation handoff.
+
+Expected: Select Google Cloud Storage with shared project/IAM defaults; select Firebase only when Firebase products are used.
+
+This is a routing contract, not account-wide audit or deployed-state proof.

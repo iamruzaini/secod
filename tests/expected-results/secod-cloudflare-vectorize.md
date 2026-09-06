@@ -1,3 +1,5 @@
 # Expected result: secod-cloudflare-vectorize
 
-The skill identifies the insecure fixture, reports evidence safely, provides a verification path, and uses `Not verified` for unavailable evidence.
+Resolve and state exact SDK/runtime/API version. Encode tenant/resource scope in trusted metadata filters and authorize retrieval before returning matches. Follow direct official documentation, preserve local authorization, and add positive and negative tests.
+
+Never invent provider APIs, claim inaccessible settings were checked, or emit an account-wide scanner verdict.

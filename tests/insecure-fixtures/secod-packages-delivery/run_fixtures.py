@@ -27,7 +27,7 @@ def main() -> int:
         "source_register_validated": source_register_ready(sources, date.today()),
         "dashboard_evidence": False,
         "registry_evidence": False,
-        "production_evidence": False,
+        "production_state_inspected": False,
     }
     print(json.dumps(payload, sort_keys=True))
     return 0 if result.wasSuccessful() else 1

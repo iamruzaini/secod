@@ -1,22 +1,7 @@
-# Executable packages-delivery fixtures
+# Implementation fixture plan: secod-packages-delivery
 
-Run from `secod/`:
+Given an implementation that violates this skill's portable invariants, replace unsafe boundary with pattern in `references/secure-patterns.md` and add successful, rejected, boundary, retry, and failure tests where applicable.
 
-```text
-python tests/insecure-fixtures/secod-packages-delivery/run_fixtures.py
-```
+Expected: Justify dependency need, update lockfile reproducibly, pin immutable CI inputs, minimize permissions, and test build/rollback.
 
-The runner uses the Python standard library, reads the committed source register, writes no
-files, makes no network calls and emits JSON. Exit `0` means all fixture expectations were
-reproduced. It does not prove that an inspected repository, GitHub organization, registry,
-artifact, deployment dashboard or production environment is secure.
-
-Cases exercise all 12 provisional controls: a complete synthetic evidence bundle; one explicit
-unsafe issue per control; missing repository, negative-test, dashboard and registry evidence;
-pending and expired primary sources; mutable Action and artifact references; privileged
-`pull_request_target` checkout; and fail-open attestation verification.
-
-The source-register test requires exactly PKG-S1 through PKG-S8, direct HTTPS URLs, `Reviewed`
-status, unexpired review deadlines and a recorded SHA-256 fingerprint. Source freshness supports
-review claims only. Real control status still requires the repository and external evidence named
-by the skill contract.
+This documentation plan is not scanner execution or proof of deployed behavior.

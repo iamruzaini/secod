@@ -1,73 +1,69 @@
 ---
 name: secod-cloudflare-queues
-description: Satisfy secod-cloudflare, secod-inputs-apis, secod-abuse-limits and secod-observability-response. Apply when Queues producers/consumers, queue bindings, HTTP pull consumers,…
+description: >-
+  Help coding agents securely implement Cloudflare Queues features using version-matched official APIs, secure defaults, and provider-specific tests. Use when Queues producers/consumers, batches, retries, delays, dead-letter queues, or pull consumers.
+license: Apache-2.0
+metadata:
+  secod-category: "provider-feature"
+  secod-format: "implementation-v1"
+  secod-maturity: "provisional"
 ---
 
-# SECOD Cloudflare Queues
+# Secure Cloudflare Queues implementation
 
-## Scope and applicability
+## Purpose
 
-Satisfy `secod-cloudflare`, `secod-inputs-apis`, `secod-abuse-limits` and `secod-observability-
-response`. Apply when Queues producers/consumers, queue bindings, HTTP pull consumers,
-batch/retry/delay settings, dead-letter queues or queue-triggered Workers are detected. Queue
-delivery is untrusted, delayed and duplicated; it never authorizes a state change.
+Implement Cloudflare Queues features securely. Provider-family router supplies shared context; this skill owns exact product decisions and version-qualified SDK/runtime use.
 
-## Control requirements
+## When to use
 
-Exact queue/DLQ, producer/consumer script or HTTP pull client, account/environment/binding,
-message schema/classification, producer/consumer API token, batch size/timeout, retry/delay,
-retention, consumer concurrency, visibility timeout/lease, DLQ/redrive, alert/owner and
-production/preview inventory; distinct producer/consumer bindings and minimum API tokens are
-scoped to named queues, HTTP pull credentials with required read/write authority remain server-
-only and are rotated, no client/browser holds a queue token or lease, and queue/DLQ/environment
-names cannot be selected by untrusted input; validate
-producer/source/type/schema/version/tenant/object authority and external signature before a side
-effect, persist an idempotency/event key, account for batch redelivery and at-least-once/out-of-
-order delivery, explicitly acknowledge safely completed messages and retry only safe/idempotent
-work, and bound message size, batch, visibility, retry, delay, retention, concurrency, cost and
-cancellation; each failure path has an intentional DLQ and active consumer/operator playbook
-because messages at retry limit are deleted without a DLQ and unconsumed DLQ messages have
-limited retention, redrive revalidates and reauthorizes instead of blindly replaying, and
-monitoring alerts on backlog, retry, DLQ, token and consumer failure; negative tests for
-unauthorized producer/consumer/pull-token access, forged or cross-tenant message,
-duplicate/reordered/replayed batch, partial-ack failure, retry/DLQ deletion or unmonitored
-retention loss, unbounded concurrency/cost and preview-production queue drift.
+Use when Queues producers/consumers, batches, retries, delays, dead-letter queues, or pull consumers. Do not activate from package presence alone when current feature does not use Cloudflare Queues.
 
-## Evidence to inspect
+## Context to inspect
 
-- Repository code, configuration, tests, deployment definitions, and CI evidence relevant to this skill.
-- Provider or framework dashboard/API evidence when the required setting cannot be established from the repository.
-- Direct primary-source evidence recorded in `references/sources.md`; absent, stale, or inaccessible evidence is **Not verified**.
+Inspect current feature, imports and calls, manifest/lockfile, runtime configuration, environment, identity/tenant model, data classes, trust boundaries, provider-family context, and nearby tests. Never collect secret values.
 
-## Dependencies and routing
+## Secure defaults
 
-Direct dependencies: `secod-core`, `secod-cloudflare`, `secod-inputs-apis`, `secod-abuse-limits`, `secod-observability-response`.
+- Keep privileged credentials and provider management calls server/runtime-only.
+- Authenticate, validate, and authorize every reachable handler or event boundary.
+- Separate production, preview, and development resources/configuration.
+- Bound concurrency, retries, subrequests, execution time, and failure effects.
+- Validate messages, make consumers idempotent, bound retries/batches, and route poison messages safely.
 
-When a required dependency is not installed or cannot be invoked, record the affected
-control as **Not verified** and do not issue a passing or launch-ready conclusion.
+## Implementation workflow
 
-## Negative fixtures and tests
+1. Resolve exact installed SDK/runtime/API version and product features in use.
+2. Read version-matched direct official documentation before writing provider calls.
+3. Reuse project conventions; implement validation and authorization before provider effect.
+4. Add idempotency, limits, safe failure, redaction, and environment separation where applicable.
+5. Add successful, denied, cross-tenant, malformed, replay/retry, and provider-failure tests.
 
-- Run the maintained trigger case and insecure fixture plan at `tests/` for this skill.
-- Test the unsafe or missing-control cases implied by the control requirements, including
-  unavailable-provider and partial-failure behavior where applicable.
-- Keep tests read-only unless the user explicitly authorizes a change.
+## Implementation recipes
 
-## Output schema
+- [Supported versions](references/versions.md) — resolve compatible SDK, runtime, and API surfaces.
+- [Secure implementation recipe](references/runtime-deployment.md) — provider-specific boundaries and coding sequence.
+- [Security-focused tests](references/tests.md) — positive, denied, replay, failure, and version tests.
 
-For each finding return: `control_id`, `status`, `evidence`, `impact`, `recommended_fix`,
-`verification`, `limitations`, and `source_refs`. Valid status values are `Do not ship`,
-`Fix before launch`, `Recommended hardening`, `Passed with evidence`, and `Not verified`.
+## Unsafe patterns to avoid
 
-## Verification and safe failure
+- Inventing SDK methods, options, model capabilities, service behavior, or dashboard state.
+- Copying examples for another major version or runtime without checking installed version.
+- Trusting client-controlled identity, tenant, resource, price, tool, or authority fields.
+- Replacing implementation with findings, score, account audit, or certification language.
 
-Never infer dashboard, deployment, provider, or production settings from package presence.
-Redact secrets and bearer credentials. Fail closed: preserve unknown or failed checks as
-**Not verified**, identify the next verification step, and never claim launch readiness from
-incomplete evidence.
+## Tests to add
 
-## References
+Test version-compatible setup, expected success, missing identity, wrong tenant/resource, malformed input, duplicate/replay where applicable, timeout/provider failure, secret/log redaction, and unavailable external configuration.
 
-Use the source register in `references/sources.md`. For each security-critical source,
-record the direct URL, documentation index URL, version, reviewed date, review expiry,
-hash/ETag when available, owner, plan/tier, region, feature maturity, and linked control IDs.
+## Provider and deployment steps
+
+Implement repository-owned code first. For required external settings, name exact official page and verification action. If inaccessible, do not claim setting was checked.
+
+## Official sources
+
+Use [source register](references/sources.md). llms.txt indexes aid discovery only; direct provider documentation governs implementation.
+
+## Completion handoff
+
+State SDK/runtime/API version used, secure boundary implemented, tests run, provider-family defaults applied, assumptions, and exact external step remaining. Never claim whole application or provider account is secure.

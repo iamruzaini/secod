@@ -1,3 +1,3 @@
 display_name: "AI API Integrations"
-short_description: "Secure the application's developer-owned AI API, SDK, RAG, chat, streaming and realtime data paths; keep authentication, authorization, tenancy and consequential application…"
-default_prompt: "Use $secod-ai-api-integrations to review this project. Preserve missing evidence as Not verified."
+short_description: "Implement tenant-safe AI, RAG, streaming, files, and tools with constrained model authority."
+default_prompt: "Use $secod-ai-api-integrations while implementing this feature. Preserve portable security invariants, apply provider adapters for exact SDK behavior, and add positive and negative tests."

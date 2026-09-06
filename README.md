@@ -6,7 +6,7 @@ Security coding skills for AI builders.
 
 ## What SECOD is
 
-SECOD is an open-source library of 57 Agent Skills for security work on
+SECOD is an open-source library of 60 Agent Skills for security work on
 websites, web applications, mobile backends, APIs, infrastructure and AI
 integrations. It combines generalized security skills with conditional
 framework and provider skills.
@@ -30,11 +30,11 @@ releases.
 
 Current status: early public release.
 
-SECOD v0.1.0 provides 57 generalized and provider-specific security skills. It
-is not a security certification. Controls without sufficient technical or
-provider evidence must be reported as `Not verified`.
+The SECOD v0.1.0 catalog contains 60 generalized,
+mobile, and provider-specific secure-coding skills. It helps agents implement
+safer features; it is not a scanner, launch gate, or security certification.
 
-All 57 skills remain publicly discoverable. Provider adapters whose source
+All 60 skills remain publicly discoverable. Provider adapters whose source
 registers contain `Pending review` entries are provisional: their direct
 official URLs have been identified, but their claims have not completed
 substantive control-by-control review. URL reachability alone is never treated
@@ -133,29 +133,31 @@ npx skills remove --all --agent codex --yes
 Repeat for each agent and scope where SECOD was installed. Confirm that
 unrelated skills remain installed.
 
-## Evidence model
+## Implementation honesty
 
-SECOD separates security guidance from evidence about a particular project.
-Skills inspect repository, deployment, provider and dashboard evidence when it
-is available. Missing, inaccessible, stale or contradictory evidence is
-reported as `Not verified`.
+SECOD separates code it can implement and test from external provider actions.
+Missing dashboard access never blocks unrelated repository-owned work. Instead,
+the skill names the exact setting, environment, official page, and verification
+action remaining.
 
 Each skill keeps a source register in `references/sources.md`. Statuses mean:
 
 - `Reviewed`: source content was read and mapped to controls.
 - `Pending review`: an official source was identified, but substantive mapping
   is incomplete.
-- `Not verified`: evidence is inaccessible, stale or insufficient.
+- `Not verified`: source evidence is inaccessible, stale, or insufficient;
+  this source-register status is not routine coding output.
 
-An official documentation URL, package name or provider detection signal does
-not prove that a project is configured securely. SECOD never provides a
-security certification or a passing conclusion without technical evidence.
+An official URL, package name, or provider signal does not prove deployed
+configuration. SECOD never claims an inaccessible setting was inspected, a
+documentation-only test executed, an undocumented API exists, or an
+application is secure.
 
 ## Testing status
 
-Seven skills currently have executable insecure-fixture suites. The remaining
-fixture directories are documentation-only test plans unless explicitly marked
-otherwise.
+Fourteen skills currently have executable insecure-fixture suites. The remaining
+46 skill fixture directories are documentation-only test plans unless explicitly
+marked otherwise.
 
 Phase 6 also includes one cross-skill executable suite covering 14 critical
 insecure behaviors. It is a deterministic fixture contract and does not prove
@@ -163,7 +165,7 @@ that an agent executed every skill against a real application.
 
 Repository validation currently covers catalog structure, Agent Skills
 metadata, source-register requirements, test layout and repository hygiene.
-The executable fixture suites are:
+The executable skill-owned fixture suites are:
 
 - `secod-abuse-limits`
 - `secod-crypto-data-protection`
@@ -172,8 +174,15 @@ The executable fixture suites are:
 - `secod-packages-delivery`
 - `secod-payments-billing`
 - `secod-secrets-config`
+- `secod-identity-access`
+- `secod-inputs-apis`
+- `secod-data-files`
+- `secod-nextjs`
+- `secod-firebase`
+- `secod-supabase`
+- `secod-openai`
 
-Cross-skill critical behavior suite:
+Separate cross-skill critical behavior suite:
 
 - `secod-critical-behaviors` (14 categories; not a skill-owned suite)
 
@@ -199,16 +208,16 @@ python scripts/check_repo_hygiene.py
 - Skills provide security guidance and review structure; they do not replace
   application testing, provider configuration review, incident response,
   professional security assessment or compliance advice.
-- Supported-agent installation and behavior verification must be completed
-  before treating this release as fully validated.
+- Supported-agent installation and behavior verification are documented release
+  checks; they do not certify an application or provider deployment.
 
 ## Security reporting
 
 Do not disclose sensitive vulnerability details in public issues, discussions,
 pull requests or chat.
 
-Use the repository's GitHub Security tab and private vulnerability reporting
-once enabled. Include a minimal reproduction, affected version or commit,
+Use the repository's GitHub Security tab and private vulnerability reporting.
+Include a minimal reproduction, affected version or commit,
 impact, prerequisites, and a safe contact path. Remove credentials, personal
 data and production secrets from all reports.
 

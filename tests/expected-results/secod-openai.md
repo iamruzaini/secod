@@ -1,3 +1,6 @@
 # Expected result: secod-openai
 
-The skill identifies the insecure fixture, reports evidence safely, provides a verification path, and uses `Not verified` for unavailable evidence.
+The agent uses the installed OpenAI SDK's documented interfaces, holds API keys on the server,
+minimizes transmitted data, validates structured output, treats model-selected tools/arguments as
+untrusted, and independently authorizes tool execution. Tests cover unknown tools, invalid schema,
+cross-tenant identifiers, prompt injection, timeout, and confirmation denial.

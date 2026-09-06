@@ -1,78 +1,69 @@
 ---
 name: secod-cloudflare-pages
-description: Satisfy secod-cloudflare, secod-packages-delivery, secod-secrets-config, secod-web-app-security and secod-cloudflare-workers when Pages Functions/bindings are present. Apply when…
+description: >-
+  Help coding agents securely implement Cloudflare Pages features using version-matched official APIs, secure defaults, and provider-specific tests. Use when Pages projects, preview deployments, branch builds, Pages Functions, bindings, or custom domains.
+license: Apache-2.0
+metadata:
+  secod-category: "provider-feature"
+  secod-format: "implementation-v1"
+  secod-maturity: "provisional"
 ---
 
-# SECOD Cloudflare Pages
+# Secure Cloudflare Pages implementation
 
-## Scope and applicability
+## Purpose
 
-Satisfy `secod-cloudflare`, `secod-packages-delivery`, `secod-secrets-config`, `secod-web-app-
-security` and `secod-cloudflare-workers` when Pages Functions/bindings are present. Apply when
-Pages projects, Pages Functions, Git integration, Direct Upload, `pages.dev` deployment URLs,
-preview aliases, branch controls, Pages bindings or Pages environment variables/secrets are
-detected.
+Implement Cloudflare Pages features securely. Provider-family router supplies shared context; this skill owns exact product decisions and version-qualified SDK/runtime use.
 
-## Control requirements
+## When to use
 
-Exact Pages project, production branch, Git/Direct Upload deployment mode, production and
-preview build controls, commit/deployment ID and URL, `pages.dev`/branch/hash/custom domain,
-Pages Function/binding, build/runtime environment variable/secret, Access policy, custom-
-domain/DNS/TLS and production/preview inventory; production deploys only from the named
-protected release branch or an explicitly approved Direct Upload release input, preview branch
-controls exclude untrusted/noisy branches where appropriate, build identity and
-dependency/install-script policy follow `secod-packages-delivery`, and every deployment is
-traceable to immutable source/artifact; preview URLs are treated as public by default, including
-immutable hash deployment URLs that can remain directly reachable after a branch alias changes,
-so previews receive no production secret, credential, private data or privileged binding and are
-protected with Access where sensitive, while Access coverage is tested independently for preview
-hashes, `*.pages.dev` and every custom domain because protecting previews alone does not protect
-the project/default/custom domain; Pages production and preview use distinct binding IDs and
-secrets, variables are classified as plaintext versus encrypted secret, build-time and runtime
-values are reviewed separately, no secret reaches static client assets, source maps or build
-logs, and Pages Functions follow Workers authorization/binding/egress requirements; custom
-domain ownership/DNS/certificate/redirect policy, cache headers and static/private-content
-separation are reviewed, branch aliases are never used as immutable release evidence, and
-delete/archive/rollback behavior is recorded; negative tests for public
-preview/hash/default/custom-domain bypass, preview production-secret/binding/data access,
-untrusted branch build/deploy, direct-upload/production-branch confusion, Access policy coverage
-gap, build-log/static-asset/source-map disclosure and Pages Function runtime drift.
+Use when Pages projects, preview deployments, branch builds, Pages Functions, bindings, or custom domains. Do not activate from package presence alone when current feature does not use Cloudflare Pages.
 
-## Evidence to inspect
+## Context to inspect
 
-- Repository code, configuration, tests, deployment definitions, and CI evidence relevant to this skill.
-- Provider or framework dashboard/API evidence when the required setting cannot be established from the repository.
-- Direct primary-source evidence recorded in `references/sources.md`; absent, stale, or inaccessible evidence is **Not verified**.
+Inspect current feature, imports and calls, manifest/lockfile, runtime configuration, environment, identity/tenant model, data classes, trust boundaries, provider-family context, and nearby tests. Never collect secret values.
 
-## Dependencies and routing
+## Secure defaults
 
-Direct dependencies: `secod-core`, `secod-cloudflare`, `secod-packages-delivery`, `secod-secrets-config`, `secod-web-app-security`.
+- Keep privileged credentials and provider management calls server/runtime-only.
+- Authenticate, validate, and authorize every reachable handler or event boundary.
+- Separate production, preview, and development resources/configuration.
+- Bound concurrency, retries, subrequests, execution time, and failure effects.
+- Separate preview and production bindings/data, protect previews when needed, and authorize Pages Functions server-side.
 
-When a required dependency is not installed or cannot be invoked, record the affected
-control as **Not verified** and do not issue a passing or launch-ready conclusion.
+## Implementation workflow
 
-## Negative fixtures and tests
+1. Resolve exact installed SDK/runtime/API version and product features in use.
+2. Read version-matched direct official documentation before writing provider calls.
+3. Reuse project conventions; implement validation and authorization before provider effect.
+4. Add idempotency, limits, safe failure, redaction, and environment separation where applicable.
+5. Add successful, denied, cross-tenant, malformed, replay/retry, and provider-failure tests.
 
-- Run the maintained trigger case and insecure fixture plan at `tests/` for this skill.
-- Test the unsafe or missing-control cases implied by the control requirements, including
-  unavailable-provider and partial-failure behavior where applicable.
-- Keep tests read-only unless the user explicitly authorizes a change.
+## Implementation recipes
 
-## Output schema
+- [Supported versions](references/versions.md) — resolve compatible SDK, runtime, and API surfaces.
+- [Secure implementation recipe](references/runtime-deployment.md) — provider-specific boundaries and coding sequence.
+- [Security-focused tests](references/tests.md) — positive, denied, replay, failure, and version tests.
 
-For each finding return: `control_id`, `status`, `evidence`, `impact`, `recommended_fix`,
-`verification`, `limitations`, and `source_refs`. Valid status values are `Do not ship`,
-`Fix before launch`, `Recommended hardening`, `Passed with evidence`, and `Not verified`.
+## Unsafe patterns to avoid
 
-## Verification and safe failure
+- Inventing SDK methods, options, model capabilities, service behavior, or dashboard state.
+- Copying examples for another major version or runtime without checking installed version.
+- Trusting client-controlled identity, tenant, resource, price, tool, or authority fields.
+- Replacing implementation with findings, score, account audit, or certification language.
 
-Never infer dashboard, deployment, provider, or production settings from package presence.
-Redact secrets and bearer credentials. Fail closed: preserve unknown or failed checks as
-**Not verified**, identify the next verification step, and never claim launch readiness from
-incomplete evidence.
+## Tests to add
 
-## References
+Test version-compatible setup, expected success, missing identity, wrong tenant/resource, malformed input, duplicate/replay where applicable, timeout/provider failure, secret/log redaction, and unavailable external configuration.
 
-Use the source register in `references/sources.md`. For each security-critical source,
-record the direct URL, documentation index URL, version, reviewed date, review expiry,
-hash/ETag when available, owner, plan/tier, region, feature maturity, and linked control IDs.
+## Provider and deployment steps
+
+Implement repository-owned code first. For required external settings, name exact official page and verification action. If inaccessible, do not claim setting was checked.
+
+## Official sources
+
+Use [source register](references/sources.md). llms.txt indexes aid discovery only; direct provider documentation governs implementation.
+
+## Completion handoff
+
+State SDK/runtime/API version used, secure boundary implemented, tests run, provider-family defaults applied, assumptions, and exact external step remaining. Never claim whole application or provider account is secure.

@@ -1,5 +1,17 @@
 # Trigger case: secod-secrets-config
 
-Positive prompt: `Use secod-secrets-config to review this project.`
+## Should trigger
 
-Negative prompt: a request outside this skill's stated applicability must not claim coverage.
+```text
+Add a provider API key and production environment configuration.
+```
+
+Expected: Keep credentials server-only, validate configuration, scope authority, separate environments, and document rotation/revocation.
+
+## Should not trigger
+
+```text
+Add a public theme color variable.
+```
+
+Expected: skill excluded.

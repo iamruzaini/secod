@@ -21,7 +21,7 @@ def main() -> int:
         "expectations_reproduced": result.wasSuccessful(),
         "controls_exercised": [f"PB-{number}" for number in range(1, 11)],
         "provider_specific_envelope_evidence": False,
-        "production_evidence": False,
+        "production_state_inspected": False,
     }
     print(json.dumps(payload, sort_keys=True))
     return 0 if result.wasSuccessful() else 1

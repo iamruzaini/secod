@@ -19,8 +19,8 @@ def main() -> int:
         "errors": len(result.errors),
         "skipped": len(result.skipped),
         "expectations_reproduced": result.wasSuccessful(),
-        "production_evidence": False,
-        "launch_readiness_owner": "secod-ship-check",
+        "production_state_inspected": False,
+        "completion_owner": "secod-ship-check",
     }
     print(json.dumps(payload, sort_keys=True))
     return 0 if result.wasSuccessful() else 1

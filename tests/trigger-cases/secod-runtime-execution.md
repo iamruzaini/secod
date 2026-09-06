@@ -1,5 +1,17 @@
 # Trigger case: secod-runtime-execution
 
-Positive prompt: `Use secod-runtime-execution to review this project.`
+## Should trigger
 
-Negative prompt: a request outside this skill's stated applicability must not claim coverage.
+```text
+Add image conversion by invoking a server-side executable.
+```
+
+Expected: Use fixed executables, structured arguments, allowlists, least privilege, resource bounds, and injection tests.
+
+## Should not trigger
+
+```text
+Adjust static CSS colors.
+```
+
+Expected: skill excluded.

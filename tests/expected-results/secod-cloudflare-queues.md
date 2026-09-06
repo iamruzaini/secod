@@ -1,3 +1,5 @@
 # Expected result: secod-cloudflare-queues
 
-The skill identifies the insecure fixture, reports evidence safely, provides a verification path, and uses `Not verified` for unavailable evidence.
+Resolve and state exact SDK/runtime/API version. Validate messages, make consumers idempotent, bound retries/batches, and route poison messages safely. Follow direct official documentation, preserve local authorization, and add positive and negative tests.
+
+Never invent provider APIs, claim inaccessible settings were checked, or emit an account-wide scanner verdict.

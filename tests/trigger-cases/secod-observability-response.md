@@ -1,5 +1,17 @@
 # Trigger case: secod-observability-response
 
-Positive prompt: `Use secod-observability-response to review this project.`
+## Should trigger
 
-Negative prompt: a request outside this skill's stated applicability must not claim coverage.
+```text
+Add audit events for role changes and webhook failures.
+```
+
+Expected: Emit structured redacted events, stable correlation, bounded metrics, actionable alerts, and containment/recovery tests.
+
+## Should not trigger
+
+```text
+Change a static image asset.
+```
+
+Expected: skill excluded.

@@ -1,79 +1,69 @@
 ---
 name: secod-cloudflare-ai-gateway
-description: Satisfy secod-cloudflare, secod-ai-api-integrations, secod-secrets-config, secod-abuse-limits and secod-observability-response. Apply when AI Gateway endpoints/bindings, BYOK…
+description: >-
+  Help coding agents securely implement Cloudflare AI Gateway features using version-matched official APIs, secure defaults, and provider-specific tests. Use when AI Gateway endpoints, authentication, BYOK, logging, caching, rate limiting, or provider routing.
+license: Apache-2.0
+metadata:
+  secod-category: "provider-feature"
+  secod-format: "implementation-v1"
+  secod-maturity: "provisional"
 ---
 
-# SECOD Cloudflare AI Gateway
+# Secure Cloudflare AI Gateway implementation
 
-## Scope and applicability
+## Purpose
 
-Satisfy `secod-cloudflare`, `secod-ai-api-integrations`, `secod-secrets-config`, `secod-abuse-
-limits` and `secod-observability-response`. Apply when AI Gateway endpoints/bindings, BYOK
-provider credentials, gateway IDs/tokens, caching, logging, DLP/guardrails, rate limits, spend
-limits, dynamic routing/fallbacks or custom Access-protected gateway domains are detected.
+Implement Cloudflare AI Gateway features securely. Provider-family router supplies shared context; this skill owns exact product decisions and version-qualified SDK/runtime use.
 
-## Control requirements
+## When to use
 
-Exact account/gateway ID/binding/domain, gateway/API token and permissions, provider/BYOK
-credential, model/route/fallback, authentication, Access policy, logging/payload
-collection/retention, cache/default/custom cache key/TTL, DLP/guardrail, rate/spend limit,
-metadata, billing and production/preview inventory; gateways require authentication, application
-calls use a Worker binding or server-only least-privilege token, no browser/client receives
-Cloudflare or provider credential, and account-scoped AI Gateway `Run` permissions are not
-treated as per-gateway isolation—separate accounts or a Worker-side binding are used where
-tenant/gateway isolation requires it; named gateways are explicitly provisioned rather than
-accidentally accepting an auto-created default whose logging is on and rate limiting is off,
-BYOK keys are least scoped/rotated and provider/model routes/fallbacks meet the same
-data/region/retention policy; logging and payload collection are configured for data sensitivity
-because request/response bodies can be stored by default, per-request log/cache/metadata headers
-are server controlled, sensitive prompts/private output/secrets are excluded or payload logging
-disabled, retention/export/deletion/incident evidence exists, and DLP/guardrail outcomes are
-monitored without treating them as application authorization; cache behavior is explicit for
-each data class, personalized/private/tenant-scoped responses never share a custom cache key or
-cache entry across principals, cache TTL/skip overrides and fallback/retry/timeouts are bounded,
-and rate/spend/concurrency controls limit abuse/cost; custom domains behind Access have exact
-policy and application-level user/tenant authorization, while any `cf.user_id`/metadata is
-validated in the app context rather than replacing local authorization; negative tests for
-unauthenticated/default-gateway or account-token overreach, client/BYOK credential exposure,
-cross-gateway/tenant cache or route leak, payload-log/DLP/export disclosure, custom-
-header/cache-key/metadata spoofing, rate/spend/fallback abuse, Access custom-domain bypass and
-production-preview gateway/configuration drift.
+Use when AI Gateway endpoints, authentication, BYOK, logging, caching, rate limiting, or provider routing. Do not activate from package presence alone when current feature does not use Cloudflare AI Gateway.
 
-## Evidence to inspect
+## Context to inspect
 
-- Repository code, configuration, tests, deployment definitions, and CI evidence relevant to this skill.
-- Provider or framework dashboard/API evidence when the required setting cannot be established from the repository.
-- Direct primary-source evidence recorded in `references/sources.md`; absent, stale, or inaccessible evidence is **Not verified**.
+Inspect current feature, imports and calls, manifest/lockfile, runtime configuration, environment, identity/tenant model, data classes, trust boundaries, provider-family context, and nearby tests. Never collect secret values.
 
-## Dependencies and routing
+## Secure defaults
 
-Direct dependencies: `secod-core`, `secod-cloudflare`, `secod-ai-api-integrations`, `secod-secrets-config`, `secod-abuse-limits`, `secod-observability-response`.
+- Keep long-lived provider and management credentials server-side.
+- Treat model input, output, retrieved content, and tool arguments as untrusted.
+- Authorize retrieval and every tool effect against trusted user/tenant/resource state.
+- Minimize data and bound model, token, file, stream, retry, and spending scope.
+- Authenticate gateway use, protect provider keys, minimize/redact logs, constrain cache/route scope, and preserve application authorization.
 
-When a required dependency is not installed or cannot be invoked, record the affected
-control as **Not verified** and do not issue a passing or launch-ready conclusion.
+## Implementation workflow
 
-## Negative fixtures and tests
+1. Resolve exact installed SDK/runtime/API version and product features in use.
+2. Read version-matched direct official documentation before writing provider calls.
+3. Reuse project conventions; implement validation and authorization before provider effect.
+4. Add idempotency, limits, safe failure, redaction, and environment separation where applicable.
+5. Add successful, denied, cross-tenant, malformed, replay/retry, and provider-failure tests.
 
-- Run the maintained trigger case and insecure fixture plan at `tests/` for this skill.
-- Test the unsafe or missing-control cases implied by the control requirements, including
-  unavailable-provider and partial-failure behavior where applicable.
-- Keep tests read-only unless the user explicitly authorizes a change.
+## Implementation recipes
 
-## Output schema
+- [Supported versions](references/versions.md) — resolve compatible SDK, runtime, and API surfaces.
+- [Secure implementation recipe](references/model-tools-data.md) — provider-specific boundaries and coding sequence.
+- [Security-focused tests](references/tests.md) — positive, denied, replay, failure, and version tests.
 
-For each finding return: `control_id`, `status`, `evidence`, `impact`, `recommended_fix`,
-`verification`, `limitations`, and `source_refs`. Valid status values are `Do not ship`,
-`Fix before launch`, `Recommended hardening`, `Passed with evidence`, and `Not verified`.
+## Unsafe patterns to avoid
 
-## Verification and safe failure
+- Inventing SDK methods, options, model capabilities, service behavior, or dashboard state.
+- Copying examples for another major version or runtime without checking installed version.
+- Trusting client-controlled identity, tenant, resource, price, tool, or authority fields.
+- Replacing implementation with findings, score, account audit, or certification language.
 
-Never infer dashboard, deployment, provider, or production settings from package presence.
-Redact secrets and bearer credentials. Fail closed: preserve unknown or failed checks as
-**Not verified**, identify the next verification step, and never claim launch readiness from
-incomplete evidence.
+## Tests to add
 
-## References
+Test version-compatible setup, expected success, missing identity, wrong tenant/resource, malformed input, duplicate/replay where applicable, timeout/provider failure, secret/log redaction, and unavailable external configuration.
 
-Use the source register in `references/sources.md`. For each security-critical source,
-record the direct URL, documentation index URL, version, reviewed date, review expiry,
-hash/ETag when available, owner, plan/tier, region, feature maturity, and linked control IDs.
+## Provider and deployment steps
+
+Implement repository-owned code first. For required external settings, name exact official page and verification action. If inaccessible, do not claim setting was checked.
+
+## Official sources
+
+Use [source register](references/sources.md). llms.txt indexes aid discovery only; direct provider documentation governs implementation.
+
+## Completion handoff
+
+State SDK/runtime/API version used, secure boundary implemented, tests run, provider-family defaults applied, assumptions, and exact external step remaining. Never claim whole application or provider account is secure.

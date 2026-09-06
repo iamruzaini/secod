@@ -1,3 +1,5 @@
 # Expected result: secod-vercel-ai
 
-The skill identifies the insecure fixture, reports evidence safely, provides a verification path, and uses `Not verified` for unavailable evidence.
+Resolve and state exact SDK/runtime/API version. Keep credentials server-side, validate tools/output, authorize effects, constrain model routing, and protect streamed tenant data. Follow direct official documentation, preserve local authorization, and add positive and negative tests.
+
+Never invent provider APIs, claim inaccessible settings were checked, or emit an account-wide scanner verdict.

@@ -1,3 +1,3 @@
-display_name: "Workos"
-short_description: "Satisfy secod-auth-provider-integrations and every applicable secod-identity-access requirement. Apply when @workos-inc/*, WorkOS/AuthKit SDKs, WORKOS_API_KEY, WORKOS_CLIENT_ID,…"
-default_prompt: "Use $secod-workos to review this project. Preserve missing evidence as Not verified."
+display_name: "WorkOS"
+short_description: "Implement secure, version-qualified WorkOS code and provider-specific tests."
+default_prompt: "Use $secod-workos while implementing this WorkOS feature. Resolve exact versions, follow direct official docs, preserve authorization boundaries, and add positive and negative tests."

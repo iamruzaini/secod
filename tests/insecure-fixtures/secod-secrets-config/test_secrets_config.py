@@ -28,17 +28,17 @@ class SecretsConfigFixtures(unittest.TestCase):
             }
         )
         self.assertEqual(len(results), 2)
-        self.assertTrue(all(item["status"] == "Do not ship" for item in results))
+        self.assertTrue(all(item["status"] == "unsafe pattern reproduced" for item in results))
         self.assertNotIn(FAKE_KEY, str(results))
         self.assertEqual({item["evidence"]["match"] for item in results}, {"[REDACTED]"})
 
     def test_02_bearer_response_and_rpc_are_blocked(self) -> None:
         results = check_bearer_flow(["session_token"], ["tenant_capability"])
-        self.assertEqual([item["status"] for item in results], ["Do not ship", "Do not ship"])
+        self.assertEqual([item["status"] for item in results], ["unsafe pattern reproduced", "unsafe pattern reproduced"])
 
     def test_03_superuser_for_routine_runtime_is_blocked(self) -> None:
         result = check_scope("superuser", ["read_invoice"])
-        self.assertEqual(result[0]["status"], "Fix before launch")
+        self.assertEqual(result[0]["status"], "secure implementation required")
 
     def test_04_template_value_and_parity_gaps_are_reported(self) -> None:
         results = check_template(["DATABASE_URL", "PAYMENT_SECRET"], {"DATABASE_URL": FAKE_KEY})
@@ -49,44 +49,44 @@ class SecretsConfigFixtures(unittest.TestCase):
     def test_05_plaintext_and_public_secret_are_blocked(self) -> None:
         results = check_storage(["NEXT_PUBLIC_PROVIDER_SECRET"], "fixture-password")
         self.assertEqual(len(results), 2)
-        self.assertTrue(all(item["status"] == "Do not ship" for item in results))
+        self.assertTrue(all(item["status"] == "unsafe pattern reproduced" for item in results))
 
     def test_06_environment_identity_conflicts_are_blocked(self) -> None:
         results = check_environment_separation("production-db.fixture.invalid", ["test", "live"])
         self.assertEqual(len(results), 2)
-        self.assertTrue(all(item["status"] == "Do not ship" for item in results))
+        self.assertTrue(all(item["status"] == "unsafe pattern reproduced" for item in results))
 
     def test_07_missing_rotation_evidence_stays_not_verified(self) -> None:
         result = check_rotation(
             has_owner=True, has_revocation_path=True, has_current_evidence=False
         )
-        self.assertEqual(result["status"], "Not verified")
+        self.assertEqual(result["status"], "external state not inspected")
 
     def test_08_missing_revocation_path_blocks_launch(self) -> None:
         result = check_rotation(
             has_owner=True, has_revocation_path=False, has_current_evidence=False
         )
-        self.assertEqual(result["status"], "Fix before launch")
+        self.assertEqual(result["status"], "secure implementation required")
 
     def test_09_fail_open_bypass_and_production_debug_are_reported(self) -> None:
         results = check_production_flags(bypass_default=True, debug_enabled=True)
-        self.assertEqual([item["status"] for item in results], ["Do not ship", "Fix before launch"])
+        self.assertEqual([item["status"] for item in results], ["unsafe pattern reproduced", "secure implementation required"])
 
     def test_10_history_rewrite_before_revocation_is_blocked(self) -> None:
         result = check_history_response(["rewrite", "revoke", "block"])
-        self.assertEqual(result["status"], "Do not ship")
+        self.assertEqual(result["status"], "unsafe pattern reproduced")
 
     def test_11_removed_but_unrevoked_key_remains_blocked(self) -> None:
         result = check_history_response(["remove_from_head"])
-        self.assertEqual(result["status"], "Do not ship")
+        self.assertEqual(result["status"], "unsafe pattern reproduced")
 
     def test_12_default_seed_credential_blocks_launch(self) -> None:
         result = check_default_credentials(seed_uses_default=True, probe_authorized=False)
-        self.assertEqual(result["status"], "Fix before launch")
+        self.assertEqual(result["status"], "secure implementation required")
 
     def test_13_unauthorized_deployed_probe_is_not_run(self) -> None:
         result = check_default_credentials(seed_uses_default=False, probe_authorized=False)
-        self.assertEqual(result["status"], "Not verified")
+        self.assertEqual(result["status"], "external state not inspected")
         self.assertFalse(result["probe_performed"])
 
     def test_14_clean_case_has_no_repository_findings(self) -> None:
@@ -103,7 +103,7 @@ class SecretsConfigFixtures(unittest.TestCase):
         self.assertEqual(check_production_flags(bypass_default=False, debug_enabled=False), [])
         self.assertEqual(
             check_history_response(["revoke", "rewrite", "block"])["status"],
-            "Passed with evidence",
+            "secure pattern confirmed",
         )
 
 

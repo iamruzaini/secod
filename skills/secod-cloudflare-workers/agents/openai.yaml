@@ -1,3 +1,3 @@
 display_name: "Cloudflare Workers"
-short_description: "Satisfy secod-cloudflare, secod-identity-access, secod-inputs-apis, secod-secrets-config, secod-abuse-limits, secod-data-files and secod-observability-response. Apply when…"
-default_prompt: "Use $secod-cloudflare-workers to review this project. Preserve missing evidence as Not verified."
+short_description: "Implement secure, version-qualified Cloudflare Workers code and provider-specific tests."
+default_prompt: "Use $secod-cloudflare-workers while implementing this Cloudflare Workers feature. Resolve exact versions, follow direct official docs, preserve authorization boundaries, and add positive and negative tests."

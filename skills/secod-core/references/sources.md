@@ -1,16 +1,23 @@
-# Source register: secod-core
+# Official source register
 
-Use official documentation indexes for discovery only. Verify security-critical claims against
-the direct primary source and refresh this register before its review-expiry date.
+This register records official material used to design `secod-core`. Source status describes
+documentation review, not security status of a user's application.
 
-| Source ID | Title | Direct official URL | Owner | Reviewed | Expiry / refresh trigger | Status | Control IDs | Assumptions |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| S1 | File-system conventions: proxy.js (middleware renamed to Proxy in v16, Node runtime default) | https://nextjs.org/docs/app/api-reference/file-conventions/proxy | Vercel / Next.js team | 2026-08-24 | Refresh on Next.js major release or page change | Reviewed | PROVISIONAL-core-2, PROVISIONAL-core-3 | See register assumptions below. |
-| S2 | Renaming Middleware to Proxy (migration guidance and codemod) | https://nextjs.org/docs/messages/middleware-to-proxy | Vercel / Next.js team | 2026-08-24 | Refresh on Next.js major release | Reviewed | PROVISIONAL-core-2 | See register assumptions below. |
+## Status meanings
 
-Provider-specific documentation indexes (`llms.txt`/`llms-full.txt`) and their primary pages are
-registered in each routed skill's own `references/sources.md`, not here; this skill treats those
-indexes as discovery inputs only and never as proof of current provider behavior.
+- `Reviewed`: content was read and mapped to named implementation recipes.
+- `Pending review`: official source is known, but mapping is incomplete.
+- `Unavailable`: expected official source is inaccessible or insufficient and is not relied on.
 
-Assumptions: S1/S2 reflect Next.js 16.x conventions; repositories on older supported versions
-may legitimately use legacy `middleware.ts`. No plan/tier/region assumptions apply to this skill.
+URL reachability alone does not establish review.
+
+## Sources
+
+| Source ID | Title | Source type | Direct official URL | Owner | Reviewed date | Refresh trigger | Status | Recipes or decisions supported | Assumptions/notes |
+|---|---|---|---|---|---|---|---|---|---|
+| CORE-SRC-001 | Agent Skills specification | Direct specification | https://agentskills.io/specification | Agent Skills project | 2026-09-06 | Specification, metadata, discovery, validation, or progressive-disclosure change | Reviewed | discovery-routing.md: skill discovery and progressive loading; task-context.md: concise routed context | Applies to current published Agent Skills specification. |
+
+## Local product authority
+
+[`../../../docs/PRD.md`](../../../docs/PRD.md) defines SECOD product positioning and routing
+requirements. It is repository product policy rather than an external technical source.

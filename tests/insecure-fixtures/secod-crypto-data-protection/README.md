@@ -1,16 +1,7 @@
-# Crypto-data-protection fixtures
+# Implementation fixture plan: secod-crypto-data-protection
 
-Run from `secod/`:
+Given an implementation that violates this skill's portable invariants, replace unsafe boundary with pattern in `references/secure-patterns.md` and add successful, rejected, boundary, retry, and failure tests where applicable.
 
-```text
-python tests/insecure-fixtures/secod-crypto-data-protection/run_fixtures.py
-```
+Expected: Use maintained libraries, purpose-specific primitives, separated keys, rotation, retention, deletion, and known-answer/failure tests.
 
-Runner uses Python standard library only, makes no network calls, and validates synthetic external
-evidence bundles. Exit `0` means evidence-intake expectations were reproduced; it does not prove
-reviewed application or production behavior.
-
-Executable cases cover complete evidence, missing provider deletion proof, stale restore-test
-evidence, hash mismatch, unsafe paths, and control/kind mismatch. Documentation-only unsafe cases
-remain: insecure randomness, weak password hashes, ECB, committed all-purpose keys, unclassified
-PII, pre-consent analytics, and deletion propagation without a durable ledger.
+This documentation plan is not scanner execution or proof of deployed behavior.

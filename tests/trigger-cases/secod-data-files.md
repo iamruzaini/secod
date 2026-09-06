@@ -1,5 +1,17 @@
 # Trigger case: secod-data-files
 
-Positive prompt: `Use secod-data-files to review this project.`
+## Should trigger
 
-Negative prompt: a request outside this skill's stated applicability must not claim coverage.
+```text
+Add tenant-scoped PDF uploads and private downloads.
+```
+
+Expected: Authorize each object operation, validate real content, generate identifiers, bound processing, store privately, and test denial paths.
+
+## Should not trigger
+
+```text
+Add a text field with no file or object handling.
+```
+
+Expected: skill excluded.

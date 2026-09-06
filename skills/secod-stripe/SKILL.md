@@ -1,62 +1,78 @@
 ---
 name: secod-stripe
-description: Satisfy every secod-payments-billing requirement; treat verified Stripe state as authoritative and keep secret or restricted keys server-side with test/live isolation.
+description: >-
+  Help coding agents implement Stripe checkout, PaymentIntents, subscriptions,
+  webhooks, refunds, and entitlements with server-owned prices, restricted keys,
+  signature verification, idempotency, and reconciliation.
+license: Apache-2.0
+compatibility: "Requires Stripe; recipes target current server SDK patterns and sandbox testing."
+metadata:
+  secod-category: "provider-feature"
+  secod-format: "implementation-v1"
+  secod-maturity: "provisional"
 ---
 
-# SECOD Stripe
+# Secure Stripe implementation
 
-## Scope and applicability
+## Purpose
 
-Satisfy every `secod-payments-billing` requirement; treat verified Stripe state as authoritative
-and keep secret or restricted keys server-side with test/live isolation.
+Build Stripe flows where server chooses products/prices, Stripe state is authoritative, webhook
+events are authenticated and deduplicated, retries are safe, and entitlements reconcile correctly.
 
-## Control requirements
+## When to use
 
-Publishable/secret/restricted key boundaries; restricted-key/IP controls; key leak response;
-Checkout and PaymentIntent lifecycle, including PaymentIntent reuse rules and 3DS/SCA; outbound
-POST idempotency keys; server-resolved price and customer metadata; Connect account and
-authorization boundaries where used, including Connect OAuth state/redirect/code handling;
-customer-portal authorization; raw-body `Stripe-Signature` verification with signed timestamp
-tolerance plus Event object ID/type validation; persistent Event ID deduplication and
-idempotency; asynchronous acknowledgement with fast `2xx` before complex work; only subscribing
-to necessary events; webhook API-version pinning and API/event version evidence; subscription,
-renewal, cancellation, refund, dispute and chargeback entitlement correction; reconciliation.
+Use for Stripe API, Checkout, PaymentIntents, subscriptions, portal, Connect, webhooks, refunds,
+disputes, or entitlement changes. Do not activate for unrelated payment providers.
 
-## Evidence to inspect
+## Context to inspect
 
-- Repository code, configuration, tests, deployment definitions, and CI evidence relevant to this skill.
-- Provider or framework dashboard/API evidence when the required setting cannot be established from the repository.
-- Direct primary-source evidence recorded in `references/sources.md`; absent, stale, or inaccessible evidence is **Not verified**.
+Resolve Stripe SDK/API version, sandbox/live environment, key type, account/Connect scope, product
+mapping, customer ownership, webhook route/raw body, event store, idempotency, and entitlement model.
 
-## Dependencies and routing
+## Secure defaults
 
-Direct dependencies: `secod-core`, `secod-payments-billing`.
+- Keep restricted/secret keys and webhook secrets server-side; prefer restricted keys.
+- Resolve price, currency, quantity limits, customer, and account scope on server.
+- Verify webhook signature against raw request body before parsing or effects.
+- Persist event IDs and process effects idempotently inside transaction/reconciliation boundary.
+- Grant entitlement from verified Stripe state, not browser redirect or client claims.
 
-When a required dependency is not installed or cannot be invoked, record the affected
-control as **Not verified** and do not issue a passing or launch-ready conclusion.
+## Implementation workflow
 
-## Negative fixtures and tests
+1. Map application user/customer/product/price/account and entitlement state.
+2. Implement server-owned Stripe request with stable operation idempotency key.
+3. Implement raw-body webhook verification and event deduplication.
+4. Handle duplicates, retries, out-of-order events, refunds, disputes, and subscription changes.
+5. Add sandbox and Stripe CLI tests plus reconciliation path.
 
-- Run the maintained trigger case and insecure fixture plan at `tests/` for this skill.
-- Test the unsafe or missing-control cases implied by the control requirements, including
-  unavailable-provider and partial-failure behavior where applicable.
-- Keep tests read-only unless the user explicitly authorizes a change.
+## Implementation recipes
 
-## Output schema
+- [`references/stripe-server-webhooks.md`](references/stripe-server-webhooks.md) — TypeScript server
+  client, idempotent creation, verified webhooks, deduplication, and entitlement handoff.
 
-For each finding return: `control_id`, `status`, `evidence`, `impact`, `recommended_fix`,
-`verification`, `limitations`, and `source_refs`. Valid status values are `Do not ship`,
-`Fix before launch`, `Recommended hardening`, `Passed with evidence`, and `Not verified`.
+## Unsafe patterns to avoid
 
-## Verification and safe failure
+- Accepting amount, price, entitlement, customer, or connected-account authority from client.
+- Exposing restricted/secret keys or confusing API keys with webhook secrets.
+- Parsing/re-encoding body before signature verification.
+- Treating checkout success redirect as payment completion.
+- Retrying POST operations without stable idempotency key.
 
-Never infer dashboard, deployment, provider, or production settings from package presence.
-Redact secrets and bearer credentials. Fail closed: preserve unknown or failed checks as
-**Not verified**, identify the next verification step, and never claim launch readiness from
-incomplete evidence.
+## Tests to add
 
-## References
+Test authorized checkout, tampered price/customer, invalid signature, duplicate/out-of-order event,
+retry after timeout, refund/dispute/revocation, sandbox/live separation, and reconciliation.
 
-Use the source register in `references/sources.md`. For each security-critical source,
-record the direct URL, documentation index URL, version, reviewed date, review expiry,
-hash/ETag when available, owner, plan/tier, region, feature maturity, and linked control IDs.
+## Provider and deployment steps
+
+Configure sandbox/live keys separately, register exact HTTPS webhook, select required event types,
+and verify with Stripe CLI/sandbox. State unperformed dashboard steps precisely.
+
+## Official sources
+
+Use [`references/sources.md`](references/sources.md); Stripe `llms.txt` is discovery index only.
+
+## Completion handoff
+
+State authoritative mappings, key category, webhook/idempotency design, tests run, reconciliation,
+and external endpoint setup. No payment-security verdict.

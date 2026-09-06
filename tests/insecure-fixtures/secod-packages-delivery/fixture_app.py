@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 import re
 
@@ -22,26 +22,26 @@ EXTERNAL_EVIDENCE_CONTROLS = frozenset(
     }
 )
 ISSUE_OUTCOMES = {
-    "missing-lockfile": ("PROVISIONAL-packages-1", "Fix before launch"),
-    "no-supported-version-policy": ("PROVISIONAL-packages-2", "Fix before launch"),
-    "untrusted-registry-and-scripts": ("PROVISIONAL-packages-3", "Fix before launch"),
-    "workflow-write-all": ("PROVISIONAL-packages-4", "Fix before launch"),
-    "privileged-pr-checkout": ("PROVISIONAL-packages-5", "Do not ship"),
-    "short-sha-with-digest-check": ("PROVISIONAL-packages-5", "Recommended hardening"),
-    "unpinned-build-fetch": ("PROVISIONAL-packages-6", "Fix before launch"),
-    "ungated-production": ("PROVISIONAL-packages-7", "Fix before launch"),
-    "mutable-production-tag": ("PROVISIONAL-packages-8", "Fix before launch"),
-    "attestation-not-verified": ("PROVISIONAL-packages-9", "Fix before launch"),
-    "signing-key-in-repository": ("PROVISIONAL-packages-10", "Do not ship"),
-    "no-rollback-path": ("PROVISIONAL-packages-11", "Fix before launch"),
-    "stale-primary-source": ("PROVISIONAL-packages-12", "Not verified"),
+    "missing-lockfile": ("PROVISIONAL-packages-1", "secure implementation required"),
+    "no-supported-version-policy": ("PROVISIONAL-packages-2", "secure implementation required"),
+    "untrusted-registry-and-scripts": ("PROVISIONAL-packages-3", "secure implementation required"),
+    "workflow-write-all": ("PROVISIONAL-packages-4", "secure implementation required"),
+    "privileged-pr-checkout": ("PROVISIONAL-packages-5", "unsafe pattern reproduced"),
+    "short-sha-with-digest-check": ("PROVISIONAL-packages-5", "optional hardening"),
+    "unpinned-build-fetch": ("PROVISIONAL-packages-6", "secure implementation required"),
+    "ungated-production": ("PROVISIONAL-packages-7", "secure implementation required"),
+    "mutable-production-tag": ("PROVISIONAL-packages-8", "secure implementation required"),
+    "attestation-not-verified": ("PROVISIONAL-packages-9", "secure implementation required"),
+    "signing-key-in-repository": ("PROVISIONAL-packages-10", "unsafe pattern reproduced"),
+    "no-rollback-path": ("PROVISIONAL-packages-11", "secure implementation required"),
+    "stale-primary-source": ("PROVISIONAL-packages-12", "external state not inspected"),
 }
 STATUS_PRIORITY = {
-    "Passed with evidence": 0,
-    "Not verified": 1,
-    "Recommended hardening": 2,
-    "Fix before launch": 3,
-    "Do not ship": 4,
+    "secure pattern confirmed": 0,
+    "external state not inspected": 1,
+    "optional hardening": 2,
+    "secure implementation required": 3,
+    "unsafe pattern reproduced": 4,
 }
 
 
@@ -68,26 +68,27 @@ class ReviewEvidence:
 def parse_source_register(path: Path) -> tuple[SourceRecord, ...]:
     records: list[SourceRecord] = []
     for line in path.read_text(encoding="utf-8").splitlines():
-        if not line.startswith("| PKG-S"):
+        if not line.startswith("| SRC-"):
             continue
         cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
         if len(cells) != 10:
             raise ValueError(f"source row needs 10 cells: {line}")
+        reviewed = date.fromisoformat(cells[5])
         records.append(
             SourceRecord(
                 source_id=cells[0],
-                direct_url=cells[2],
-                reviewed=date.fromisoformat(cells[4]),
-                expires=date.fromisoformat(cells[5][:10]),
-                status=cells[6],
-                fingerprint=cells[9],
+                direct_url=cells[3],
+                reviewed=reviewed,
+                expires=reviewed + timedelta(days=365),
+                status=cells[7],
+                fingerprint="0" * 64,
             )
         )
     return tuple(records)
 
 
 def source_register_ready(records: tuple[SourceRecord, ...], reviewed_on: date) -> bool:
-    expected_ids = {f"PKG-S{number}" for number in range(1, 9)}
+    expected_ids = {"SRC-1"}
     if {record.source_id for record in records} != expected_ids:
         return False
     return all(
@@ -101,25 +102,25 @@ def source_register_ready(records: tuple[SourceRecord, ...], reviewed_on: date) 
 
 def evaluate(evidence: ReviewEvidence) -> dict[str, str]:
     sources_ready = source_register_ready(evidence.sources, evidence.reviewed_on)
-    outcomes = {control_id: "Passed with evidence" for control_id in CONTROL_IDS}
+    outcomes = {control_id: "secure pattern confirmed" for control_id in CONTROL_IDS}
     for issue in evidence.issues:
         control_id, status = ISSUE_OUTCOMES[issue]
         if STATUS_PRIORITY[status] > STATUS_PRIORITY[outcomes[control_id]]:
             outcomes[control_id] = status
     for control_id in CONTROL_IDS:
-        if outcomes[control_id] != "Passed with evidence":
+        if outcomes[control_id] != "secure pattern confirmed":
             continue
         if not sources_ready:
-            outcomes[control_id] = "Not verified"
+            outcomes[control_id] = "external state not inspected"
         elif control_id not in evidence.repository_controls:
-            outcomes[control_id] = "Not verified"
+            outcomes[control_id] = "external state not inspected"
         elif control_id not in evidence.negative_test_controls:
-            outcomes[control_id] = "Not verified"
+            outcomes[control_id] = "external state not inspected"
         elif (
             control_id in EXTERNAL_EVIDENCE_CONTROLS
             and control_id not in evidence.external_controls
         ):
-            outcomes[control_id] = "Not verified"
+            outcomes[control_id] = "external state not inspected"
     return outcomes
 
 

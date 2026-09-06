@@ -98,4 +98,4 @@ class DegradedCache:
 
 
 def evidence_status(repository: bool, runtime: bool, deployment: bool) -> str:
-    return "Passed with evidence" if all((repository, runtime, deployment)) else "Not verified"
+    return "secure pattern confirmed" if all((repository, runtime, deployment)) else "external state not inspected"

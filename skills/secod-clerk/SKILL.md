@@ -1,80 +1,69 @@
 ---
 name: secod-clerk
-description: Satisfy secod-auth-provider-integrations and every applicable secod-identity-access requirement. Apply when @clerk/*, clerk, clerkMiddleware, CLERK_* variables, Clerk webhook…
+description: >-
+  Help coding agents securely implement Clerk features using version-matched official APIs, secure defaults, and provider-specific tests. Use when Clerk SDKs, middleware, sessions, organizations, callbacks, or Clerk webhooks.
+license: Apache-2.0
+metadata:
+  secod-category: "provider-feature"
+  secod-format: "implementation-v1"
+  secod-maturity: "provisional"
 ---
 
-# SECOD Clerk
+# Secure Clerk implementation
 
-## Scope and applicability
+## Purpose
 
-Satisfy `secod-auth-provider-integrations` and every applicable `secod-identity-access`
-requirement. Apply when `@clerk/*`, `clerk`, `clerkMiddleware`, `CLERK_*` variables, Clerk
-webhook routes, Clerk Organizations, Clerk JWT templates or a Clerk instance/custom domain is
-detected. Clerk establishes identity; all application authorization remains backend-enforced.
+Implement Clerk features securely. Provider-family router supplies shared context; this skill owns exact product decisions and version-qualified SDK/runtime use.
 
-## Control requirements
+## When to use
 
-Backend Clerk SDK `authenticateRequest()`/`verifyToken()` validation or manual verification only
-against the application's fixed Clerk instance JWKS or Dashboard public key; expected JWT
-algorithm, signature, issuer, expiry, not-before, subject, token type and
-`azp`/`authorizedParties` validation; fixed, configured JWKS trust with `kid` cache/rotation and
-one bounded refresh, never a token-provided key/discovery URL; trusted origin and
-`authorizedParties` configuration for cross-origin requests; explicit publishable-key versus
-server-only secret-key and Backend API key boundary; Dashboard evidence for inactivity timeout,
-maximum lifetime, single- versus multi-session behavior, active-session/device management, sign-
-out/revocation and unexpected-sign-in response; Clerk fixation protection and
-reverification/step-up authentication for sensitive actions; backend authorization of the
-immutable Clerk user ID, active organization, role and permission boundary, including pending-
-organization state—never UI-only organization state, email domain, display name or stale
-browser/custom claim; account for Clerk's per-tab active-organization behavior, so background
-work uses the correct current organization token and the backend verifies tenant ownership;
-custom JWT claims are minimized, contain no secrets or private sensitive data, respect Clerk
-token/cookie size guidance and are not relied on when fresh server-side state is required; MFA,
-device trust, bot protection, email/password/recovery and account-linking settings are
-evidenced; Clerk/Svix webhook raw-body verification with Clerk's `verifyWebhook()`, supported
-timestamp/freshness handling, event-ID deduplication, signed event-type allowlist, retry/replay
-handling, durable event processing and reconciliation; exact supported Clerk SDK/configuration
-version, instance, custom-domain and development/production separation; negative tests for
-expired, malformed, wrong-algorithm, wrong-issuer, wrong-`azp`, unknown/rotated-`kid` and
-pending-organization tokens; cross-tenant organization access and multi-tab context confusion;
-session revocation and sensitive-action reverification; forged, replayed, duplicate, delayed and
-out-of-order webhooks.
+Use when Clerk SDKs, middleware, sessions, organizations, callbacks, or Clerk webhooks. Do not activate from package presence alone when current feature does not use Clerk.
 
-## Evidence to inspect
+## Context to inspect
 
-- Repository code, configuration, tests, deployment definitions, and CI evidence relevant to this skill.
-- Provider or framework dashboard/API evidence when the required setting cannot be established from the repository.
-- Direct primary-source evidence recorded in `references/sources.md`; absent, stale, or inaccessible evidence is **Not verified**.
+Inspect current feature, imports and calls, manifest/lockfile, runtime configuration, environment, identity/tenant model, data classes, trust boundaries, provider-family context, and nearby tests. Never collect secret values.
 
-## Dependencies and routing
+## Secure defaults
 
-Direct dependencies: `secod-core`, `secod-auth-provider-integrations`, `secod-identity-access`.
+- Validate provider credentials and tokens at trusted server boundary.
+- Keep client/server redirect, cookie, state, nonce, PKCE, and secret boundaries intact.
+- Map provider identity to local user/tenant using immutable identifiers.
+- Authorize each application resource and action independently.
+- Verify Clerk sessions server-side and authorize local tenant/resources independently.
 
-When a required dependency is not installed or cannot be invoked, record the affected
-control as **Not verified** and do not issue a passing or launch-ready conclusion.
+## Implementation workflow
 
-## Negative fixtures and tests
+1. Resolve exact installed SDK/runtime/API version and product features in use.
+2. Read version-matched direct official documentation before writing provider calls.
+3. Reuse project conventions; implement validation and authorization before provider effect.
+4. Add idempotency, limits, safe failure, redaction, and environment separation where applicable.
+5. Add successful, denied, cross-tenant, malformed, replay/retry, and provider-failure tests.
 
-- Run the maintained trigger case and insecure fixture plan at `tests/` for this skill.
-- Test the unsafe or missing-control cases implied by the control requirements, including
-  unavailable-provider and partial-failure behavior where applicable.
-- Keep tests read-only unless the user explicitly authorizes a change.
+## Implementation recipes
 
-## Output schema
+- [Supported versions](references/versions.md) — resolve compatible SDK, runtime, and API surfaces.
+- [Secure implementation recipe](references/sessions-callbacks.md) — provider-specific boundaries and coding sequence.
+- [Security-focused tests](references/tests.md) — positive, denied, replay, failure, and version tests.
 
-For each finding return: `control_id`, `status`, `evidence`, `impact`, `recommended_fix`,
-`verification`, `limitations`, and `source_refs`. Valid status values are `Do not ship`,
-`Fix before launch`, `Recommended hardening`, `Passed with evidence`, and `Not verified`.
+## Unsafe patterns to avoid
 
-## Verification and safe failure
+- Inventing SDK methods, options, model capabilities, service behavior, or dashboard state.
+- Copying examples for another major version or runtime without checking installed version.
+- Trusting client-controlled identity, tenant, resource, price, tool, or authority fields.
+- Replacing implementation with findings, score, account audit, or certification language.
 
-Never infer dashboard, deployment, provider, or production settings from package presence.
-Redact secrets and bearer credentials. Fail closed: preserve unknown or failed checks as
-**Not verified**, identify the next verification step, and never claim launch readiness from
-incomplete evidence.
+## Tests to add
 
-## References
+Test version-compatible setup, expected success, missing identity, wrong tenant/resource, malformed input, duplicate/replay where applicable, timeout/provider failure, secret/log redaction, and unavailable external configuration.
 
-Use the source register in `references/sources.md`. For each security-critical source,
-record the direct URL, documentation index URL, version, reviewed date, review expiry,
-hash/ETag when available, owner, plan/tier, region, feature maturity, and linked control IDs.
+## Provider and deployment steps
+
+Implement repository-owned code first. For required external settings, name exact official page and verification action. If inaccessible, do not claim setting was checked.
+
+## Official sources
+
+Use [source register](references/sources.md). llms.txt indexes aid discovery only; direct provider documentation governs implementation.
+
+## Completion handoff
+
+State SDK/runtime/API version used, secure boundary implemented, tests run, provider-family defaults applied, assumptions, and exact external step remaining. Never claim whole application or provider account is secure.

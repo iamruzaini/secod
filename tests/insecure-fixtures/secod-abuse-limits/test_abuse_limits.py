@@ -18,10 +18,8 @@ from fixture_app import (
     RateLimiter,
     StableQuota,
     checkout_amount,
-    evidence_status,
     invoke_limited,
     recovery_response,
-    release_handoff,
     retry_call,
 )
 
@@ -208,48 +206,6 @@ class AbuseLimitsFixtures(unittest.TestCase):
         self.assertEqual(concurrency.acquire(), "rejected")
         concurrency.release()
         self.assertEqual(concurrency.acquire(), "accepted")
-
-    def test_08_missing_external_evidence_and_ship_handoff(self) -> None:
-        status = evidence_status(
-            repository=True,
-            deployment=False,
-            runtime=False,
-            provider=False,
-        )
-        self.assertEqual(status, "Not verified")
-        control_ids = [f"PROVISIONAL-ABUSE-{number:02d}" for number in range(1, 9)]
-        statuses = {control_id: status for control_id in control_ids}
-        handoff = release_handoff(
-            control_ids,
-            statuses,
-            ["provider spend control evidence missing"],
-            ["provider account spend ceiling or billing alert capture"],
-            {"execution_status": "passed", "tests_run": 25, "expected_tests": 25},
-        )
-        self.assertEqual(handoff["verdict_owner"], "secod-ship-check")
-        self.assertEqual(handoff["readiness_verdict"], "not_issued")
-        self.assertEqual(
-            handoff["requested_external_evidence"],
-            ["provider account spend ceiling or billing alert capture"],
-        )
-        self.assertEqual(
-            handoff["control_statuses"],
-            statuses,
-        )
-        self.assertEqual(
-            handoff["blockers"],
-            ["provider spend control evidence missing"],
-        )
-        self.assertEqual(handoff["fixture_execution"]["execution_status"], "passed")
-        with self.assertRaises(ValueError):
-            release_handoff(
-                control_ids,
-                {"PROVISIONAL-ABUSE-08": status},
-                [],
-                [],
-                {"execution_status": "failed"},
-            )
-
 
 if __name__ == "__main__":
     unittest.main()

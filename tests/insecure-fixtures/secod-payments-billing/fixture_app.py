@@ -38,7 +38,7 @@ def capability_status(
     reviewed_on: date,
 ) -> str:
     if not row.adapter or not row.source_refs:
-        return "Not verified"
+        return "external state not inspected"
     for source_ref in row.source_refs:
         source = sources.get(source_ref)
         if (
@@ -47,16 +47,16 @@ def capability_status(
             or source.status != "Reviewed"
             or source.review_expiry < reviewed_on
         ):
-            return "Not verified"
+            return "external state not inspected"
     if not row.has_delivery_id:
         required = {"stable-dedup-key", "replay-ledger", "provider-retrieval", "reconciliation"}
         if not required.issubset(row.compensating_controls):
-            return "Not verified"
+            return "external state not inspected"
     if not row.has_signature or not row.has_event_type or not row.has_account_context:
-        return "Not verified"
+        return "external state not inspected"
     if not row.has_retry_behavior or not row.has_disabled_endpoint_behavior:
-        return "Not verified"
-    return "Passed with evidence"
+        return "external state not inspected"
+    return "secure pattern confirmed"
 
 
 def resolve_checkout(
@@ -181,7 +181,7 @@ def delivery_readiness(
     persisted_before_ack: bool,
 ) -> str:
     return (
-        "Passed with evidence"
+        "secure pattern confirmed"
         if (
             retry_exhaustion_detected
             and disabled_endpoint_detected
@@ -189,7 +189,7 @@ def delivery_readiness(
             and persistent_deduplication
             and persisted_before_ack
         )
-        else "Fix before launch"
+        else "secure implementation required"
     )
 
 
@@ -244,13 +244,13 @@ def credential_status(credentials: dict[str, str]) -> str:
         name.startswith("NEXT_PUBLIC_") and value.startswith("live_")
         for name, value in credentials.items()
     ):
-        return "Do not ship"
+        return "unsafe pattern reproduced"
     live_values = [value for name, value in credentials.items() if name.endswith("_LIVE")]
     test_values = [value for name, value in credentials.items() if name.endswith("_TEST")]
     if set(live_values) & set(test_values):
-        return "Not verified"
-    return "Passed with evidence"
+        return "external state not inspected"
+    return "secure pattern confirmed"
 
 
 def evidence_status(repository: bool, provider: bool, production: bool) -> str:
-    return "Passed with evidence" if all((repository, provider, production)) else "Not verified"
+    return "secure pattern confirmed" if all((repository, provider, production)) else "external state not inspected"

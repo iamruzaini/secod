@@ -1,0 +1,3 @@
+display_name: "Flutter"
+short_description: "Build secure Flutter mobile features with supported Dart and plugin APIs."
+default_prompt: "Use $secod-flutter while implementing this mobile feature. Resolve Flutter and plugin versions, keep authorization server-side, secure local data and links, minimize permissions, and test signed release behavior."

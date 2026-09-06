@@ -204,7 +204,7 @@ class PaymentsBillingFixtures(unittest.TestCase):
                 persistent_deduplication=False,
                 persisted_before_ack=False,
             ),
-            "Fix before launch",
+            "secure implementation required",
         )
         self.assertEqual(
             delivery_readiness(
@@ -214,7 +214,7 @@ class PaymentsBillingFixtures(unittest.TestCase):
                 persistent_deduplication=True,
                 persisted_before_ack=True,
             ),
-            "Passed with evidence",
+            "secure pattern confirmed",
         )
 
     def test_09_atomic_mapping_and_tenant_binding(self) -> None:
@@ -269,15 +269,15 @@ class PaymentsBillingFixtures(unittest.TestCase):
             credential_status(
                 {"PAYMENTS_LIVE": "live_prod", "PAYMENTS_TEST": "test_preview"}
             ),
-            "Passed with evidence",
+            "secure pattern confirmed",
         )
         self.assertEqual(
             credential_status({"NEXT_PUBLIC_PAYMENTS_KEY": "live_secret"}),
-            "Do not ship",
+            "unsafe pattern reproduced",
         )
         self.assertEqual(
             credential_status({"PAYMENTS_LIVE": "same", "PAYMENTS_TEST": "same"}),
-            "Not verified",
+            "external state not inspected",
         )
 
     def test_12_capability_source_and_adapter_blockers(self) -> None:
@@ -291,7 +291,7 @@ class PaymentsBillingFixtures(unittest.TestCase):
                 reviewed,
                 reviewed_on=reviewed_on,
             ),
-            "Passed with evidence",
+            "secure pattern confirmed",
         )
         self.assertEqual(
             capability_status(
@@ -299,7 +299,7 @@ class PaymentsBillingFixtures(unittest.TestCase):
                 reviewed,
                 reviewed_on=reviewed_on,
             ),
-            "Not verified",
+            "external state not inspected",
         )
         self.assertEqual(
             capability_status(
@@ -307,7 +307,7 @@ class PaymentsBillingFixtures(unittest.TestCase):
                 reviewed,
                 reviewed_on=reviewed_on,
             ),
-            "Not verified",
+            "external state not inspected",
         )
         no_id = CapabilityRow(
             adapter="secod-fixture",
@@ -316,13 +316,13 @@ class PaymentsBillingFixtures(unittest.TestCase):
         )
         self.assertEqual(
             capability_status(no_id, reviewed, reviewed_on=reviewed_on),
-            "Not verified",
+            "external state not inspected",
         )
 
-    def test_13_missing_provider_and_production_evidence(self) -> None:
+    def test_13_missing_provider_and_production_state_inspected(self) -> None:
         self.assertEqual(
             evidence_status(repository=True, provider=False, production=False),
-            "Not verified",
+            "external state not inspected",
         )
 
 

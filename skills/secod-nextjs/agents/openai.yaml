@@ -1,3 +1,3 @@
 display_name: "Next.js"
-short_description: "Satisfy every applicable general baseline requirement; apply when the next package, next.config.*, App Router, Pages Router, Route Handlers/API Routes, Server Actions,…"
-default_prompt: "Use $secod-nextjs to review this project. Preserve missing evidence as Not verified."
+short_description: "Build secure Next.js App or Pages Router features with explicit server/client boundaries, authorization, validation, and scoped caching."
+default_prompt: "Use $secod-nextjs while implementing this Next.js feature. Resolve the installed version and router, keep privileged code server-only, authorize every action or route, and add tests."

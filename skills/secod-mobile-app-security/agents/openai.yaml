@@ -1,0 +1,3 @@
+display_name: "Mobile App Security"
+short_description: "Build secure mobile storage, links, permissions, notifications, and backend boundaries."
+default_prompt: "Use $secod-mobile-app-security while implementing this mobile feature. Keep the device untrusted, minimize local data and permissions, verify links, and add Android/iOS negative tests."

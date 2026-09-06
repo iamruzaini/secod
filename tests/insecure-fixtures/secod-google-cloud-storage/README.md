@@ -1,3 +1,5 @@
-# Insecure fixture plan: secod-google-cloud-storage
+# Implementation fixture plan: secod-google-cloud-storage
 
-Create a minimal reproducible unsafe case for the control requirements in the skill contract. Include a missing-evidence case and, where applicable, a partial-failure or replay case.
+Start from an intentionally unsafe Google Cloud Storage boundary. Replace client-trusted authority and unbounded provider calls with version-matched secure implementation from references/data-access.md.
+
+Test success, unauthorized/cross-tenant access, malformed input, replay/retry where applicable, provider failure, and secret redaction. This plan is not a scanner execution.

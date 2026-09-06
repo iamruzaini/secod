@@ -1,3 +1,7 @@
 # Expected result: secod-google-cloud-web
 
-The skill identifies the insecure fixture, reports evidence safely, provides a verification path, and uses `Not verified` for unavailable evidence.
+Select Google Cloud Storage with shared project/IAM defaults; select Firebase only when Firebase products are used.
+
+Missing context: Exact Google Cloud products, client versions, project, location, and workload identity are unclear; inspect code and IaC before routing.
+
+Rejected behavior: Do not select Firebase for unrelated Google Cloud code and do not audit organization-wide settings.

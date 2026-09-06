@@ -1,3 +1,11 @@
-# Insecure fixture plan: secod-openai
+# Executable implementation fixtures: secod-openai
 
-Create a minimal reproducible unsafe case for the control requirements in the skill contract. Include a missing-evidence case and, where applicable, a partial-failure or replay case.
+Run:
+
+```text
+python tests/insecure-fixtures/secod-openai/run_fixtures.py
+```
+
+The fixture models server-only API credentials, tool allowlisting, argument validation, trusted
+resource reload, tenant authorization, and unauthenticated denial. It uses local callbacks instead
+of the OpenAI API; provider retention, spend, and project settings are not inspected.

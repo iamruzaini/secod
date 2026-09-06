@@ -112,7 +112,7 @@ class FailureSafetyFixtures(unittest.TestCase):
     def test_09_missing_evidence(self) -> None:
         self.assertEqual(
             evidence_status(repository=True, runtime=False, deployment=False),
-            "Not verified",
+            "external state not inspected",
         )
 
 

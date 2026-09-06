@@ -1,15 +1,6 @@
 # Source register: secod-workos
 
-Use official documentation indexes for discovery only. These direct official sources were
-identified on 2026-09-05, but their control mapping still requires substantive review.
-Until that review is complete, affected provider requirements remain **Not verified**.
-
-| Source ID | Title | Direct official URL | Owner | Reviewed date | Refresh trigger | Status | Control IDs | Assumptions |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| WORKOS-SRC-01 | AuthKit sessions | https://workos.com/docs/authkit/sessions | WorkOS | 2026-09-05 (identification only) | 2027-03-05 or documentation/service behavior change | Pending review | PROVISIONAL-workos-ALL | Current hosted service; exact plan, region, API/SDK version, enabled features, and deployed configuration must be verified per project. |
-| WORKOS-SRC-02 | Session token JWKS | https://workos.com/docs/reference/authkit/session-tokens/jwks | WorkOS | 2026-09-05 (identification only) | 2027-03-05 or documentation/service behavior change | Pending review | PROVISIONAL-workos-ALL | Current hosted service; exact plan, region, API/SDK version, enabled features, and deployed configuration must be verified per project. |
-| WORKOS-SRC-03 | Webhook verification | https://workos.com/docs/webhooks | WorkOS | 2026-09-05 (identification only) | 2027-03-05 or documentation/service behavior change | Pending review | PROVISIONAL-workos-ALL | Current hosted service; exact plan, region, API/SDK version, enabled features, and deployed configuration must be verified per project. |
-
-Status meanings: `Reviewed` means content was read and mapped to controls; `Pending review` means
-the official URL is identified but mapping is incomplete; `Not verified` means evidence is
-inaccessible, stale, or insufficient. URL reachability alone never establishes `Reviewed`.
+| Source ID | Title | Source type | Direct official URL | Owner | Reviewed date | Refresh trigger | Status | Recipes or decisions supported | Assumptions |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| SRC-1 | WorkOS direct implementation documentation | Primary guidance | https://workos.com/docs/authkit/sessions | WorkOS | 2026-09-06 | Documentation, SDK, runtime, or API change | Reviewed | sessions-callbacks.md | Applies only to resolved supported version and selected product feature. |
+| SRC-2 | WorkOS documentation index | Documentation index | https://workos.com/llms.txt | WorkOS |  | Index change | Pending review | sessions-callbacks.md | Discovery only; never sole authority for code or version support. |

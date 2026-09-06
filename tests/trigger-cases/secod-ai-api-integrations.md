@@ -1,17 +1,17 @@
 # Trigger case: secod-ai-api-integrations
 
-Positive prompt: `Use secod-ai-api-integrations to review this project.`
+## Should trigger
 
-Negative prompt: a request outside this skill's stated applicability must not claim coverage.
+```text
+Add RAG and an AI tool that updates customer records.
+```
 
-Evidence-boundary case: review an AI integration with repository configuration but no provider
-Dashboard/API export. Provider retention/training/ZDR/telemetry, spend ceiling and provider-side
-deletion completion remain `Not verified` only for their mapped controls, with exact requested
-artifacts and next steps.
+Expected: Protect keys, minimize data, authorize retrieval/tools, validate output, confirm effects, and add prompt-injection/cross-tenant tests.
 
-Client-token case: review a realtime path using a short-lived client token. Require current direct
-official documentation for the exact provider feature and matching implementation/configuration;
-never generalize from another provider.
+## Should not trigger
 
-Fixture-reporting case: all referenced Markdown fixture plans must be reported as
-`artifact_type: documentation_only`, `execution_status: not_executed`.
+```text
+Add deterministic local filtering with no model integration.
+```
+
+Expected: skill excluded.

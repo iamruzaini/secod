@@ -1,80 +1,71 @@
 ---
 name: secod-aws-web
 description: >-
-  Act as the AWS account and IAM security router: use workforce/workload federation and short-lived per-workload roles, least-privilege identity and resource policies, explicit…
+  Route AWS coding tasks to exact service adapters and apply shared workload-identity, IAM, account, Region, secret, encryption, and environment defaults.
+license: Apache-2.0
+metadata:
+  secod-category: "provider-family"
+  secod-format: "implementation-v1"
+  secod-maturity: "provisional"
 ---
 
-# SECOD AWS Web
+# AWS Web implementation router
 
-## Scope and applicability
+## Purpose
 
-Act as the AWS account and IAM security router: use workforce/workload federation and short-
-lived per-workload roles, least-privilege identity and resource policies, explicit public-
-exposure decisions, protected secrets and keys, and centralized evidence. It must route every
-detected AWS service profile below; no service profile replaces the general app-security
-baseline or this common account/IAM layer.
+Identify exact provider products used by current feature, apply only shared provider defaults, and route exact SDK work to applicable feature adapters. Do not perform account-wide audit.
 
-## Control requirements
+## When to use
 
-Exact AWS Organization, account, partition, Region, environment, VPC, availability zone,
-service, endpoint, public DNS/domain, IaC stack, principal, role, permission boundary, SCP,
-resource policy, KMS key, secret, logging/security service and cross-account inventory; separate
-production accounts or an explicit equivalent isolation control, human access through
-SSO/federation with MFA and no routine root-user or long-lived IAM-user access keys,
-service/workload identities through STS/instance-task-pod/Lambda roles rather than static
-credentials, a distinct minimal execution role for every workload rather than a shared broad
-role, scoped trust policies with `aws:SourceAccount`, `aws:SourceArn`, audience and external-
-ID/confused-deputy protections as applicable, permission boundaries/SCPs/tag conditions where
-used, and periodic unused-role/key/policy, Access Analyzer and IAM Access Advisor review; exact
-identity, resource, endpoint, key and service-control policies with no unreviewed wildcard
-principal/action/resource or public access, explicit cross-account owner/purpose/condition
-evidence, mandatory TLS and encryption-in-transit, KMS key policy/grant/rotation/disablement and
-encryption-context review, Secrets Manager or Parameter Store secret ownership, rotation,
-retrieval role, no secret in source/client/artifact/log/metadata/user data, and
-environment/region/production separation; CloudTrail organization/trail and data-event coverage,
-CloudWatch/log retention/redaction/alarms, Config/Security Hub/GuardDuty/Access Analyzer
-findings and response ownership, backup/restore and incident-access evidence, infrastructure
-change review/drift detection, source URL/status or version/last-modified evidence, reviewed
-date and review expiry; negative tests for cross-account/principal confusion, overbroad
-identity/resource/KMS/secret policy, static credential or secret exposure, unintended public
-DNS/resource endpoint, missing regional/environment boundary, logging/alerting bypass, and
-service-profile configuration drift.
+Use for AWS SDKs, ARNs, IAM, STS, Lambda, API Gateway, Cognito, S3, CloudFront, RDS, DynamoDB, ElastiCache, OpenSearch, or AWS IaC. Package presence alone is possible context, not sufficient activation when current feature does not use provider.
 
-## Evidence to inspect
+## Context to inspect
 
-- Repository code, configuration, tests, deployment definitions, and CI evidence relevant to this skill.
-- Provider or framework dashboard/API evidence when the required setting cannot be established from the repository.
-- Direct primary-source evidence recorded in `references/sources.md`; absent, stale, or inaccessible evidence is **Not verified**.
+Inspect current request, imports and SDK calls, manifest and lockfile versions, provider configuration names, IaC, runtime/deployment target, environment, trust boundaries, and tests. Never collect secret values.
 
-## Dependencies and routing
+## Secure defaults
 
-Direct dependencies: `secod-core`.
+- Use short-lived workload roles and federation instead of static access keys.
+- Give each workload minimal identity and resource policies scoped to required account, Region, service, and resource.
+- Keep secrets in trusted server/runtime paths and separate environments/accounts.
+- Make public exposure and cross-account trust explicit and condition-bound.
 
-When a required dependency is not installed or cannot be invoked, record the affected
-control as **Not verified** and do not issue a passing or launch-ready conclusion.
+## Implementation workflow
 
-## Negative fixtures and tests
+1. Identify exact provider products used by current feature from code and configuration evidence.
+2. Classify each product as Confirmed, Possible, or Absent; route only Confirmed products.
+3. Add applicable generalized skills and compute transitive dependency closure through secod-core.
+4. Pass product, resolved version, environment, identity, data, boundaries, files, and assumptions to adapters.
+5. Let adapters own exact SDK calls and product tests; retain shared defaults across adapters.
 
-- Run the maintained trigger case and insecure fixture plan at `tests/` for this skill.
-- Test the unsafe or missing-control cases implied by the control requirements, including
-  unavailable-provider and partial-failure behavior where applicable.
-- Keep tests read-only unless the user explicitly authorizes a change.
+## Implementation recipes
 
-## Output schema
+- [Provider routing](references/provider-routing.md) — product signals, adapter map, exclusions, and shared context.
 
-For each finding return: `control_id`, `status`, `evidence`, `impact`, `recommended_fix`,
-`verification`, `limitations`, and `source_refs`. Valid status values are `Do not ship`,
-`Fix before launch`, `Recommended hardening`, `Passed with evidence`, and `Not verified`.
+## Unsafe patterns to avoid
 
-## Verification and safe failure
+- Loading every adapter because provider package or account exists.
+- Replacing feature implementation with account-wide settings inventory or findings report.
+- Inventing SDK calls, product availability, plan behavior, or dashboard state.
+- Treating provider authentication, edge controls, or IAM as application authorization.
 
-Never infer dashboard, deployment, provider, or production settings from package presence.
-Redact secrets and bearer credentials. Fail closed: preserve unknown or failed checks as
-**Not verified**, identify the next verification step, and never claim launch readiness from
-incomplete evidence.
+## Tests to add
 
-## References
+Test correct product activation, similar non-trigger, multiple applicable products, transitive dependencies, unused-provider exclusion, missing-version handling, secure generated boundary, and no account-audit output.
 
-Use the source register in `references/sources.md`. For each security-critical source,
-record the direct URL, documentation index URL, version, reviewed date, review expiry,
-hash/ETag when available, owner, plan/tier, region, feature maturity, and linked control IDs.
+## Provider and deployment steps
+
+- Lambda or API Gateway selects secod-aws-lambda-api-gateway.
+- Cognito selects secod-aws-cognito.
+- S3 or CloudFront selects secod-aws-s3-cloudfront.
+- RDS, Aurora, DynamoDB, ElastiCache, or OpenSearch selects secod-aws-data-services.
+
+If required console setting is inaccessible, provide exact official verification path without claiming it was checked.
+
+## Official sources
+
+Use [source register](references/sources.md). llms.txt indexes support page discovery only; direct product pages govern implementation.
+
+## Completion handoff
+
+State detected products, selected and excluded adapters, shared defaults applied, code/tests changed, and precise external step remaining. Never issue account-wide verdict, scanner report, certification, or whole-application security claim.
